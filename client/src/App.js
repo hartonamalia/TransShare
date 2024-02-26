@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Form from "./components/Form";
+import LoginForm from "./components/LoginForm";
 import registerBackground from "./assets/register.jpg"; 
 import SignUpForm from "./components/SignUpForm";
 
@@ -18,7 +18,7 @@ function App() {
   return (
     <div className="flex w-full h-screen">
       <div className="w-full flex items-center justify-center lg:w-1/2">
-        {authState === 'login' ? <Form setAuthState={setAuthState} /> : <SignUpForm setAuthState={setAuthState} />}
+        {authState === 'login' ? <LoginForm setAuthState={setAuthState} /> : <SignUpForm setAuthState={setAuthState} />}
       </div>
       <div className="relative lg:flex h-full w-1/2 bg-gray-200 flex items-center justify-center">
         <div

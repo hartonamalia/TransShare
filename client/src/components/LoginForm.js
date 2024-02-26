@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default function Form({
+export default function LoginForm({
     setUser,
     setAuthState
 }) {
@@ -24,14 +24,10 @@ export default function Form({
                     />
                 </div>
                 <div className='mt-8 flex justify-between items-center'>
-                    <div>
-                        <input  type="checkbox" id='remember'/>
-                        <label className='ml-2 font-medium text-base' for="remember">Remember for 30 days</label>
-                    </div>
                     <button className='font-medium text-base text-violet-500'>Forgot password</button>
                 </div>
                 <div className='mt-8 flex flex-col gap-y-4'>
-                    <button className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform py-4 bg-violet-500 rounded-xl text-white font-bold text-lg'>Sign in</button>
+                    <button className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform py-4 bg-violet-500 rounded-xl text-white font-bold text-lg'>Login</button>
                     <button 
                         className='flex items-center justify-center gap-2 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform py-4  rounded-xl text-gray-700 font-semibold text-lg border-2 border-gray-100 '>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,7 +36,7 @@ export default function Form({
                                 <path d="M19.8342 20.9978C22.0292 18.9503 23.4545 15.9019 23.4545 11.9982C23.4545 11.2891 23.3455 10.5255 23.1818 9.81641H12V14.4528H18.4364C18.1188 16.0119 17.2663 17.2194 16.0407 18.0108L19.8342 20.9978Z" fill="#4A90E2"/>
                                 <path d="M5.27698 14.2663C5.03833 13.5547 4.90909 12.7922 4.90909 11.9984C4.90909 11.2167 5.03444 10.4652 5.2662 9.76294L1.23999 6.64844C0.436587 8.25884 0 10.0738 0 11.9984C0 13.918 0.444781 15.7286 1.23746 17.3334L5.27698 14.2663Z" fill="#FBBC05"/>
                             </svg>
-                            Sign in with Google
+                            Login with Google
                     </button>
                 </div>
                 <div className='mt-8 flex justify-center items-center'>
