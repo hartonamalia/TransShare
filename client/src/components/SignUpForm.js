@@ -16,13 +16,13 @@ export default function SignUpForm({ setAuthState }) {
       return;
     }
 
-    // Verifică dacă restul numărului de telefon conține doar cifre
+    // Verif daca restul nr de telefon contine doar cifre
     if (!/^\d+$/.test(restPhoneNumber)) {
       setErrorMessage("Phone number must contain only digits.");
       return;
     }
 
-    // Restul codului pentru procesarea datelor și autentificare
+    // Restul codului pentru procesarea datelor si autentificare
     console.log("User information:", {
       firstName,
       lastName,
@@ -46,10 +46,12 @@ export default function SignUpForm({ setAuthState }) {
 
   return (
     <div className="w-11/12 max-w-[700px] px-10 py-20 rounded-3xl bg-white border-2 border-gray-100">
-      <h1 className="text-5xl font-semibold">Create an Account</h1>
-      <p className="font-medium text-lg text-gray-500 mt-4">
-        Please enter your details.
-      </p>
+      <div className="text-center">
+        <h1 className="text-5xl font-semibold">Create an Account</h1>
+        <p className="font-medium text-lg text-gray-500 mt-4">
+          Please enter your details.
+        </p>
+      </div>
       <div className="mt-8">
         <div className="flex flex-col">
           <label className="text-lg font-medium">First Name</label>
@@ -94,7 +96,7 @@ export default function SignUpForm({ setAuthState }) {
             <select
               value={prefix}
               onChange={handlePrefixChange}
-              className="border-2 border-gray-100 rounded-l-xl p-4 bg-transparent"
+              className="border-2 border-gray-100 rounded-l-xl p-4 bg-transparent w-1/3" // Setarea lățimii select-ului la 1/3 din container
             >
               <option value="">Select Prefix</option>\
               <option value="+93">Afghanistan (+93)</option>
@@ -262,7 +264,7 @@ export default function SignUpForm({ setAuthState }) {
               onChange={(e) =>
                 setRestPhoneNumber(e.target.value.replace(/\D/, ""))
               }
-              className="border-2 border-gray-100 rounded-r-xl p-4 bg-transparent flex-1 ml-1"
+              className="border-2 border-gray-100 rounded-r-xl p-4 bg-transparent flex-1 ml-1" // Utilizarea flex-1 pentru a umple restul spațiului disponibil în container
               placeholder="Rest of phone number"
             />
           </div>
