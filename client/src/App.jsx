@@ -1,21 +1,46 @@
-import React, { useState } from 'react';
-import LoginForm from "./components/LoginForm";
-import registerBackground from "./assets/register.jpg"; 
-import SignUpForm from "./components/SignUpForm";
+import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar/Navbar";
+import Hero from "./components/Hero/Hero";
+import LoginForm from "./components/Login/LoginForm";
+// import registerBackground from "./assets/register.jpg";
+import SignUpForm from "./components/Register/SignUpForm";
+import { Routes, Route } from "react-router-dom";
+import axios from "axios";
 
-function App() {
-  const [authState, setAuthState] = useState('login'); 
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.withCredentials = true;
+
+const App = () => {
+  // dark mode start
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
+  );
+
+  const element = document.documentElement;
+
+  useEffect(() => {
+    if (theme === "dark") {
+      element.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      element.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [theme]);
+  // dark mode end
 
   return (
-    <div className="flex w-full h-screen">
-      <div className="w-full lg:w-1/2 flex items-center justify-center">
-        {authState === 'login' ? <LoginForm setAuthState={setAuthState} /> : <SignUpForm setAuthState={setAuthState} />}
-      </div>
-      <div className="relative lg:flex lg:w-1/2 h-full bg-gray-200">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${registerBackground})` }} />
-      </div>
-    </div>
-  );
-}
+    <>
+      <Navbar theme={theme} setTheme={setTheme} />
+      <Hero />
+      <Routes>
+        <Route path="/login"  element={< LoginForm />}/>
+        <Route path="/register"  element={< SignUpForm />}/>
 
+
+      </Routes>
+
+    </>
+  );
+};
 export default App;
