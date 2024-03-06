@@ -4,17 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function SignUpForm({ setAuthState }) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [prefix, setPrefix] = useState("");
-  const [restPhoneNumber, setRestPhoneNumber] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-  //
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -60,7 +53,7 @@ export default function SignUpForm({ setAuthState }) {
         toast.error(data.error);
       } else {
         setData({});
-        toast.success("Login Successful. Welcome!");
+        toast.success("Register Successful!");
         navigate("/login");
       }
     } catch (error) {
@@ -75,28 +68,6 @@ export default function SignUpForm({ setAuthState }) {
   const handleTermsCheckboxChange = () => {
     setErrorMessage("");
     setTermsAccepted(!termsAccepted);
-  };
-
-  const handlePrefixChange = (e) => {
-    setPrefix(e.target.value);
-  };
-
-  const registerUser = async (e) => {
-    e.preventDefault();
-    const { name, email, password } = data;
-    // try {
-    //   const { data } = await axios.post("/register", {});
-    //   if (data.error) {
-    //     toast.error(data.error);
-    //   } else {
-    //     setData({});
-    //     toast.success("Login Successful. Welcome!");
-    //     navigate("/login");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    console.log(data);
   };
 
   return (

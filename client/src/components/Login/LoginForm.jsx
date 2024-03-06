@@ -26,7 +26,8 @@ export default function LoginForm() {
         toast.error(data.error);
       } else {
         setData({});
-        navigate("/");
+        toast.success("Login Successful. Welcome!");
+        navigate("/dashboard");
       }
     } catch (error) {}
   };
