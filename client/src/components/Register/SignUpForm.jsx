@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSignup } from "../../hooks/useSignUp";
 
 export default function SignUpForm({ setAuthState }) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { signup, error, isLoading } = useSignup();
 
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -16,17 +18,19 @@ export default function SignUpForm({ setAuthState }) {
     prefix: "",
     restPhoneNumber: "",
   });
+  
+  const handleLogin = () => {
+    navigate("/login");
+  };
+  const handleTermsCheckboxChange = () => {
+    setErrorMessage("");
+    setTermsAccepted(!termsAccepted);
+  };
   const handleSignUpClick = async () => {
     if (!termsAccepted) {
       setErrorMessage("You must accept the terms and conditions to continue.");
       return;
     }
-
-    // Verif daca restul nr de telefon contine doar cifre
-    // if (!/^\d+$/.test(restPhoneNumber)) {
-    //   setErrorMessage("Phone number must contain only digits.");
-    //   return;
-    // }
     const { firstName, lastName, email, password, prefix, restPhoneNumber } =
       data;
     if (
@@ -40,34 +44,7 @@ export default function SignUpForm({ setAuthState }) {
       toast.error("Please complete all the fields.");
       return;
     }
-    try {
-      const { data } = await axios.post("/register", {
-        firstName,
-        lastName,
-        email,
-        password,
-        prefix,
-        restPhoneNumber,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        setData({});
-        toast.success("Register Successful!");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    console.log(data);
-  };
-
-  const handleLogin = () => {
-    navigate("/login");
-  };
-  const handleTermsCheckboxChange = () => {
-    setErrorMessage("");
-    setTermsAccepted(!termsAccepted);
+    await signup(firstName, lastName, email, password, prefix, restPhoneNumber);
   };
 
   return (

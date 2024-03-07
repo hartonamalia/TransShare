@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -11,26 +12,20 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
+  const {login,error,isLoading} = useLogin();
 
   const handleSignUp = () => {
-    navigate("/register");
+    navigate("/signup");
   };
+
   const loginUser = async () => {
     const { email, password } = data;
-    try {
-      const { data } = await axios.post("/login", {
-        email,
-        password,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        setData({});
-        toast.success("Login Successful. Welcome!");
-        navigate("/dashboard");
-      }
-    } catch (error) {}
-  };
+    if(!email || !password){
+      toast.error("Please complete all the fields!");
+      return;
+    }
+    await login(email,password);
+  }
 
   return (
     <div className=" w-11/12 max-w-[700px] px-10 py-20 rounded-3xl bg-white border-2 border-gray-100">
@@ -103,7 +98,6 @@ export default function LoginForm() {
         <div className="mt-8 flex justify-center items-center">
           <p className="font-medium text-base">Don't have an account?</p>
           <button
-            //onClick={() => setAuthState("register")}
             onClick={() => handleSignUp()}
             className="ml-2 font-medium text-base text-violet-500"
           >

@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const { mongoose } = require("mongoose");
 const cookieParser = require("cookie-parser");
+const userRoutes = require("./routes/authRoutes");
 const app = express();
 
 //database connection
@@ -15,8 +16,13 @@ mongoose
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
+});
 
-app.use("/", require("./routes/authRoutes"));
+//app.use("/", require("./routes/authRoutes"));
+app.use("/api/user", userRoutes);
 
 const port = 8000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

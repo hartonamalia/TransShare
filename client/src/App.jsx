@@ -4,10 +4,10 @@ import Hero from "./components/Hero/Hero";
 import LoginForm from "./components/Login/LoginForm";
 //import registerBackground from "./assets/register.jpg";
 import SignUpForm from "./components/Register/SignUpForm";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter,Navigate } from "react-router-dom";
 import axios from "axios";
-import { UserContextProvider } from "../context/userContext";
 import Dashboard from "./components/Dashboard/Dashboard";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -17,6 +17,7 @@ const App = () => {
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
+  const {user} = useAuthContext();
 
   const element = document.documentElement;
 
@@ -32,17 +33,26 @@ const App = () => {
   // dark mode end
 
   return (
-    <>
-      <UserContextProvider>
-        <Navbar theme={theme} setTheme={setTheme} />
-        <Hero />
-        <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<SignUpForm />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </UserContextProvider>
-    </>
+    <div>
+      <BrowserRouter>
+        <div>
+          <Routes>
+            <Route 
+              path="/" 
+              element={user ? <Dashboard /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/login" 
+              element={!user ? <LoginForm /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/signup" 
+              element={!user ? <SignUpForm /> : <Navigate to="/" />} 
+            />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
   );
 };
 export default App;
