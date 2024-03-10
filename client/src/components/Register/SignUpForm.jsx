@@ -348,7 +348,7 @@ export default function SignUpForm({ setAuthState }) {
         </div>
       </div>
       {/* Container pentru imagine */}
-      <div className=" w-full md:w-1/2 p-4">
+      <div className="hidden md:hidden w-full md:w-1/2 p-4">
         {/* Imaginea */}
         <img
           src={registerImage}
