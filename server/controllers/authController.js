@@ -68,7 +68,6 @@ const loginUser = async (req, res) => {
     const match = await comparePassword(password, user.password);
     if (match) {
       jwt.sign(
-        // ??
         { email: user.email, id: user._id, firstName: user.firstName },
         process.env.JWT_SECRET,
         {},
