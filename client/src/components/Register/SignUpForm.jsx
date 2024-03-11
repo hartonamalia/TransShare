@@ -33,7 +33,7 @@ export default function SignUpForm({ setAuthState }) {
       setErrorMessage("You must accept the terms and conditions to continue.");
       return;
     }
-    const { firstName, lastName, email, password, prefix, restPhoneNumber } =
+    const { firstName, lastName, email, password, confirmPassword, prefix, restPhoneNumber } =
       data;
     if (
       firstName === "" ||
@@ -48,7 +48,7 @@ export default function SignUpForm({ setAuthState }) {
       toast.error("Please complete all the fields.");
       return;
     }
-    await signup(firstName, lastName, email, password, prefix, restPhoneNumber);
+    await signup(firstName, lastName, email, password, confirmPassword, prefix, restPhoneNumber);
   };
 
   return (
@@ -348,7 +348,7 @@ export default function SignUpForm({ setAuthState }) {
         </div>
       </div>
       {/* Container pentru imagine */}
-      <div className="hidden md:hidden w-full md:w-1/2 p-4">
+      <div className="hidden md:block w-full md:w-1/2 p-4">
         {/* Imaginea */}
         <img
           src={registerImage}
