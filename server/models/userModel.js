@@ -67,4 +67,16 @@ userSchema.statics.login = async function(email, password) {
   return user
 }
 
+userSchema.statics.getDetails = async function(_id){
+  if(!_id){
+    throw Error('Invalid user id')
+  }
+
+  const user = await this.findOne({_id})
+  if(!user){
+    throw Error("User with this id doesn't exist!")
+  }
+  return user
+}
+
 module.exports = mongoose.model('User', userSchema)

@@ -22,7 +22,7 @@ const App = () => {
     <div>
       <BrowserRouter>
         <div>
-          <Navbar />
+          {user && <Navbar />}
           <Routes>
             <Route
               path="/"
