@@ -39,16 +39,20 @@ export default function SignUpForm({ setAuthState }) {
       firstName === "" ||
       lastName === "" ||
       password === "" ||
-      confirmPassword === "" ||
-      password !== confirmPassword ||
       prefix === "" ||
+      confirmPassword === "" ||
       email === "" ||
       restPhoneNumber === ""
     ) {
       toast.error("Please complete all the fields.");
       return;
     }
-    await signup(firstName, lastName, email, password, confirmPassword, prefix, restPhoneNumber);
+    if(password !== confirmPassword){
+      toast.error("Passwords must be the same.");
+      return;
+      
+    }
+    await signup(firstName, lastName, email, password, prefix, restPhoneNumber);
   };
 
   return (

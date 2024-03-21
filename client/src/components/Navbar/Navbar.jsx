@@ -2,27 +2,28 @@ import React, { useState } from "react";
 import { BiSolidSun, BiSolidMoon } from "react-icons/bi";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import ResponsiveMenu from "./ResponsiveMenu";
+import { Link } from "react-router-dom";
 
 export const Navlinks = [
   {
     id: 1,
     name: "HOME",
-    link: "/#",
+    link: "/",
   },
   {
     id: 2,
     name: "LIST",
-    link: "/#list",
+    link: "/list",
   },
   {
-    id: 1,
+    id: 3,
     name: "RENT",
-    link: "/#rent",
+    link: "/rent",
   },
   {
-    id: 1,
+    id: 4,
     name: "PROFILE",
-    link: "/#profile",
+    link: "/profile",
   },
 ];
 const Navbar = ({ theme, setTheme }) => {
@@ -41,44 +42,19 @@ const Navbar = ({ theme, setTheme }) => {
           </div>
           <nav className="hidden md:block">
             <ul className="flex items-center gap-8">
-              {Navlinks.map(({ id, name, link }) => (
+              {Navlinks.map(({ id, name, link,index }) => (
                 <li key={id} className="py-4">
-                  <a
-                    href={link}
+                  <Link to={link}
                     className=" text-lg font-medium  hover:text-primary py-2 hover:border-b-2 hover:border-primary transition-colors duration-500  "
                   >
                     {name}
-                  </a>
+                  </Link>
                 </li>
               ))}
-              {/* DarkMode feature implement */}
-              {theme === "dark" ? (
-                <BiSolidSun
-                  onClick={() => setTheme("light")}
-                  className="text-2xl"
-                />
-              ) : (
-                <BiSolidMoon
-                  onClick={() => setTheme("dark")}
-                  className="text-2xl"
-                />
-              )}
             </ul>
           </nav>
           {/* Mobile view  */}
           <div className="flex items-center gap-4 md:hidden ">
-            {/* dark  mode */}
-            {theme === "dark" ? (
-              <BiSolidSun
-                onClick={() => setTheme("light")}
-                className="text-2xl"
-              />
-            ) : (
-              <BiSolidMoon
-                onClick={() => setTheme("dark")}
-                className="text-2xl"
-              />
-            )}
             {/* Mobile Hamburger icon */}
             {showMenu ? (
               <HiMenuAlt1

@@ -114,7 +114,7 @@ export default function LoginForm() {
         </div>
       </div>
       {/* Container pentru imagine */}
-      <div className=" hidden sm:block w-full md:w-1/2 p-4">
+      <div className=" hidden md:block w-full md:w-1/2 p-4">
         {/* Imaginea */}
         <img
           src={registerImage}
