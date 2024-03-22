@@ -45,8 +45,15 @@ const Profile = () => {
 
   return (
     <div className=" mt-10 max-w-md mx-auto p-6 bg-white rounded shadow">
-      {userDetails && <p className="text-black">{userDetails.firstName}</p>}
-      <button  className="w-22 h-15 rounded-sm p-2 text-white bg-purple-800 hover:bg-purple-400"
+    {userDetails && (
+      <div>
+        <p className="text-black">{userDetails.firstName}</p>
+        <p className="text-black">{userDetails.lastName}</p>
+        <p className="text-black">{userDetails.email}</p>
+        <p className="text-black">{userDetails.prefix}   {userDetails.restPhoneNumber}</p>
+        </div>
+    )}
+      <button  className="w-22 h-15 rounded-sm p-2 text-white bg-violet-500 hover:bg-purple-400"
       onClick={() => handleOpenEditProfileModal()}>
         Edit Profile
       </button>

@@ -304,7 +304,7 @@ export default function SignUpForm({ setAuthState }) {
                     setData({ ...data, restPhoneNumber: e.target.value })
                   }
                   //}
-                  className="border-2 border-gray-100 rounded-r-xl p-4 bg-transparent flex-1 ml-1" // Utilizarea flex-1 pentru a umple restul spațiului disponibil în container
+                  className="border-2 border-gray-100 rounded-r-xl p-4 bg-transparent flex-1 ml-1" 
                   placeholder="Rest of phone number"
                 />
               </div>
