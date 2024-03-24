@@ -1,9 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const cors = require("cors");
-const { loginUser, signupUser } = require("../controllers/userController");
-const { getUserDetails } = require('../controllers/userController');
-
+const {
+  loginUser,
+  signupUser,
+  updateUserDetails,
+  changeUserPassword
+} = require("../controllers/userController");
+const { getUserDetails } = require("../controllers/userController");
 
 //middleware
 router.use(
@@ -18,10 +22,10 @@ router.use(
 // router.post("/login", loginUser);
 // router.get("/profile", getProfile);
 
-
 router.post("/login", loginUser);
 router.post("/signup", signupUser);
-router.get('/user-details', getUserDetails); 
-
+router.get("/user-details", getUserDetails);
+router.put("/update-details", updateUserDetails);
+router.post("/change-password", changeUserPassword);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
 
 const EditProfile = ({
@@ -14,6 +14,14 @@ const EditProfile = ({
   );
   const [profilePicture, setProfilePicture] = useState(null);
 
+  useEffect(()=>{
+  setFirstName(userDetails.firstName);
+  setLastName(userDetails.lastName);
+  setPrefix(userDetails.prefix);
+  setRestPhoneNumber(userDetails.restPhoneNumber);
+  
+  }, [isEditProfileModalOpen])
+  
   const handleSaveChanges = () => {
     console.log("Saving changes:", {
       firstName,
