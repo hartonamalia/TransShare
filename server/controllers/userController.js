@@ -139,7 +139,7 @@ const changeUserPassword = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.SECRET);
     const _id = decoded._id;
-    
+
     const { newPassword } = req.body;
     if (!newPassword) {
       return res.status(400).json({ error: "New password is required" });

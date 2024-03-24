@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { toast } from "react-toastify";
 
 const EditProfile = ({
   isEditProfileModalOpen,
@@ -13,23 +15,47 @@ const EditProfile = ({
     userDetails.restPhoneNumber
   );
   const [profilePicture, setProfilePicture] = useState(null);
+  const { user } = useAuthContext();
 
-  useEffect(()=>{
-  setFirstName(userDetails.firstName);
-  setLastName(userDetails.lastName);
-  setPrefix(userDetails.prefix);
-  setRestPhoneNumber(userDetails.restPhoneNumber);
-  
-  }, [isEditProfileModalOpen])
-  
-  const handleSaveChanges = () => {
-    console.log("Saving changes:", {
-      firstName,
-      lastName,
-      prefix,
-      restPhoneNumber,
-      profilePicture,
-    });
+  useEffect(() => {
+    setFirstName(userDetails.firstName);
+    setLastName(userDetails.lastName);
+    setPrefix(userDetails.prefix);
+    setRestPhoneNumber(userDetails.restPhoneNumber);
+  }, [isEditProfileModalOpen]);
+
+  const handleSaveChanges = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/update-details`,
+        {
+          method: "PUT", 
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`, 
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            prefix,
+            restPhoneNumber,
+          }),
+        }
+      );
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        toast.error(json.error);
+        handleCloseEditProfileModal();
+        return; 
+      }
+
+      toast.success("Profile updated successfully!");
+      handleCloseEditProfileModal();
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const handleProfilePictureChange = (e) => {
@@ -40,55 +66,55 @@ const EditProfile = ({
   return (
     <Modal open={isEditProfileModalOpen} onClose={handleCloseEditProfileModal}>
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-violet-500 shadow-lg p-5 rounded-lg w-full max-w-md">
-       <div className="flex  flex-col items-center gap-3 " >
-        <div>
-          <label
-            htmlFor="firstName"
-            className="block text-gray-200 text-sm font-bold mb-2"
-          >
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="First Name"
-            className="input-field rounded w-[10rem] p-1"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="lastName"
-            className="block text-gray-200 text-sm font-bold mb-2"
-          >
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Last Name"
-            className="input-field rounded w-[10rem] p-1"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="prefix"
-            className="block text-gray-200 text-sm font-bold mb-2"
-          >
-            Prefix
-          </label>
-          <select
-            type="text"
-            id="prefix"
-            value={prefix}
-            onChange={(e) => setPrefix(e.target.value)}
-            placeholder="Prefix"
-            className="input-field rounded w-[10rem] p-1"
-          >
-            <option value="+93">Afghanistan (+93)</option>
+        <div className="flex  flex-col items-center gap-3 ">
+          <div>
+            <label
+              htmlFor="firstName"
+              className="block text-gray-200 text-sm font-bold mb-2"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="First Name"
+              className="input-field rounded w-[10rem] p-1"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="lastName"
+              className="block text-gray-200 text-sm font-bold mb-2"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Last Name"
+              className="input-field rounded w-[10rem] p-1"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="prefix"
+              className="block text-gray-200 text-sm font-bold mb-2"
+            >
+              Prefix
+            </label>
+            <select
+              type="text"
+              id="prefix"
+              value={prefix}
+              onChange={(e) => setPrefix(e.target.value)}
+              placeholder="Prefix"
+              className="input-field rounded w-[10rem] p-1"
+            >
+              <option value="+93">Afghanistan (+93)</option>
               <option value="+355">Albania (+355)</option>
               <option value="+213">Algeria (+213)</option>
               <option value="+376">Andorra (+376)</option>
@@ -247,43 +273,46 @@ const EditProfile = ({
               <option value="+967">Yemen (+967)</option>
               <option value="+260">Zambia (+260)</option>
               <option value="+263">Zimbabwe (+263)</option>
-          </select>
-        </div>
-        <div>
-          <label
-            htmlFor="restPhoneNumber"
-            className="block text-gray-200 text-sm font-bold mb-2"
+            </select>
+          </div>
+          <div>
+            <label
+              htmlFor="restPhoneNumber"
+              className="block text-gray-200 text-sm font-bold mb-2"
+            >
+              Rest Phone Number
+            </label>
+            <input
+              type="text"
+              id="restPhoneNumber"
+              value={restPhoneNumber}
+              onChange={(e) => setRestPhoneNumber(e.target.value)}
+              placeholder="Rest Phone Number"
+              className="input-field rounded w-[10rem] p-1"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="profilePicture"
+              className="block text-gray-200 text-sm font-bold mb-2 ml-[7.2rem]"
+            >
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              id="profilePicture"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+              className="input-field rounded ml-24"
+            />
+          </div>
+          <button
+            onClick={handleSaveChanges}
+            className="button w-22 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer"
           >
-            Rest Phone Number
-          </label>
-          <input
-            type="text"
-            id="restPhoneNumber"
-            value={restPhoneNumber}
-            onChange={(e) => setRestPhoneNumber(e.target.value)}
-            placeholder="Rest Phone Number"
-            className="input-field rounded w-[10rem] p-1"
-          />
+            Save Changes
+          </button>
         </div>
-        <div>
-          <label
-            htmlFor="profilePicture"
-            className="block text-gray-200 text-sm font-bold mb-2 ml-[7.2rem]"
-          >
-            Profile Picture
-          </label>
-          <input
-            type="file"
-            id="profilePicture"
-            accept="image/*"
-            onChange={handleProfilePictureChange}
-            className="input-field rounded ml-24"
-          />
-        </div>
-        <button onClick={handleSaveChanges} className="button w-22 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer">
-          Save Changes
-        </button>
-      </div>
       </div>
     </Modal>
   );
