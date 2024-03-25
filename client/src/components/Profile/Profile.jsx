@@ -101,7 +101,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className="relative mt-10 max-w-xl mx-auto p-16 bg-white  shadow  border-t-8 border-t-yellow-300 rounded-lg">
+      <div className="relative mt-10 max-w-xl mx-auto p-16 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg">
         {userDetails && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row justify-between md:items-center ">
@@ -170,11 +170,9 @@ const Profile = () => {
 
       {/*Only for drivers*/}
 
-      <div className="relative mt-10 max-w-xl mx-auto p-16 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg">
+      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-yellow-300 rounded-lg">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-700">
-            Driver's Only
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-700">Driver's Only</h2>
         </div>
         {userDetails && (
           <div className="flex flex-col gap-4">
@@ -236,6 +234,39 @@ const Profile = () => {
                 </button>
                 <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
               </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Owners Only */}
+      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-700">Owners Only</h2>
+        </div>
+        {userDetails && (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col md:flex-row justify-between md:items-center ">
+              <span className="text-gray-500 text-sm font-bold  tracking-wide">
+                Legal data for e-invoice
+              </span>
+              <div className="flex items-center justify-between">
+                <button
+                  className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
+                  onClick={handleOpenEditBirthDateModal}
+                >
+                  Add
+                </button>
+                <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+              </div>
+            </div>
+            <div className="flex items-center justify-center text-xs md:text-base gap-3 md:gap-8 ">
+              <button
+                className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
+                onClick={() => navigate('/list')}
+              >
+                List your car
+              </button>
             </div>
           </div>
         )}
