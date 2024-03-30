@@ -5,10 +5,12 @@ import { Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EditProfile from "./EditProfile";
 import ChangePasswordModal from "./ChangePasswordModal";
-// import DriversOnly from "./DriversOnly";
+import Sidebar from "./Sidebar";
+import {useNavigate} from "react-router-dom";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState();
+  const navigate = useNavigate();
   const { user } = useAuthContext();
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
@@ -16,35 +18,36 @@ const Profile = () => {
   const [isEditBirthDateModal, setEditBirthDateModal] = useState(false);
   const [isEditIdCopy, setIsEditIdCopy] = useState(false);
   const [isEditIdDetails, setIsEditIdDetails] = useState(false);
-  const [isEditCreditCardDetails, setIsEditCreditCardDetails] = useState(false);
 
   useEffect(() => {
     if (user?.token) {
-      (async () => {
-        try {
-          const response = await fetch(
-            "http://localhost:8000/api/user/user-details",
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-              },
-            }
-          );
-          const userResponse = await response.json();
-          console.log(userResponse.userDetails);
-          if (response.ok) {
-            setUserDetails(userResponse.userDetails);
-          } else {
-            throw new Error("Failed to fetch user details");
-          }
-        } catch (error) {
-          console.error("Error in getting user details:", error);
-        }
-      })();
+      fetchUserDetails();
     }
   }, [user]);
+
+  const fetchUserDetails = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/user/user-details",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      const userResponse = await response.json();
+      console.log(userResponse.userDetails);
+      if (response.ok) {
+        setUserDetails(userResponse.userDetails);
+      } else {
+        throw new Error("Failed to fetch user details");
+      }
+    } catch (error) {
+      console.error("Error in getting user details:", error);
+    }
+  };
 
   useEffect(() => {
     console.log(
@@ -101,7 +104,10 @@ const Profile = () => {
 
   return (
     <>
-      <div className="relative mt-10 max-w-xl mx-auto p-16 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg">
+    <div className="flex justify-center gap-8">
+      <Sidebar />
+      <div className="flex flex-col">
+      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg w-[23rem] md:w-[32rem]">
         {userDetails && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row justify-between md:items-center ">
@@ -160,6 +166,7 @@ const Profile = () => {
             isEditProfileModalOpen={isEditProfileModalOpen}
             handleCloseEditProfileModal={handleCloseEditProfileModal}
             userDetails={userDetails}
+            fetchUserDetails={fetchUserDetails}
           />
         )}
         <ChangePasswordModal
@@ -168,15 +175,15 @@ const Profile = () => {
         />
       </div>
 
-      {/*Only for drivers*/}
+      {/* drivers only*/}
 
-      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-yellow-300 rounded-lg">
+      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-yellow-300 rounded-lg w-[23rem] md:w-[32rem]">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-700">Driver's Only</h2>
         </div>
         {userDetails && (
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col md:flex-row justify-between md:items-center ">
+            <div className="flex justify-between md:items-center ">
               <span className="text-gray-500 text-sm font-bold  tracking-wide">
                 Date of birth
               </span>
@@ -191,11 +198,11 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between md:items-center ">
+            <div className="flex justify-between md:items-center ">
               <span className="text-gray-500 text-sm font-bold  tracking-wide">
                 ID copy
               </span>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center ">
                 <button
                   className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
                   onClick={handleOpenEditIdCopy}
@@ -206,29 +213,14 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between md:items-center ">
+            <div className="flex  justify-between md:items-center ">
               <span className="text-gray-500 text-sm font-bold  tracking-wide">
                 Driver license
               </span>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center">
                 <button
                   className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
                   onClick={handleOpenEditIdDetails}
-                >
-                  Add details
-                </button>
-                <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row justify-between md:items-center ">
-              <span className="text-gray-500 text-sm font-bold  tracking-wide">
-                Add credit card
-              </span>
-              <div className="flex items-center justify-between">
-                <button
-                  className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
-                  onClick={handleOpenEditCreditCardDetails}
                 >
                   Add details
                 </button>
@@ -240,17 +232,17 @@ const Profile = () => {
       </div>
 
       {/* Owners Only */}
-      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg">
+      <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg w-[23rem] md:w-[32rem]">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-700">Owners Only</h2>
         </div>
         {userDetails && (
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col md:flex-row justify-between md:items-center ">
+            <div className="flex  justify-between md:items-center ">
               <span className="text-gray-500 text-sm font-bold  tracking-wide">
                 Legal data for e-invoice
               </span>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center ">
                 <button
                   className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
                   onClick={handleOpenEditBirthDateModal}
@@ -270,6 +262,8 @@ const Profile = () => {
             </div>
           </div>
         )}
+      </div>
+      </div>
       </div>
     </>
   );

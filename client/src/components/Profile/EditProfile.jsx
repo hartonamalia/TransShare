@@ -7,6 +7,7 @@ const EditProfile = ({
   isEditProfileModalOpen,
   handleCloseEditProfileModal,
   userDetails,
+  fetchUserDetails
 }) => {
   const [firstName, setFirstName] = useState(userDetails.firstName);
   const [lastName, setLastName] = useState(userDetails.lastName);
@@ -53,6 +54,7 @@ const EditProfile = ({
 
       toast.success("Profile updated successfully!");
       handleCloseEditProfileModal();
+      fetchUserDetails();
     } catch (error) {
       toast.error(error);
     }
