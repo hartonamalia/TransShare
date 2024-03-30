@@ -159,10 +159,57 @@ const changeUserPassword = async (req, res) => {
   }
 };
 
+const updateUserDateOfBirth = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Bearer token not formatted properly" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const _id = decoded._id;
+
+    const { dateOfBirth } = req.body;
+    if (!dateOfBirth) {
+      return res.status(400).json({ error: "New date of birth is required" });
+    }
+
+    if (!Date.parse(dateOfBirth)) {
+      return res.status(400).json({ error: "Invalid date format" });
+    }
+
+    const updatedUser = await User.updateDateOfBirth(
+      _id,
+      new Date(dateOfBirth)
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "Date of birth updated successfully",
+      userDetails: updatedUser,
+    });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    }
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   signupUser,
   loginUser,
   getUserDetails,
   updateUserDetails,
   changeUserPassword,
+  updateUserDateOfBirth,
 };

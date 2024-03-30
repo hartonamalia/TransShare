@@ -16,9 +16,9 @@ axios.defaults.withCredentials = true;
 const App = () => {
   const { user } = useAuthContext();
 
-  if (user == undefined) {
-    return null;
-  }
+  // if (user == undefined) {
+  //   return null;
+  // }
 
   return (
     <div>

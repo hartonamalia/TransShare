@@ -18,6 +18,7 @@ const userSchema = new Schema({
   },
   prefix: String,
   restPhoneNumber: Number,
+  dateOfBirth: Date,
 });
 
 // static signup method
@@ -119,7 +120,29 @@ userSchema.statics.changePassword = async function (_id, newPassword) {
     { password: hashedPassword },
     { new: true }
   );
- 
+
+  if (!user) {
+    throw Error("User not found");
+  }
+
+  return user;
+};
+
+userSchema.statics.updateDateOfBirth = async function (_id, newDateOfBirth) {
+  if (!_id || !newDateOfBirth) {
+    throw Error("User ID and new date of birth must be provided");
+  }
+
+  if (!validator.isDate(newDateOfBirth)) {
+    throw Error("Invalid date format");
+  }
+
+  const user = await this.findByIdAndUpdate(
+    _id,
+    { dateOfBirth: newDateOfBirth },
+    { new: true, runValidators: true }
+  );
+
   if (!user) {
     throw Error("User not found");
   }

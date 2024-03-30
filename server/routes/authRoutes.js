@@ -5,7 +5,8 @@ const {
   loginUser,
   signupUser,
   updateUserDetails,
-  changeUserPassword
+  changeUserPassword,
+  updateUserDateOfBirth,
 } = require("../controllers/userController");
 const { getUserDetails } = require("../controllers/userController");
 
@@ -27,5 +28,6 @@ router.post("/signup", signupUser);
 router.get("/user-details", getUserDetails);
 router.put("/update-details", updateUserDetails);
 router.post("/change-password", changeUserPassword);
+router.post("/dateOfBirth", updateUserDateOfBirth);
 
 module.exports = router;
