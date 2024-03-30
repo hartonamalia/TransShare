@@ -2,16 +2,54 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const BirtDateModal = ({
   isEditBirthDateModal,
   handleCloseEditBirthDateModal,
   userBirthday,
 }) => {
-  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState(userBirthday);
+  const { user } = useAuthContext();
 
   const handleDateChange = (date) => {
     setDateOfBirth(date);
+  };
+
+  useEffect(() => {
+    setDateOfBirth(userBirthday);
+  }, [userBirthday]);
+
+  const handleSaveBirthday = async () => {
+    if (!dateOfBirth) {
+      toast.error("Please select a date.");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/dateOfBirth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ dateOfBirth }),
+        }
+      );
+
+      const json = await response.json();
+      if (!response.ok) {
+        toast.error(json.error);
+        handleCloseEditBirthDateModal();
+      } else {
+        toast.success("Birthday updated successfully!");
+        handleCloseEditBirthDateModal();
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -29,7 +67,10 @@ const BirtDateModal = ({
               selected={userBirthday || dateOfBirth}
             />
           </div>
-          <button className="button w-22 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer">
+          <button
+            className="button w-22 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer"
+            onClick={handleSaveBirthday}
+          >
             Save
           </button>
         </div>
