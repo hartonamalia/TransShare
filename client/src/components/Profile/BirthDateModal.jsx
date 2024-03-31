@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal } from "@mui/material";
+import { Modal } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-const BirtDateModal = ({
+const BirthDateModal = ({
   isEditBirthDateModal,
   handleCloseEditBirthDateModal,
   userBirthday,
@@ -18,8 +18,9 @@ const BirtDateModal = ({
   };
 
   useEffect(() => {
+    console.log("da", userBirthday);
     setDateOfBirth(userBirthday);
-  }, [userBirthday]);
+  }, [isEditBirthDateModal]);
 
   const handleSaveBirthday = async () => {
     if (!dateOfBirth) {
@@ -79,4 +80,4 @@ const BirtDateModal = ({
   );
 };
 
-export default BirtDateModal;
+export default BirthDateModal;

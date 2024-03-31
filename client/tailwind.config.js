@@ -8,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        "surface-blue": "#48AAAD",
         primary: "#FFFFFF",
         dark: "#333333",
       },

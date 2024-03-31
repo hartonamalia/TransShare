@@ -8,9 +8,11 @@ import ChangePasswordModal from "./ChangePasswordModal";
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import BirthDateModal from "./BirthDateModal";
+import IDCardModal from "./IDCardModal";
+import bcgImage from "../../assets/bcg.jpg";
 
 const Profile = () => {
-  const [userDetails, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useState({});
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
@@ -18,7 +20,8 @@ const Profile = () => {
     useState(false);
   const [isEditBirthDateModal, setEditBirthDateModal] = useState(false);
   const [isEditIdCopy, setIsEditIdCopy] = useState(false);
-  const [isEditIdDetails, setIsEditIdDetails] = useState(false);
+  const [isEditDriverLicenseDetails, setIsEditDriverLicenseDetails] =
+    useState(false);
 
   useEffect(() => {
     if (user?.token) {
@@ -40,8 +43,9 @@ const Profile = () => {
       );
       const userResponse = await response.json();
       console.log(userResponse.userDetails);
+      const userDetailsResponse = userResponse.userDetails;
       if (response.ok) {
-        setUserDetails(userResponse.userDetails);
+        setUserDetails(userDetailsResponse);
       } else {
         throw new Error("Failed to fetch user details");
       }
@@ -85,20 +89,23 @@ const Profile = () => {
     setEditBirthDateModal(false);
   };
   const handleOpenEditIdCopy = () => {
-    setEditBirthDateModal(true);
+    setIsEditIdCopy(true);
   };
   const handleCloseEditIdCopy = () => {
     setIsEditIdCopy(false);
   };
-  const handleOpenEditIdDetails = () => {
-    setIsEditIdDetails(true);
+  const handleOpenEditDriverLicenseDetails = () => {
+    setIsEditDriverLicenseDetails(true);
   };
-  const handleCloseEditIdDetails = () => {
-    setIsEditIdDetails(false);
+  const handleCloseEditDriverLicenseDetails = () => {
+    setIsEditDriverLicenseDetails(false);
   };
 
   return (
     <>
+    <div className="w-full md:h-72 h-48" style={{backgroundImage: "url('../../assets/bcg.jpg')"}}>
+      <img  className="h-full w-full" src={bcgImage} alt="" />
+    </div>
       <div className="flex justify-center gap-8">
         <Sidebar />
         <div className="flex flex-col">
@@ -217,7 +224,7 @@ const Profile = () => {
                   <div className="flex items-center">
                     <button
                       className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
-                      onClick={handleOpenEditIdDetails}
+                      onClick={handleOpenEditDriverLicenseDetails}
                     >
                       Add details
                     </button>
@@ -261,13 +268,17 @@ const Profile = () => {
             )}
           </div>
         </div>
-        {user && (
+        {userDetails && (
           <BirthDateModal
             isEditBirthDateModal={isEditBirthDateModal}
             handleCloseEditBirthDateModal={handleCloseEditBirthDateModal}
-            userBirthday={user.dateOfBirth}
+            userBirthday={userDetails.dateOfBirth}
           />
         )}
+        <IDCardModal
+          isEditIdCopy={isEditIdCopy}
+          handleCloseEditIdCopy={handleCloseEditIdCopy}
+        />
       </div>
     </>
   );
