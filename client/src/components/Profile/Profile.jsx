@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import BirthDateModal from "./BirthDateModal";
 import IDCardModal from "./IDCardModal";
+import DriverLicenseModal from "./DriverLicenseModal";
 import bcgImage from "../../assets/bcg.jpg";
 
 const Profile = () => {
@@ -100,12 +101,14 @@ const Profile = () => {
   const handleCloseEditDriverLicenseDetails = () => {
     setIsEditDriverLicenseDetails(false);
   };
-
   return (
     <>
-    <div className="w-full md:h-72 h-48" style={{backgroundImage: "url('../../assets/bcg.jpg')"}}>
-      <img  className="h-full w-full" src={bcgImage} alt="" />
-    </div>
+      <div
+        className="w-full md:h-72 h-48"
+        style={{ backgroundImage: "url('../../assets/bcg.jpg')" }}
+      >
+        <img className="h-full w-full" src={bcgImage} alt="" />
+      </div>
       <div className="flex justify-center gap-8">
         <Sidebar />
         <div className="flex flex-col">
@@ -241,21 +244,6 @@ const Profile = () => {
               <h2 className="text-2xl font-bold text-gray-700">Owners Only</h2>
             </div>
             {userDetails && (
-              <div className="flex flex-col gap-4">
-                <div className="flex  justify-between md:items-center ">
-                  <span className="text-gray-500 text-sm font-bold  tracking-wide">
-                    Legal data for e-invoice
-                  </span>
-                  <div className="flex items-center ">
-                    <button
-                      className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
-                      onClick={handleOpenEditBirthDateModal}
-                    >
-                      Add
-                    </button>
-                    <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
-                  </div>
-                </div>
                 <div className="flex items-center justify-center text-xs md:text-base gap-3 md:gap-8 ">
                   <button
                     className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
@@ -264,7 +252,6 @@ const Profile = () => {
                     List your car
                   </button>
                 </div>
-              </div>
             )}
           </div>
         </div>

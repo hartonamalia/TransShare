@@ -18,7 +18,7 @@ const BirthDateModal = ({
   };
 
   useEffect(() => {
-    console.log("da", userBirthday);
+    console.log("da, merge", userBirthday);
     setDateOfBirth(userBirthday);
   }, [isEditBirthDateModal]);
 
@@ -69,7 +69,7 @@ const BirthDateModal = ({
             />
           </div>
           <button
-            className="button w-22 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer"
+            className="button w-24 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer"
             onClick={handleSaveBirthday}
           >
             Save
