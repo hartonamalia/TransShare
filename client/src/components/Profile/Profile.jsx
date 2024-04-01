@@ -11,7 +11,7 @@ import BirthDateModal from "./BirthDateModal";
 import IDCardModal from "./IDCardModal";
 import DriverLicenseModal from "./DriverLicenseModal";
 import bcgImage from "../../assets/bcg.jpg";
-
+import profileImage from "../../assets/profile_pic.png";
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
   const navigate = useNavigate();
@@ -103,16 +103,24 @@ const Profile = () => {
   };
   return (
     <>
-      <div
-        className="w-full md:h-72 h-48"
-        style={{ backgroundImage: "url('../../assets/bcg.jpg')" }}
-      >
-        <img className="h-full w-full" src={bcgImage} alt="" />
+      <div className="w-full md:h-72 h-48 relative">
+        <img
+          className="h-full w-full object-cover"
+          src={bcgImage}
+          alt="Banner"
+        />
+
+        <img
+          src={profileImage}
+          alt="Profile"
+          className="absolute left-[7%] md:left-[10%] lg:left-[20%] bottom-4 w-20 h-20 md:w-28 md:h-28 object-cover rounded-full border-2 border-white cursor-pointer"
+        />
       </div>
-      <div className="flex justify-center gap-8">
+
+      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-8">
         <Sidebar />
         <div className="flex flex-col">
-          <div className="relative mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg w-[23rem] md:w-[32rem]">
+          <div className="relative mt-4 md:mt-10 max-w-xl mx-auto p-10 bg-white  shadow  border-t-8 border-t-violet-500 rounded-lg w-[23rem] md:w-[32rem]">
             {userDetails && (
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col md:flex-row justify-between md:items-center ">
@@ -244,14 +252,14 @@ const Profile = () => {
               <h2 className="text-2xl font-bold text-gray-700">Owners Only</h2>
             </div>
             {userDetails && (
-                <div className="flex items-center justify-center text-xs md:text-base gap-3 md:gap-8 ">
-                  <button
-                    className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
-                    onClick={() => navigate("/list")}
-                  >
-                    List your car
-                  </button>
-                </div>
+              <div className="flex items-center justify-center text-xs md:text-base gap-3 md:gap-8 ">
+                <button
+                  className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
+                  onClick={() => navigate("/list")}
+                >
+                  List your car
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -260,12 +268,17 @@ const Profile = () => {
             isEditBirthDateModal={isEditBirthDateModal}
             handleCloseEditBirthDateModal={handleCloseEditBirthDateModal}
             userBirthday={userDetails.dateOfBirth}
+            fetchUserDetails={fetchUserDetails}
           />
         )}
         <IDCardModal
           isEditIdCopy={isEditIdCopy}
           handleCloseEditIdCopy={handleCloseEditIdCopy}
         />
+        <DriverLicenseModal 
+        isEditDriverLicenseDetails={isEditDriverLicenseDetails}
+        handleCloseEditDriverLicenseDetails={handleCloseEditDriverLicenseDetails}
+        /> 
       </div>
     </>
   );

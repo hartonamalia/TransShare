@@ -9,6 +9,7 @@ const BirthDateModal = ({
   isEditBirthDateModal,
   handleCloseEditBirthDateModal,
   userBirthday,
+  fetchUserDetails,
 }) => {
   const [dateOfBirth, setDateOfBirth] = useState(userBirthday);
   const { user } = useAuthContext();
@@ -47,6 +48,7 @@ const BirthDateModal = ({
       } else {
         toast.success("Birthday updated successfully!");
         handleCloseEditBirthDateModal();
+        fetchUserDetails();
       }
     } catch (error) {
       toast.error(error);
@@ -65,7 +67,7 @@ const BirthDateModal = ({
               className="border rounded p-1 focus:outline-none text-black text-center cursor-pointer"
               placeholderText="Select date"
               onChange={handleDateChange}
-              selected={userBirthday || dateOfBirth}
+              selected={dateOfBirth}
             />
           </div>
           <button

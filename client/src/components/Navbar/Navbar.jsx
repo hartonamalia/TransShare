@@ -25,6 +25,7 @@ export const Navlinks = [
     name: "PROFILE",
     link: "/profile",
   },
+  
 ];
 const Navbar = ({ theme, setTheme }) => {
   const [showMenu, setShowMenu] = useState(false);

@@ -9,6 +9,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
+import SentRequests from "./components/Profile/SentRequests";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -41,6 +42,10 @@ const App = () => {
             <Route
               path="/signup"
               element={!user ? <SignUpForm /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/sent-requests"
+              element={user ? <SentRequests /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>
