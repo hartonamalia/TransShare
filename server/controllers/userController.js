@@ -1,6 +1,26 @@
+const {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const dotenv = require("dotenv");
+const multer = require("multer");
+const crypto = require("crypto");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
+const s3 = new S3Client({
+  region: "eu-central-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+const randomImageName = () => crypto.randomBytes(16).toString("hex");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
@@ -45,6 +65,18 @@ const signupUser = async (req, res) => {
   }
 };
 
+const getPicture = async (user, type) => {
+  if (user[type]) {
+    const getObjectParams = {
+      Bucket: "trans-share",
+      Key: user[type],
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command);
+    return url;
+  }
+};
+
 const getUserDetails = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -67,7 +99,14 @@ const getUserDetails = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
+    const photoTypes = ["profilePictureURL", "idPictureURL", "driverFrontPictureURL", "driverBackPictureURL"];
+    for (const type of photoTypes) {
+      console.log(type);
+      let pictureURL = await getPicture(user, type);
+      if (pictureURL) {
+        user[type] = pictureURL;
+      }
+    }
     res.status(200).json({ userDetails: user });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
@@ -205,6 +244,58 @@ const updateUserDateOfBirth = async (req, res) => {
   }
 };
 
+const updateProfilePicture = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Bearer token not formatted properly" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const _id = decoded._id;
+
+    const user = await User.getDetails(_id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const pictureType = req.body.pictureType;
+    if (user[pictureType]) {
+      const params = {
+        Bucket: "trans-share",
+        Key: user[pictureType],
+      };
+      const command = new DeleteObjectCommand(params);
+      await s3.send(command);
+    }
+    const params = {
+      Bucket: "trans-share",
+      Key: randomImageName(),
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+    };
+
+    const command = new PutObjectCommand(params);
+    await s3.send(command);
+
+    await User.updateProfilePicture(_id, params.Key, pictureType);
+
+    res.status(200).send();
+  } catch (error) {
+    console.error("Error uploading file to S3:", error);
+    res
+      .status(500)
+      .send("An error occurred while uploading the file to S3" + error.message);
+  }
+};
+
 module.exports = {
   signupUser,
   loginUser,
@@ -212,4 +303,5 @@ module.exports = {
   updateUserDetails,
   changeUserPassword,
   updateUserDateOfBirth,
+  updateProfilePicture,
 };

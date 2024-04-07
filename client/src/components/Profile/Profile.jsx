@@ -12,6 +12,7 @@ import IDCardModal from "./IDCardModal";
 import DriverLicenseModal from "./DriverLicenseModal";
 import bcgImage from "../../assets/bcg.jpg";
 import profileImage from "../../assets/profile_pic.png";
+import UpdateProfilePicture from "./UpdateProfilePicture";
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Profile = () => {
   const [isEditIdCopy, setIsEditIdCopy] = useState(false);
   const [isEditDriverLicenseDetails, setIsEditDriverLicenseDetails] =
     useState(false);
+  const [isEditProfilePicture, setIsEditProfilePicture] = useState(false);
 
   useEffect(() => {
     if (user?.token) {
@@ -101,6 +103,23 @@ const Profile = () => {
   const handleCloseEditDriverLicenseDetails = () => {
     setIsEditDriverLicenseDetails(false);
   };
+  const handleOpenProfilePicture = () => {
+    setIsEditProfilePicture(true);
+  };
+  const handleCloseProfilePicture = () => {
+    setIsEditProfilePicture(false);
+  };
+
+  const openDriverLicenseLinks = () => {
+    if (userDetails.driverFrontPictureURL) {
+      window.open(userDetails.driverFrontPictureURL, '_blank');
+    }
+
+    if (userDetails.driverBackPictureURL) {
+        window.open(userDetails.driverBackPictureURL, '_blank');
+    }
+  };
+
   return (
     <>
       <div className="w-full md:h-72 h-48 relative">
@@ -111,9 +130,10 @@ const Profile = () => {
         />
 
         <img
-          src={profileImage}
+          src={userDetails.profilePictureURL || profileImage}
           alt="Profile"
-          className="absolute left-[7%] md:left-[10%] lg:left-[20%] bottom-4 w-20 h-20 md:w-28 md:h-28 object-cover rounded-full border-2 border-white cursor-pointer"
+          className="absolute left-[7%] md:left-[10%] lg:left-[20%] bottom-4  w-20 h-20 md:w-28 md:h-28 object-cover rounded-full border-2 border-gray-500 cursor-pointer"
+          onClick={handleOpenProfilePicture}
         />
       </div>
 
@@ -209,13 +229,27 @@ const Profile = () => {
                     >
                       Edit date of birth
                     </button>
-                    <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                    {userDetails.dateOfBirth && (
+                      <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                    )}
                   </div>
                 </div>
 
                 <div className="flex justify-between md:items-center ">
                   <span className="text-gray-500 text-sm font-bold  tracking-wide">
-                    ID copy
+                    {/* validare poza de vazut link*/}
+                    {userDetails.idPictureURL ? (
+                      <a
+                        className="cursor-pointer"
+                        href={userDetails.idPictureURL}
+                        target="_blank"
+                      >
+                        {" "}
+                        ID copy
+                      </a>
+                    ) : (
+                      "ID copy"
+                    )}
                   </span>
                   <div className="flex items-center ">
                     <button
@@ -224,13 +258,25 @@ const Profile = () => {
                     >
                       Add ID copy
                     </button>
-                    <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                    {/* validare checkicon*/}
+                    {userDetails.idPictureURL && (
+                      <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                    )}
                   </div>
                 </div>
 
                 <div className="flex  justify-between md:items-center ">
-                  <span className="text-gray-500 text-sm font-bold  tracking-wide">
-                    Driver license
+                  <span className="text-gray-500 text-sm font-bold tracking-wide">
+                    {userDetails.driverFrontPictureURL || userDetails.driverBackPictureURL ? (
+                      <a
+                        onClick={openDriverLicenseLinks}
+                        className="cursor-pointer"
+                      >
+                        Driver license
+                      </a>
+                    ) : (
+                      "Driver license"
+                    )}
                   </span>
                   <div className="flex items-center">
                     <button
@@ -239,7 +285,9 @@ const Profile = () => {
                     >
                       Add details
                     </button>
-                    <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                    {userDetails.driverFrontPictureURL && userDetails.driverBackPictureURL && (
+                      <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                    )}
                   </div>
                 </div>
               </div>
@@ -274,11 +322,20 @@ const Profile = () => {
         <IDCardModal
           isEditIdCopy={isEditIdCopy}
           handleCloseEditIdCopy={handleCloseEditIdCopy}
+          fetchUserDetails={fetchUserDetails}
         />
-        <DriverLicenseModal 
-        isEditDriverLicenseDetails={isEditDriverLicenseDetails}
-        handleCloseEditDriverLicenseDetails={handleCloseEditDriverLicenseDetails}
-        /> 
+        <DriverLicenseModal
+          isEditDriverLicenseDetails={isEditDriverLicenseDetails}
+          handleCloseEditDriverLicenseDetails={
+            handleCloseEditDriverLicenseDetails
+          }
+          fetchUserDetails={fetchUserDetails}
+        />
+        <UpdateProfilePicture
+          isEditProfilePicture={isEditProfilePicture}
+          handleCloseProfilePicture={handleCloseProfilePicture}
+          fetchUserDetails={fetchUserDetails}
+        />
       </div>
     </>
   );

@@ -3,22 +3,54 @@ import { Modal } from "@mui/material";
 import { toast } from "react-toastify";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-const IDCardModal = ({ isEditIdCopy, handleCloseEditIdCopy }) => {
-  const [file, setFile] = useState(null);
+const IDCardModal = ({
+  isEditIdCopy,
+  handleCloseEditIdCopy,
+  fetchUserDetails,
+}) => {
+  const [picture, setPicture] = useState(null);
   const { user } = useAuthContext();
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+  const handlePictureChange = (event) => {
+    const file = event.target.files[0];
+    setPicture(file);
   };
 
-  const handleSaveIdCopy = async () => {
-    if (!file || !expiryDate) {
-      toast.error("Please select a file!");
+  const handleSavePicture = async () => {
+    if (!picture) {
+      toast.error("Please select a picture!");
       return;
     }
 
-    toast.success("ID copy updated successfully!");
-    handleCloseEditIdCopy();
+    const formData = new FormData();
+    formData.append("image", picture);
+    formData.append("pictureType", "idPictureURL");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/user-pictures`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const json = await response.json();
+        toast.error(json.error);
+        handleCloseEditIdCopy();
+        return;
+      }
+
+      toast.success("ID copy updated successfully!");
+      handleCloseEditIdCopy();
+      fetchUserDetails();
+    } catch (error) {
+      toast.error(error.toString());
+    }
   };
 
   return (
@@ -32,12 +64,12 @@ const IDCardModal = ({ isEditIdCopy, handleCloseEditIdCopy }) => {
             type="file"
             id="idPicture"
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={handlePictureChange}
             className="input-field rounded ml-24"
           />
           <button
             className="button w-24 h-15 rounded p-2 text-white bg-violet-800 hover:bg-purple-400 cursor-pointer"
-            onClick={handleSaveIdCopy}
+            onClick={handleSavePicture}
           >
             Save
           </button>

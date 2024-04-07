@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+import FindCarForm from "./FindCarForm";
 
 const Home = () => {
   return (
     <div>
-      <p>Salut</p>
+      <FindCarForm />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -7,7 +7,7 @@ const EditProfile = ({
   isEditProfileModalOpen,
   handleCloseEditProfileModal,
   userDetails,
-  fetchUserDetails
+  fetchUserDetails,
 }) => {
   const [firstName, setFirstName] = useState(userDetails.firstName);
   const [lastName, setLastName] = useState(userDetails.lastName);
@@ -30,10 +30,10 @@ const EditProfile = ({
       const response = await fetch(
         `http://localhost:8000/api/user/update-details`,
         {
-          method: "PUT", 
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`, 
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify({
             firstName,
@@ -49,7 +49,7 @@ const EditProfile = ({
       if (!response.ok) {
         toast.error(json.error);
         handleCloseEditProfileModal();
-        return; 
+        return;
       }
 
       toast.success("Profile updated successfully!");

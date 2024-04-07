@@ -57,7 +57,7 @@ export default function LoginForm() {
                   setData({ ...data, password: e.target.value })
                 }
                 className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                placeholder="Enter your email"
+                placeholder="Enter your password"
                 type={"password"}
               />
             </div>

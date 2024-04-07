@@ -19,6 +19,10 @@ const userSchema = new Schema({
   prefix: String,
   restPhoneNumber: Number,
   dateOfBirth: Date,
+  profilePictureURL: String,
+  idPictureURL: String,
+  driverFrontPictureURL: String,
+  driverBackPictureURL: String,
 });
 
 // static signup method
@@ -101,6 +105,28 @@ userSchema.statics.updateDetails = async function (_id, newData) {
 
   if (!user) {
     throw Error("User with this id doesn't exist!");
+  }
+
+  return user;
+};
+
+userSchema.statics.updateProfilePicture = async function (
+  _id,
+  picture,
+  typeOfPicture
+) {
+  console.log(picture);
+  if (!_id || !picture || !typeOfPicture) {
+    throw Error("User ID, picture, and typeOfPicture must be provided");
+  }
+
+  let update = {};
+  update[typeOfPicture] = picture;
+
+  const user = await this.findByIdAndUpdate(_id, update, { new: true });
+
+  if (!user) {
+    throw Error("User not found");
   }
 
   return user;

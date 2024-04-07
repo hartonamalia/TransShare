@@ -6,6 +6,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 const DriverLicenseModal = ({
   isEditDriverLicenseDetails,
   handleCloseEditDriverLicenseDetails,
+  fetchUserDetails,
 }) => {
   const [frontFile, setFrontFile] = useState(null);
   const [backFile, setBackFile] = useState(null);
@@ -20,15 +21,50 @@ const DriverLicenseModal = ({
   };
 
   const handleSaveDriverLicense = async () => {
-    if (!frontFile || !backFile) {
-      toast.error("Please select both front and back pictures of your driver's license!");
+    if (!frontFile && !backFile) {
+      toast.error("Please select at least one picture of your driver license!");
       return;
+    }
+    if(frontFile){
+      postDriverPictures(frontFile, "driverFrontPictureURL");
+    }
+    if(backFile){
+      postDriverPictures(backFile, "driverBackPictureURL");
     }
   
     toast.success("Driver license copy updated successfully!");
     handleCloseEditDriverLicenseDetails();
   };
   
+  const postDriverPictures = async (picture, type) =>{
+    const formData = new FormData();
+    formData.append("image", picture);
+    formData.append("pictureType", type);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/user-pictures`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const json = await response.json();
+        toast.error(json.error);
+        return;
+      }
+
+      fetchUserDetails();
+    } catch (error) {
+      toast.error(error.toString());
+    }
+
+  }
 
   return (
     <Modal
