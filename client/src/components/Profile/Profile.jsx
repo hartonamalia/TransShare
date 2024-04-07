@@ -13,6 +13,8 @@ import DriverLicenseModal from "./DriverLicenseModal";
 import bcgImage from "../../assets/bcg.jpg";
 import profileImage from "../../assets/profile_pic.png";
 import UpdateProfilePicture from "./UpdateProfilePicture";
+import FileOpenIcon from "@mui/icons-material/FileOpen";
+
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
   const navigate = useNavigate();
@@ -112,11 +114,11 @@ const Profile = () => {
 
   const openDriverLicenseLinks = () => {
     if (userDetails.driverFrontPictureURL) {
-      window.open(userDetails.driverFrontPictureURL, '_blank');
+      window.open(userDetails.driverFrontPictureURL, "_blank");
     }
 
     if (userDetails.driverBackPictureURL) {
-        window.open(userDetails.driverBackPictureURL, '_blank');
+      window.open(userDetails.driverBackPictureURL, "_blank");
     }
   };
 
@@ -236,21 +238,21 @@ const Profile = () => {
                 </div>
 
                 <div className="flex justify-between md:items-center ">
-                  <span className="text-gray-500 text-sm font-bold  tracking-wide">
-                    {/* validare poza de vazut link*/}
-                    {userDetails.idPictureURL ? (
+                  <div>
+                    <span className="text-gray-500 text-sm font-bold  tracking-wide">
+                      ID copy
+                    </span>
+                    {userDetails.idPictureURL && (
                       <a
                         className="cursor-pointer"
                         href={userDetails.idPictureURL}
                         target="_blank"
                       >
                         {" "}
-                        ID copy
+                        <FileOpenIcon className="text-violet-500 text-xs cursor-pointer" />
                       </a>
-                    ) : (
-                      "ID copy"
                     )}
-                  </span>
+                  </div>
                   <div className="flex items-center ">
                     <button
                       className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
@@ -266,18 +268,18 @@ const Profile = () => {
                 </div>
 
                 <div className="flex  justify-between md:items-center ">
-                  <span className="text-gray-500 text-sm font-bold tracking-wide">
-                    {userDetails.driverFrontPictureURL || userDetails.driverBackPictureURL ? (
-                      <a
-                        onClick={openDriverLicenseLinks}
-                        className="cursor-pointer"
-                      >
-                        Driver license
-                      </a>
-                    ) : (
-                      "Driver license"
-                    )}
-                  </span>
+                  <div>
+                    <span className="text-gray-500 text-sm font-bold  tracking-wide">
+                      Driver license
+                    </span>
+                    {(userDetails.driverFrontPictureURL ||
+                      userDetails.driverBackPictureURL) && (
+                        <FileOpenIcon
+                          className="text-violet-500 text-xs cursor-pointer"
+                          onClick={openDriverLicenseLinks}
+                        />
+                      )}
+                  </div>
                   <div className="flex items-center">
                     <button
                       className="ml-4 py-1 px-3 rounded-md text-gray bg-white  shadow border-t-1 hover:bg-purple-400 text-xs"
@@ -285,9 +287,10 @@ const Profile = () => {
                     >
                       Add details
                     </button>
-                    {userDetails.driverFrontPictureURL && userDetails.driverBackPictureURL && (
-                      <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
-                    )}
+                    {userDetails.driverFrontPictureURL &&
+                      userDetails.driverBackPictureURL && (
+                        <CheckCircleIcon className="w-6 h-6 text-yellow-300 ml-2" />
+                      )}
                   </div>
                 </div>
               </div>
