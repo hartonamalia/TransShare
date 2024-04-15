@@ -10,16 +10,17 @@ import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import SentRequests from "./components/Profile/SentRequests";
 import Rent from "./components/Rent/RentCar";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
 
 const App = () => {
   const { user } = useAuthContext();
-
-  // if (user == undefined) {
-  //   return null;
-  // }
+  useEffect(() => {
+    Aos.init({ duration: 2000 });
+  }, []);
 
   return (
     <div>
@@ -45,6 +46,10 @@ const App = () => {
             />
             <Route
               path="/rent"
+              element={user ? <Rent /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/about"
               element={user ? <Rent /> : <Navigate to="/login" />}
             />
             <Route
