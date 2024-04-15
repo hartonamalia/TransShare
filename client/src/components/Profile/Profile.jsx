@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useUserDetails } from "../../hooks/useUserDetails";
-import { Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EditProfile from "./EditProfile";
 import ChangePasswordModal from "./ChangePasswordModal";

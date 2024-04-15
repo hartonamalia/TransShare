@@ -24,8 +24,17 @@ const BirthDateModal = ({
   }, [isEditBirthDateModal]);
 
   const handleSaveBirthday = async () => {
+    const now = new Date();
+    const minAgeDate = new Date(
+      now.getFullYear() - 18,
+      now.getMonth(),
+      now.getDate()
+    );
     if (!dateOfBirth) {
       toast.error("Please select a date.");
+      return;
+    } else if (dateOfBirth > minAgeDate) {
+      toast.error("You must be at least 18 years old.");
       return;
     }
     try {
@@ -68,6 +77,10 @@ const BirthDateModal = ({
               placeholderText="Select date"
               onChange={handleDateChange}
               selected={dateOfBirth}
+              maxDate={new Date()}  
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
             />
           </div>
           <button

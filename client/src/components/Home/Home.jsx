@@ -1,10 +1,10 @@
 import React from "react";
-import FindCarForm from "./FindCarForm";
+import About from "./About";
 
 const Home = () => {
   return (
     <div>
-      <FindCarForm />
+      <About />
     </div>
   );
 };
