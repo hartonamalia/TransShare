@@ -3,6 +3,8 @@ import About from "./About";
 import SearchBanner from "./SearchBanner";
 import TopBanner from "./TopBanner";
 import CarCard from "./CarCard";
+import CarReviewCarousel from "./CarReviewCarousel";
+import FeedbackCar from "./FeedbackCar";
 
 
 const Home = () => {
@@ -11,7 +13,10 @@ const Home = () => {
       <TopBanner />
       <SearchBanner />
       <About />
-      <CarCard />
+      <div className="max-w-screen-lg mx-auto px-4">
+      <CarReviewCarousel />
+      <FeedbackCar />
+      </div>
     </div>
   );
 };

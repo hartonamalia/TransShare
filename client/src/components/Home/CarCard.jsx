@@ -11,16 +11,16 @@ import { useNavigate } from "react-router-dom";
 const CarCard = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col w-80 h-[30rem] bg-white rounded-lg  mb-6 shadow-md gap-3">
-      <div className="w-full">
+    <div className="flex flex-col w-80 h-[30rem] bg-white rounded-lg mb-6 shadow-md overflow-hidden">
+      <div className="relative w-full">
         <img
           src={CarPng}
-          className="w-full rounded-lg transform-gpu transition duration-2000 ease-in-out"
+          className="w-full transform-gpu transition duration-2000 ease-in-out"
           alt="Toyota"
         />
-      </div>
-      <div className="flex items-center justify-center w-20 h-10 p-1 bg-violet-500 rounded-md">
-        <span className="text-white">$400/day</span>
+         <div className="absolute bottom-0 right-0 mb-[-1rem]  mr-[1rem] w-20 h-10 bg-violet-500 rounded-md flex items-center justify-center">
+          <span className="text-white">$400/day</span>
+        </div>
       </div>
       <div className="flex flex-col gap-3 p-4">
         <div className="flex flex-col gap-1">
@@ -32,12 +32,12 @@ const CarCard = () => {
             <p>⭐</p>
             <span>(5.0)</span>
           </div>
-          <h3 className="listing-title">Toyota Camry SE 350</h3>
+          <h3 className="font-semibold">Toyota Camry SE 350</h3>
           <h6>
             Listed By : <span>Venis Darren</span>
           </h6>
         </div>
-        <div className="flex flex-col gap-2 border-t border-t-gray-700">
+        <div className="flex flex-col gap-2 border-t border-t-gray-500">
           <ul className="flex items-center justify-between">
             <li className="flex items-center gap-1">
               <span>
