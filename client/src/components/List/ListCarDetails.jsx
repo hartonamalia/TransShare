@@ -1,92 +1,248 @@
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 
 const ListCarDetails = () => {
-  const [features, setFeatures] = useState([]);
+  const navigate = useNavigate();
+  const [isFirstDetailsOpen, setIsFirstDetailsOpen] = useState(false);
+  const [isSecondDetailsOpen, setIsSecondDetailsOpen] = useState(false);
+  const [selectedFeatures, setSelectedFeatures] = useState({});
+  const [dailyPrice, setDailyPrice] = useState("");
 
-//   const handleFeatureChange = (event, feature) => {
-//     setFeatures((currentFeatures) =>
-//       currentFeatures.includes(feature)
-//         ? currentFeatures.filter((f) => f !== feature)
-//         : [...currentFeatures, feature]
-//     );
-//   };
+  const toggleFirstDetails = () => {
+    setIsFirstDetailsOpen(!isFirstDetailsOpen);
+  };
 
-//   e;
-  const featureOptions = ["All-wheel drive", "Android Auto", "Apple CarPlay"];
+  const toggleSecondDetails = () => {
+    setIsSecondDetailsOpen(!isSecondDetailsOpen);
+  };
+
+  const handleFeatureChange = (feature) => {
+    setSelectedFeatures((prevFeatures) => ({
+      ...prevFeatures,
+      [feature]: !prevFeatures[feature],
+    }));
+  };
+
+  const handlePriceChange = (event) => {
+    setDailyPrice(event.target.value);
+  };
+
+  const featuresList = [
+    "All-wheel drive",
+    "Android Auto",
+    "Apple CarPlay",
+    "AUX input",
+    "Backup camera",
+    "Bike rack",
+    "Blind spot warning",
+    "Bluetooth",
+    "Child seat",
+    "Convertible",
+    "GPS",
+    "Heated seats",
+    "Keyless entry",
+    "Pet friendly",
+    "Ski rack",
+    "Snow tires or chains",
+    "Sunroof",
+    "Toll pass",
+    "USB charger",
+    "Wheelchair accessible",
+  ];
 
   return (
-    <div className="p-4 bg-white shadow rounded-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label
-            htmlFor="licensePlate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            License plate number
-          </label>
+    <div className="container mx-auto px-4 py-8">
+      <div
+        className="flex justify-between items-center mb-4 cursor-pointer"
+        onClick={toggleFirstDetails}
+      >
+        <h1 className="text-3xl font-semibold text-gray-800 mb-4">
+          Car details
+        </h1>
+        {isFirstDetailsOpen ? (
+          <ChevronUpIcon className="w-5 h-5" />
+        ) : (
+          <ChevronDownIcon className="w-5 h-5" />
+        )}
+      </div>
+      {/* first section */}
+      {isFirstDetailsOpen && (
+        <div className="bg-white shadow rounded-lg p-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="License Plate Number"
+                className="font-semibold text-gray-700 block pb-2"
+              >
+                License Plate Number
+              </label>
+              <input
+                id="License Plate Number"
+                type="text"
+                className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+                placeholder="License Plate Number"
+              />
+              <div className="pt-4">
+                <p className="text-sm text-gray-600">
+                  Your license plate information won't be shared with guests.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="city"
+                className="font-semibold text-gray-700 block pb-2"
+              >
+                City
+              </label>
+              <select
+                id="city"
+                name="city"
+                className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select City
+                </option>
+                <option value="Alba Iulia">Alba Iulia</option>
+                <option value="Arad">Arad</option>
+                <option value="Bacău">Bacău</option>
+                <option value="Oradea">Oradea</option>
+                <option value="București">București</option>
+                <option value="Cluj-Napoca">Cluj-Napoca</option>
+                <option value="Constanța">Constanța</option>
+                <option value="Craiova">Craiova</option>
+                <option value="Iași">Iași</option>
+                <option value="Timișoara">Timișoara</option>
+                <option value="Sibiu">Sibiu</option>
+                {/* ... restul orașelor */}
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="county"
+                className="font-semibold text-gray-700 block pb-2"
+              >
+                County
+              </label>
+              <select
+                id="county"
+                name="county"
+                className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select County
+                </option>
+                <option value="Alba Iulia">Alba Iulia</option>
+                <option value="Arad">Arad</option>
+                <option value="Bacău">Bacău</option>
+                <option value="Oradea">Oradea</option>
+                <option value="București">București</option>
+                <option value="Cluj-Napoca">Cluj-Napoca</option>
+                <option value="Constanța">Constanța</option>
+                <option value="Craiova">Craiova</option>
+                <option value="Iași">Iași</option>
+                <option value="Timișoara">Timișoara</option>
+                <option value="Sibiu">Sibiu</option>
+                {/* ... restul orașelor */}
+              </select>
+            </div>
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold text-gray-800 mb-3">
+                Car features
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10">
+                {featuresList.map((feature) => (
+                  <label key={feature} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={!!selectedFeatures[feature]}
+                      onChange={() => handleFeatureChange(feature)}
+                      className="form-checkbox h-5 w-5 text-violet-500 checked:bg-violet-600 checked:border-transparent focus:outline-none focus:ring-0"
+                    />
+                    <span className="ml-2 text-sm text-gray-700 font-semibold">
+                      {feature}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t pt-4">
+            <p className="text-sm text-gray-600">
+              Tell guests what makes your car unique and why they will love it.
+            </p>
+          </div>
+          <div className="mt-4">
+            <label
+              htmlFor="description"
+              className="block text-sm font-bold text-gray-700"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              rows="3"
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Add some details about your car."
+            ></textarea>
+          </div>
+        </div>
+      )}
+
+      {/* second section */}
+      <div
+        className="flex justify-between items-center mb-4 cursor-pointer"
+        onClick={toggleSecondDetails}
+      >
+        <h1 className="text-3xl font-semibold text-gray-800">Car photos</h1>
+        {isSecondDetailsOpen ? (
+          <ChevronUpIcon className="w-5 h-5" />
+        ) : (
+          <ChevronDownIcon className="w-5 h-5" />
+        )}
+      </div>
+
+      {isSecondDetailsOpen && (
+        <div className="bg-white shadow rounded-lg p-6 mb-8">
+          {/* Alte câmpuri formular sau conținut */}
+          {/* ... */}
+        </div>
+      )}
+
+      {/* Componenta pentru prețul zilnic */}
+      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-4">
+        <label
+          htmlFor="daily-price"
+          className="block text-sm font-bold text-gray-700"
+        >
+          Daily price
+        </label>
+        <div className="flex items-center border border-gray-300 rounded overflow-hidden">
+          <span className="pl-1 text-gray-500">RON</span>
           <input
             type="text"
-            id="licensePlate"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter license plate"
+            id="daily-price"
+            className="p-3 block w-full focus:ring-0"
+            placeholder="Enter your daily price"
+            value={dailyPrice}
+            onChange={(e) => setDailyPrice(e.target.value)}
           />
-          <p className="mt-1 text-xs text-gray-500">
-            Your license plate information won't be publicly visible.
-          </p>
-        </div>
-        <div>
-          <label
-            htmlFor="state"
-            className="block text-sm font-medium text-gray-700"
-          >
-            City
-          </label>
-          <select
-            id="city"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <option>Pennsylvania</option>
-            {/* ... alte opțiuni de state ... */}
-          </select>
         </div>
       </div>
 
-      <fieldset>
-        <legend className="block text-sm font-medium text-gray-700">
-          Car features
-        </legend>
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {featureOptions.map((feature) => (
-            <div key={feature}>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                  checked={features.includes(feature)}
-                  onChange={() => handleFeatureChange(feature)}
-                />
-                <span className="ml-2 text-sm text-gray-700">{feature}</span>
-              </label>
-            </div>
-          ))}
-        </div>
-      </fieldset>
-
-      <div className="mt-4">
-        <label
-          htmlFor="description"
-          className="block text-sm font-medium text-gray-700"
+      <div className="text-center mt-6">
+        <button
+          className="px-16 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
+          onClick={() => navigate("/list-car-submit")}
         >
-          Description
-        </label>
-        <textarea
-          id="description"
-          rows="3"
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="Tell guests what makes your car unique and why they'll love driving it."
-        ></textarea>
+          Submit
+        </button>
       </div>
-
     </div>
   );
 };

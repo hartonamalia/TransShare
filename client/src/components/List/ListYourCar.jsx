@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "@mui/material";
 
 const ListYourCar = () => {
   const navigate = useNavigate();
@@ -13,9 +14,9 @@ const ListYourCar = () => {
           <div className="text-sm font-medium text-gray-500">
             1 of 5 steps | Next: Car details
           </div>
-          <button className="ml-4 px-4 py-1 text-sm bg-violet-500 hover:bg-purple-400 font-semibold text-white rounded-full">
+          {/* <button className="ml-4 px-4 py-1 text-sm bg-violet-500 hover:bg-purple-400 font-semibold text-white rounded-full">
             Start over
-          </button>
+          </button> */}
         </div>
         <button className="px-4 py-1 text-sm text-white font-semibold border bg-violet-500 hover:bg-purple-400 rounded-full">
           View all steps
@@ -43,16 +44,16 @@ const ListYourCar = () => {
           >
             Which car do you have?
           </label>
-          <div className="flex justify-between items-center">
-            <div className="flex">
+          {/* <div className="flex justify-between items-center">
+            <div className="flex"> */}
               <input
                 id="license"
                 type="text"
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
                 placeholder="License plate"
               />
-            </div>
-          </div>
+            {/* </div>
+          </div> */}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
