@@ -9,9 +9,11 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import SentRequests from "./components/Profile/SentRequests";
-import Rent from "./components/Rent/RentCar";
+import ListCar from "./components/List/ListCar";
+import ListYourCar from "./components/List/ListYourCar";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import ListCarDetails from "./components/List/ListCarDetails";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -44,13 +46,21 @@ const App = () => {
               path="/signup"
               element={!user ? <SignUpForm /> : <Navigate to="/" />}
             />
-            <Route
-              path="/rent"
-              element={user ? <Rent /> : <Navigate to="/login" />}
-            />
-            <Route
+            {/* <Route
               path="/about"
-              element={user ? <Rent /> : <Navigate to="/login" />}
+              element={user ? <About /> : <Navigate to="/login" />}
+            /> */}
+             <Route
+              path="/list"
+              element={user ? <ListCar /> : <Navigate to="/login" />}
+            />
+             <Route
+              path="/list-car-details"
+              element={user ? <ListCarDetails /> : <Navigate to="/login" />}
+            />
+             <Route
+              path="/list-your-car"
+              element={user ? <ListYourCar /> : <Navigate to="/login" />}
             />
             <Route
               path="/sent-requests"
