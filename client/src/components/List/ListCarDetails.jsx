@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  TrashIcon,
+} from "@heroicons/react/solid";
 
 const ListCarDetails = () => {
   const navigate = useNavigate();
@@ -8,6 +12,7 @@ const ListCarDetails = () => {
   const [isSecondDetailsOpen, setIsSecondDetailsOpen] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [dailyPrice, setDailyPrice] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const toggleFirstDetails = () => {
     setIsFirstDetailsOpen(!isFirstDetailsOpen);
@@ -50,6 +55,22 @@ const ListCarDetails = () => {
     "USB charger",
     "Wheelchair accessible",
   ];
+
+  const onSelectFile = (event) => {
+    const selectedFiles = event.target.files;
+    const selectedFilesArray = Array.from(selectedFiles);
+    console.log(selectedFiles[0]);
+    const imagesArray = selectedFilesArray.map((file) => {
+      return URL.createObjectURL(file);
+    });
+    console.log(imagesArray);
+    setSelectedImages((previousImages) => previousImages.concat(imagesArray));
+    event.target.value = "";
+  };
+  function deleteHandler(image) {
+    setSelectedImages(selectedImages.filter((e) => e !== image));
+    URL.revokeObjectURL(image);
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -196,7 +217,7 @@ const ListCarDetails = () => {
 
       {/* second section */}
       <div
-        className="flex justify-between items-center mb-4 cursor-pointer"
+        className="flex justify-between items-center mb-4 cursor-pointer border-t-2 border-t-violet-500 py-2"
         onClick={toggleSecondDetails}
       >
         <h1 className="text-3xl font-semibold text-gray-800">Car photos</h1>
@@ -209,13 +230,47 @@ const ListCarDetails = () => {
 
       {isSecondDetailsOpen && (
         <div className="bg-white shadow rounded-lg p-6 mb-8">
-          {/* Alte câmpuri formular sau conținut */}
-          {/* ... */}
+          <div>
+            <input
+              type="file"
+              name="images"
+              onChange={onSelectFile}
+              multiple
+              accept="image/*"
+            />
+
+            {selectedImages.length > 0 && (
+              <button
+                className="upload-btn"
+                onClick={() => {
+                  console.log(selectedImages);
+                }}
+              ></button>
+            )}
+
+            <div className="flex flex-wrap gap-10 items-center">
+              {selectedImages &&
+                selectedImages.map((image, index) => {
+                  return (
+                    <div className="relative" key={image}>
+                      <img
+                        className="w-[200px] h-[200px]"
+                        src={image}
+                        alt="upload"
+                      />
+                      <TrashIcon
+                        className="absolute top-0 right-0 flex items-center justify-center h-7 w-7   font-semibold text-red-500 cursor-pointer "
+                        onClick={() => deleteHandler(image)}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Componenta pentru prețul zilnic */}
-      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-4">
+      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-4 border-t-2 border-t-violet-500">
         <label
           htmlFor="daily-price"
           className="block text-sm font-bold text-gray-700"

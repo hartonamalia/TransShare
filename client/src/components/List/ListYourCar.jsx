@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
+import ViewStepsModal from "./ViewStepsModal";
 
 const ListYourCar = () => {
+  const [isViewStepsOpen, setIsViewStepsOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleCloseViewSteps = () => {
+    setIsViewStepsOpen(false);
+  };
+  const handleOpenViewSteps = () => {
+    setIsViewStepsOpen(true);
+  };
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-semibold text-gray-800 mb-4">
@@ -14,11 +23,12 @@ const ListYourCar = () => {
           <div className="text-sm font-medium text-gray-500">
             1 of 5 steps | Next: Car details
           </div>
-          {/* <button className="ml-4 px-4 py-1 text-sm bg-violet-500 hover:bg-purple-400 font-semibold text-white rounded-full">
-            Start over
-          </button> */}
+
         </div>
-        <button className="px-4 py-1 text-sm text-white font-semibold border bg-violet-500 hover:bg-purple-400 rounded-full">
+        <button
+          className="px-4 py-1 text-sm text-white font-semibold border bg-violet-500 hover:bg-purple-400 rounded-full"
+          onClick={handleOpenViewSteps}
+        >
           View all steps
         </button>
       </div>
@@ -46,13 +56,13 @@ const ListYourCar = () => {
           </label>
           {/* <div className="flex justify-between items-center">
             <div className="flex"> */}
-              <input
-                id="license"
-                type="text"
-                className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
-                placeholder="License plate"
-              />
-            {/* </div>
+          <input
+            id="license"
+            type="text"
+            className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+            placeholder="License plate"
+          />
+          {/* </div>
           </div> */}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
@@ -163,13 +173,19 @@ const ListYourCar = () => {
         </div>
       </div>
       <div className="text-center mt-6">
-      <button
-      className="px-6 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
-      onClick={() => navigate("/list-car-details")}
-    >
-      Next
-    </button>
+        <button
+          className="px-6 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
+          onClick={() => navigate("/list-car-details")}
+        >
+          Next
+        </button>
       </div>
+      {isViewStepsOpen && (
+        <ViewStepsModal
+          isViewStepsOpen={isViewStepsOpen}
+          handleCloseViewSteps={handleCloseViewSteps}
+        />
+      )}
     </div>
   );
 };
