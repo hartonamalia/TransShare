@@ -56,12 +56,12 @@ const ListYourCar = () => {
           </label>
           {/* <div className="flex justify-between items-center">
             <div className="flex"> */}
-          <input
+          {/* <input
             id="license"
             type="text"
             className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
             placeholder="License plate"
-          />
+          /> */}
           {/* </div>
           </div> */}
         </div>

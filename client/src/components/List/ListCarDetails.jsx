@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronUpIcon,
   ChevronDownIcon,
@@ -10,9 +10,14 @@ const ListCarDetails = () => {
   const navigate = useNavigate();
   const [isFirstDetailsOpen, setIsFirstDetailsOpen] = useState(false);
   const [isSecondDetailsOpen, setIsSecondDetailsOpen] = useState(false);
+  const [isThirdDetailsOpen, setIsThirdDetailsOpen] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [dailyPrice, setDailyPrice] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [counties, setCounties] = useState([]);
+  const [selectedCounty, setSelectedCounty] = useState({});
+  const [selectedCity, setSelectedCity] = useState({});
 
   const toggleFirstDetails = () => {
     setIsFirstDetailsOpen(!isFirstDetailsOpen);
@@ -20,6 +25,10 @@ const ListCarDetails = () => {
 
   const toggleSecondDetails = () => {
     setIsSecondDetailsOpen(!isSecondDetailsOpen);
+  };
+
+  const toggleThirdDetails = () => {
+    setIsThirdDetailsOpen(!isThirdDetailsOpen);
   };
 
   const handleFeatureChange = (feature) => {
@@ -72,6 +81,38 @@ const ListCarDetails = () => {
     URL.revokeObjectURL(image);
   }
 
+  const fetchCounties = async () => {
+    try {
+      const response = await fetch("https://roloca.coldfuse.io/judete");
+      const data = await response.json();
+
+      setCounties(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchCities = async () => {
+    if (!selectedCounty.auto) return;
+    try {
+      const response = await fetch(
+        `https://roloca.coldfuse.io/orase/${selectedCounty.auto}`
+      );
+      const data = await response.json();
+      setCities(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCounties();
+  }, []);
+
+  useEffect(() => {
+    fetchCities();
+  }, [selectedCounty]);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div
@@ -113,36 +154,6 @@ const ListCarDetails = () => {
 
             <div>
               <label
-                htmlFor="city"
-                className="font-semibold text-gray-700 block pb-2"
-              >
-                City
-              </label>
-              <select
-                id="city"
-                name="city"
-                className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Select City
-                </option>
-                <option value="Alba Iulia">Alba Iulia</option>
-                <option value="Arad">Arad</option>
-                <option value="Bacău">Bacău</option>
-                <option value="Oradea">Oradea</option>
-                <option value="București">București</option>
-                <option value="Cluj-Napoca">Cluj-Napoca</option>
-                <option value="Constanța">Constanța</option>
-                <option value="Craiova">Craiova</option>
-                <option value="Iași">Iași</option>
-                <option value="Timișoara">Timișoara</option>
-                <option value="Sibiu">Sibiu</option>
-                {/* ... restul orașelor */}
-              </select>
-            </div>
-            <div>
-              <label
                 htmlFor="county"
                 className="font-semibold text-gray-700 block pb-2"
               >
@@ -152,25 +163,46 @@ const ListCarDetails = () => {
                 id="county"
                 name="county"
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
-                defaultValue=""
+                value={selectedCounty.nume || ""}
+                onChange={(e) => {
+                  const selected = counties.find(
+                    (county) => county.nume === e.target.value
+                  );
+                  setSelectedCounty(selected);
+                  fetchCities();
+                }}
               >
-                <option value="" disabled>
-                  Select County
-                </option>
-                <option value="Alba Iulia">Alba Iulia</option>
-                <option value="Arad">Arad</option>
-                <option value="Bacău">Bacău</option>
-                <option value="Oradea">Oradea</option>
-                <option value="București">București</option>
-                <option value="Cluj-Napoca">Cluj-Napoca</option>
-                <option value="Constanța">Constanța</option>
-                <option value="Craiova">Craiova</option>
-                <option value="Iași">Iași</option>
-                <option value="Timișoara">Timișoara</option>
-                <option value="Sibiu">Sibiu</option>
-                {/* ... restul orașelor */}
+                <option value="">Select County</option>
+                {counties.map((county, index) => (
+                  <option key={index} value={county.nume}>
+                    {county.nume}
+                  </option>
+                ))}
               </select>
             </div>
+            <div>
+              <label
+                htmlFor="city"
+                className="font-semibold text-gray-700 block pb-2"
+              >
+                City
+              </label>
+              <select
+                id="city"
+                name="city"
+                className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+                placeholder="Select City"
+                defaultValue=""
+              >
+                {cities &&
+                  cities.map((city, index) => (
+                    <option key={index} value={city.nume}>
+                      {city.nume}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
             <div className="mb-4">
               <h2 className="text-xl font-semibold text-gray-800 mb-3">
                 Car features
@@ -182,8 +214,9 @@ const ListCarDetails = () => {
                       type="checkbox"
                       checked={!!selectedFeatures[feature]}
                       onChange={() => handleFeatureChange(feature)}
-                      className="form-checkbox h-5 w-5 text-violet-500 checked:bg-violet-600 checked:border-transparent focus:outline-none focus:ring-0"
+                      className="form-checkbox  text-violet-500 checked:bg-violet-600 checked:border-transparent focus:outline-none focus:ring-0"
                     />
+
                     <span className="ml-2 text-sm text-gray-700 font-semibold">
                       {feature}
                     </span>
@@ -269,27 +302,44 @@ const ListCarDetails = () => {
           </div>
         </div>
       )}
+      {/* third section*/}
 
-      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-4 border-t-2 border-t-violet-500">
-        <label
-          htmlFor="daily-price"
-          className="block text-sm font-bold text-gray-700"
+      <div>
+        <div
+          className="flex justify-between items-center mb-4 cursor-pointer border-t-2 border-t-violet-500 py-2"
+          onClick={toggleThirdDetails}
         >
-          Daily price
-        </label>
-        <div className="flex items-center border border-gray-300 rounded overflow-hidden">
-          <span className="pl-1 text-gray-500">RON</span>
-          <input
-            type="text"
-            id="daily-price"
-            className="p-3 block w-full focus:ring-0"
-            placeholder="Enter your daily price"
-            value={dailyPrice}
-            onChange={(e) => setDailyPrice(e.target.value)}
-          />
+          <h1 className="text-3xl font-semibold text-gray-800">Daily price</h1>
+          {isThirdDetailsOpen ? (
+            <ChevronUpIcon className="w-5 h-5" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5" />
+          )}
         </div>
+        {isThirdDetailsOpen && (
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-4">
+            <label
+              htmlFor="daily-price"
+              className="block text-sm font-bold text-gray-700"
+            >
+              Daily price
+            </label>
+            <div className="flex items-center border border-gray-300 rounded overflow-hidden">
+              <span className="pl-1 text-gray-500">RON</span>
+              <input
+                type="text"
+                id="daily-price"
+                className="p-3 block w-full focus:ring-0"
+                placeholder="Enter your daily price"
+                value={dailyPrice}
+                onChange={(e) => setDailyPrice(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* submit button*/}
       <div className="text-center mt-6">
         <button
           className="px-16 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
