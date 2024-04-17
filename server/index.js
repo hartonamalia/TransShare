@@ -4,6 +4,7 @@ const cors = require("cors");
 const { mongoose } = require("mongoose");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/authRoutes");
+const carRoutes = require("./routes/carRoutes");
 const app = express();
 
 app.use(cors());
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 //app.use("/", require("./routes/authRoutes"));
 app.use("/api/user", userRoutes);
+app.use("/api/car", carRoutes);
 
 const port = 8000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));
