@@ -4,6 +4,7 @@ const validator = require("validator");
 const Schema = mongoose.Schema;
 
 const carSchema = new Schema({
+  userId: String,
   address: String,
   year: String,
   make: String,
@@ -20,6 +21,7 @@ const carSchema = new Schema({
 });
 
 carSchema.statics.createCar = async function (
+  userId,
   address,
   year,
   make,
@@ -35,6 +37,7 @@ carSchema.statics.createCar = async function (
   dailyPrice
 ) {
   if (
+    !userId ||
     !address ||
     !year ||
     !make ||
@@ -52,6 +55,7 @@ carSchema.statics.createCar = async function (
     throw Error("All fields must be filled");
   }
   const car = await this.create({
+    userId,
     address,
     year,
     make,

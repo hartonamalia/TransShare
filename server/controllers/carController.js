@@ -55,7 +55,8 @@ const updateCarDetails = async (req, res) => {
   }
 
   try {
-    jwt.verify(token, process.env.SECRET);
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const userId = decoded._id;
 
     const {
       address,
@@ -91,6 +92,7 @@ const updateCarDetails = async (req, res) => {
     }
 
     const newCar = await Car.createCar(
+      userId,
       address,
       year,
       make,
@@ -120,6 +122,8 @@ const updateCarDetails = async (req, res) => {
 
 const uploadCarImages = async (req, res) => {
   const carId = req.params.id;
+  console.log(carId);
+
   if (!carId) {
     return res.status(400).json({ error: "Car ID is required" });
   }

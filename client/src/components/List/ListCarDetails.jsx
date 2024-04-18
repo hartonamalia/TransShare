@@ -21,6 +21,7 @@ const ListCarDetails = () => {
   const [dailyPrice, setDailyPrice] = useState("");
   const [description, setDescription] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [counties, setCounties] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCounty, setSelectedCounty] = useState({});
@@ -93,7 +94,8 @@ const ListCarDetails = () => {
       }
 
       console.log("Car details submitted successfully", responseData);
-      navigate("/list-car-submit");
+      const carId = responseData.car._id;
+      uploadImages(carId);
     } catch (error) {
       toast.error(error);
     }
@@ -123,21 +125,53 @@ const ListCarDetails = () => {
   ];
 
   const onSelectFile = (event) => {
-    const selectedFiles = event.target.files;
-    const selectedFilesArray = Array.from(selectedFiles);
-    console.log(selectedFiles[0]);
-    const imagesArray = selectedFilesArray.map((file) => {
-      return URL.createObjectURL(file);
-    });
-    console.log(imagesArray);
-    setSelectedImages((previousImages) => previousImages.concat(imagesArray));
-    event.target.value = "";
+    const files = event.target.files;
+    const filesArray = Array.from(files);
+
+    const imagesArray = filesArray.map((file) => URL.createObjectURL(file));
+    setSelectedImages((prevImages) => [...prevImages, ...imagesArray]);
+    setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]); // Păstrează fișierele pentru upload
+
+    event.target.value = ""; // Resetează inputul pentru a permite încărcarea acelorași fișiere dacă este necesar
   };
+
   function deleteHandler(image) {
     setSelectedImages(selectedImages.filter((e) => e !== image));
     URL.revokeObjectURL(image);
   }
 
+  const uploadImages = async (carId) => {
+    const formBody = new FormData();
+    console.log("carId:", carId);
+    selectedFiles.forEach((file) => {
+      formBody.append("images", file);
+    });
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-image/post-car-image/${carId}`,
+        {
+          method: "POST",
+          body: formBody,
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Server response:", result);
+      setSelectedFiles([]);
+      setSelectedImages([]);
+      navigate("/list-car-submit");
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
   const fetchCounties = async () => {
     try {
       const response = await fetch("https://roloca.coldfuse.io/judete");
