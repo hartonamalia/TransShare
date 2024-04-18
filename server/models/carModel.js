@@ -11,6 +11,12 @@ const carSchema = new Schema({
   odometer: String,
   transmission: String,
   paidTaxesStatus: String,
+  licensePlate: String,
+  county: String,
+  city: String,
+  carFeatures: [String],
+  description: String,
+  dailyPrice: Number,
 });
 
 carSchema.statics.createCar = async function (
@@ -20,7 +26,13 @@ carSchema.statics.createCar = async function (
   model,
   odometer,
   transmission,
-  paidTaxesStatus
+  paidTaxesStatus,
+  licensePlate,
+  county,
+  city,
+  carFeatures,
+  description,
+  dailyPrice
 ) {
   if (
     !address ||
@@ -29,7 +41,13 @@ carSchema.statics.createCar = async function (
     !model ||
     !odometer ||
     !transmission ||
-    !paidTaxesStatus
+    !paidTaxesStatus ||
+    !licensePlate ||
+    !county ||
+    !city ||
+    !carFeatures ||
+    !description ||
+    !dailyPrice
   ) {
     throw Error("All fields must be filled");
   }
@@ -41,6 +59,12 @@ carSchema.statics.createCar = async function (
     odometer,
     transmission,
     paidTaxesStatus,
+    licensePlate,
+    county,
+    city,
+    carFeatures,
+    description,
+    dailyPrice,
   });
   return car;
 };

@@ -1,29 +1,30 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import {
   ChevronUpIcon,
   ChevronDownIcon,
   TrashIcon,
 } from "@heroicons/react/solid";
+import { toast } from "react-toastify";
 
 const ListCarDetails = () => {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   const location = useLocation();
-  const { formData } = location.state || "";
+  const formData = location.state || {};
   const [isFirstDetailsOpen, setIsFirstDetailsOpen] = useState(false);
   const [isSecondDetailsOpen, setIsSecondDetailsOpen] = useState(false);
   const [isThirdDetailsOpen, setIsThirdDetailsOpen] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState({});
+  const [licensePlate, setLicensePlate] = useState("");
   const [dailyPrice, setDailyPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
-  const [cities, setCities] = useState([]);
   const [counties, setCounties] = useState([]);
+  const [cities, setCities] = useState([]);
   const [selectedCounty, setSelectedCounty] = useState({});
   const [selectedCity, setSelectedCity] = useState({});
-
-  useEffect(() => {
-    console.log(location.state);
-  }, [formData]);
 
   const toggleFirstDetails = () => {
     setIsFirstDetailsOpen(!isFirstDetailsOpen);
@@ -46,6 +47,56 @@ const ListCarDetails = () => {
 
   const handlePriceChange = (event) => {
     setDailyPrice(event.target.value);
+  };
+
+  const prepareData = () => {
+    const features = Object.entries(selectedFeatures)
+      .filter(([_, value]) => value)
+      .map(([key]) => key);
+
+    return {
+      address: formData.address,
+      year: formData.year,
+      make: formData.make,
+      model: formData.model,
+      odometer: formData.odometer,
+      transmission: formData.transmission,
+      paidTaxesStatus: formData.paidTaxesStatus,
+      licensePlate: licensePlate,
+      county: selectedCounty.nume,
+      city: selectedCity.nume,
+      carFeatures: features,
+      description: description,
+      dailyPrice: dailyPrice,
+    };
+  };
+
+  const submitCarDetails = async () => {
+    const carData = prepareData();
+
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/car/update-car-details",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(carData),
+        }
+      );
+      const responseData = await response.json();
+      if (!response.ok) {
+        toast.error(responseData.message);
+        return;
+      }
+
+      console.log("Car details submitted successfully", responseData);
+      navigate("/list-car-submit");
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const featuresList = [
@@ -150,6 +201,8 @@ const ListCarDetails = () => {
                 type="text"
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
                 placeholder="License Plate Number"
+                value={licensePlate}
+                onChange={(e) => setLicensePlate(e.target.value)}
               />
               <div className="pt-4">
                 <p className="text-sm text-gray-600">
@@ -199,6 +252,12 @@ const ListCarDetails = () => {
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
                 placeholder="Select City"
                 defaultValue=""
+                onChange={(e) => {
+                  const selected = cities.find(
+                    (city) => city.nume === e.target.value
+                  );
+                  setSelectedCity(selected);
+                }}
               >
                 {cities &&
                   cities.map((city, index) => (
@@ -249,6 +308,7 @@ const ListCarDetails = () => {
               rows="3"
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Add some details about your car."
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
         </div>
@@ -349,7 +409,7 @@ const ListCarDetails = () => {
       <div className="text-center mt-6">
         <button
           className="px-16 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
-          onClick={() => navigate("/list-car-submit")}
+          onClick={submitCarDetails}
         >
           Submit
         </button>
