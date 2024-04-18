@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import {
   ChevronUpIcon,
@@ -8,6 +8,8 @@ import {
 
 const ListCarDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { formData } = location.state || "";
   const [isFirstDetailsOpen, setIsFirstDetailsOpen] = useState(false);
   const [isSecondDetailsOpen, setIsSecondDetailsOpen] = useState(false);
   const [isThirdDetailsOpen, setIsThirdDetailsOpen] = useState(false);
@@ -18,6 +20,10 @@ const ListCarDetails = () => {
   const [counties, setCounties] = useState([]);
   const [selectedCounty, setSelectedCounty] = useState({});
   const [selectedCity, setSelectedCity] = useState({});
+
+  useEffect(() => {
+    console.log(location.state);
+  }, [formData]);
 
   const toggleFirstDetails = () => {
     setIsFirstDetailsOpen(!isFirstDetailsOpen);

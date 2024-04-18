@@ -15,7 +15,7 @@ router.use(
   })
 );
 
-router.get("/car-details", getCarDetails);
-router.post("/update-car-details/:carId", updateCarDetails);
+router.get("/car-details/:id", getCarDetails);
+router.post("/update-car-details", updateCarDetails);
 
 module.exports = router;

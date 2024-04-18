@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
 import ViewStepsModal from "./ViewStepsModal";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { toast } from "react-toastify";
 
 const ListYourCar = () => {
   const [isViewStepsOpen, setIsViewStepsOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    address: "",
+    year: "",
+    make: "",
+    model: "",
+    odometer: "",
+    transmission: "",
+    paidTaxesStatus: "",
+  });
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
   const handleCloseViewSteps = () => {
     setIsViewStepsOpen(false);
@@ -13,6 +25,27 @@ const ListYourCar = () => {
   const handleOpenViewSteps = () => {
     setIsViewStepsOpen(true);
   };
+
+  const handleChange = (e, type) => {
+    setFormData({ ...formData, [type]: e.target.value });
+    console.log(formData);
+  };
+  const handleNext = () => {
+    console.log(formData);
+    if (
+      !formData.address ||
+      !formData.year ||
+      !formData.make ||
+      !formData.model ||
+      !formData.odometer ||
+      !formData.paidTaxesStatus
+    ) {
+      toast("Please fill all the fields");
+      return;
+    }
+    navigate("/list-car-details", { state: formData });
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-semibold text-gray-800 mb-4">
@@ -23,7 +56,6 @@ const ListYourCar = () => {
           <div className="text-sm font-medium text-gray-500">
             1 of 5 steps | Next: Car details
           </div>
-
         </div>
         <button
           className="px-4 py-1 text-sm text-white font-semibold border bg-violet-500 hover:bg-purple-400 rounded-full"
@@ -45,6 +77,7 @@ const ListYourCar = () => {
             type="text"
             className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
             placeholder="Enter address"
+            onChange={(e) => handleChange(e, "address")}
           />
         </div>
         <div className="mb-4">
@@ -54,16 +87,6 @@ const ListYourCar = () => {
           >
             Which car do you have?
           </label>
-          {/* <div className="flex justify-between items-center">
-            <div className="flex"> */}
-          {/* <input
-            id="license"
-            type="text"
-            className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
-            placeholder="License plate"
-          /> */}
-          {/* </div>
-          </div> */}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
@@ -80,6 +103,7 @@ const ListYourCar = () => {
               max={new Date().getFullYear()}
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
               placeholder="Year"
+              onChange={(e) => handleChange(e, "year")}
             />
           </div>
           <div>
@@ -94,6 +118,7 @@ const ListYourCar = () => {
               type="text"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
               placeholder="Make"
+              onChange={(e) => handleChange(e, "make")}
             />
           </div>
           <div>
@@ -108,6 +133,7 @@ const ListYourCar = () => {
               type="text"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
               placeholder="Model"
+              onChange={(e) => handleChange(e, "model")}
             />
           </div>
         </div>
@@ -116,7 +142,11 @@ const ListYourCar = () => {
             Odometer and transmission
           </label>
           <div className="flex flex-wrap items-center mb-4">
-            <select className="border-2 mr-4 p-2 rounded-lg mb-4 sm:mb-0">
+            <select
+              className="border-2 mr-4 p-2 rounded-lg mb-4 sm:mb-0"
+              value={formData.odometer}
+              onChange={(e) => handleChange(e, "odometer")}
+            >
               <option value="">Select odometer</option>
               <option value="0-20">0-20k kilometers</option>
               <option value="20-40">20-40k kilometers</option>
@@ -137,11 +167,25 @@ const ListYourCar = () => {
             </select>
             <div>
               <label className="flex items-center mr-4 font-semibold text-gray-600">
-                <input type="radio" name="transmission" className="mr-1" />
+                <input
+                  type="radio"
+                  name="transmission"
+                  value="Automatic"
+                  checked={formData.transmission === "Automatic"}
+                  onChange={(e) => handleChange(e, "transmission")}
+                  className="mr-1"
+                />
                 Automatic
               </label>
               <label className="flex items-center font-semibold text-gray-600">
-                <input type="radio" name="transmission" className="mr-1" />
+                <input
+                  type="radio"
+                  name="transmission"
+                  value="Manual"
+                  checked={formData.transmission === "Manual"}
+                  onChange={(e) => handleChange(e, "transmission")}
+                  className="mr-1"
+                />
                 Manual
               </label>
             </div>
@@ -159,6 +203,7 @@ const ListYourCar = () => {
             id="taxes"
             name="taxes"
             className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+            onChange={(e) => handleChange(e, "paidTaxesStatus")}
           >
             <option value="yes">Yes</option>
             <option value="no">No</option>
@@ -175,7 +220,7 @@ const ListYourCar = () => {
       <div className="text-center mt-6">
         <button
           className="px-6 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
-          onClick={() => navigate("/list-car-details")}
+          onClick={handleNext}
         >
           Next
         </button>
