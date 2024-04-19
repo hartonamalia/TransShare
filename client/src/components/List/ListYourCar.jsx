@@ -14,7 +14,7 @@ const ListYourCar = () => {
     model: "",
     odometer: "",
     transmission: "",
-    paidTaxesStatus: "",
+    fuelType: "",
   });
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -38,7 +38,7 @@ const ListYourCar = () => {
       !formData.make ||
       !formData.model ||
       !formData.odometer ||
-      !formData.paidTaxesStatus
+      !formData.fuelType
     ) {
       toast("Please fill all the fields");
       return;
@@ -193,20 +193,23 @@ const ListYourCar = () => {
         </div>
         <div className="relative mb-4">
           <label
-            htmlFor="taxes"
-            className="block mb-2 text-sm font-medium text-gray-900 "
+            htmlFor="fuel type"
+            className="block mb-2   text-gray-700 font-semibold "
           >
-            I certify I paid applicable sales or related taxes on the purchase
-            of this vehicle.
+            Fuel type
           </label>
           <select
-            id="taxes"
-            name="taxes"
+            id="fuel type"
+            name="fuel type"
             className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
-            onChange={(e) => handleChange(e, "paidTaxesStatus")}
+            onChange={(e) => handleChange(e, "fuelType")}
           >
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="">Select fuel type</option>
+            <option value="disel">Diesel</option>
+            <option value="electric">Electric</option>
+            <option value="gas">Gas</option>
+            <option value="gpl">GPL</option>
+            <option value="hybrid">Hybrid</option>
           </select>
         </div>
         <div className="border-t pt-4">

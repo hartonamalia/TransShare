@@ -62,7 +62,7 @@ const ListCarDetails = () => {
       model: formData.model,
       odometer: formData.odometer,
       transmission: formData.transmission,
-      paidTaxesStatus: formData.paidTaxesStatus,
+      fuelType: formData.fuelType,
       licensePlate: licensePlate,
       county: selectedCounty.nume,
       city: selectedCity.nume,
@@ -103,8 +103,8 @@ const ListCarDetails = () => {
 
   const featuresList = [
     "All-wheel drive",
-    "Android Auto",
-    "Apple CarPlay",
+    "Spare wheel",
+    "Automatic pilot",
     "AUX input",
     "Backup camera",
     "Bike rack",
@@ -116,12 +116,12 @@ const ListCarDetails = () => {
     "Heated seats",
     "Keyless entry",
     "Pet friendly",
-    "Ski rack",
+    "AC",
     "Snow tires or chains",
     "Sunroof",
-    "Toll pass",
+    "Smoking allowed",
     "USB charger",
-    "Wheelchair accessible",
+    "Navigation system",
   ];
 
   const onSelectFile = (event) => {
@@ -130,9 +130,9 @@ const ListCarDetails = () => {
 
     const imagesArray = filesArray.map((file) => URL.createObjectURL(file));
     setSelectedImages((prevImages) => [...prevImages, ...imagesArray]);
-    setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]); // Păstrează fișierele pentru upload
+    setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
 
-    event.target.value = ""; // Resetează inputul pentru a permite încărcarea acelorași fișiere dacă este necesar
+    event.target.value = "";
   };
 
   function deleteHandler(image) {

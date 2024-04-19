@@ -11,7 +11,7 @@ const carSchema = new Schema({
   model: String,
   odometer: String,
   transmission: String,
-  paidTaxesStatus: String,
+  fuelType: String,
   licensePlate: String,
   county: String,
   city: String,
@@ -28,7 +28,7 @@ carSchema.statics.createCar = async function (
   model,
   odometer,
   transmission,
-  paidTaxesStatus,
+  fuelType,
   licensePlate,
   county,
   city,
@@ -44,7 +44,7 @@ carSchema.statics.createCar = async function (
     !model ||
     !odometer ||
     !transmission ||
-    !paidTaxesStatus ||
+    !fuelType ||
     !licensePlate ||
     !county ||
     !city ||
@@ -62,7 +62,7 @@ carSchema.statics.createCar = async function (
     model,
     odometer,
     transmission,
-    paidTaxesStatus,
+    fuelType,
     licensePlate,
     county,
     city,

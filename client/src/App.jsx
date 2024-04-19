@@ -15,6 +15,8 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import ListCarDetails from "./components/List/ListCarDetails";
 import ListCarSubmit from "./components/List/ListCarSubmit";
+import DashboardRent from "./components/Dashboard/DashboardRent";
+import RentCars from "./components/Rent/RentCars";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -62,6 +64,14 @@ const App = () => {
              <Route
               path="/list-your-car"
               element={user ? <ListYourCar /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/rent"
+              element={user ? <RentCars /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/see-your-car"
+              element={user ? <DashboardRent /> : <Navigate to="/login" />}
             />
              <Route
               path="/list-car-submit"

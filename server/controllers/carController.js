@@ -65,7 +65,7 @@ const updateCarDetails = async (req, res) => {
       model,
       odometer,
       transmission,
-      paidTaxesStatus,
+      fuelType,
       licensePlate,
       county,
       city,
@@ -80,7 +80,7 @@ const updateCarDetails = async (req, res) => {
       !model ||
       !odometer ||
       !transmission ||
-      !paidTaxesStatus ||
+      !fuelType ||
       !licensePlate ||
       !county ||
       !city ||
@@ -99,7 +99,7 @@ const updateCarDetails = async (req, res) => {
       model,
       odometer,
       transmission,
-      paidTaxesStatus,
+      fuelType,
       licensePlate,
       county,
       city,
