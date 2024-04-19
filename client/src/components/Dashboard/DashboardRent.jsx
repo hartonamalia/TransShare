@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CarDetails from "./CarDetails";
 import ReviewsList from "../Review/ReviewList";
+import ReviewForm from "../Review/ReviewForm";
 
 const DashboardRent = () => {
   const [pickupLocation, setPickupLocation] = useState("");
@@ -153,6 +154,9 @@ const DashboardRent = () => {
 
           <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
             <ReviewsList />
+          </div>
+          <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
+            <ReviewForm />
           </div>
         </div>
       </div>
