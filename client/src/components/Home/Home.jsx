@@ -5,7 +5,6 @@ import TopBanner from "./TopBanner";
 import CarReviewCarousel from "./CarReviewCarousel";
 import FeedbackCar from "./FeedbackCar";
 
-
 const Home = () => {
   return (
     <div>
@@ -13,8 +12,8 @@ const Home = () => {
       <SearchBanner />
       <About />
       <div className="max-w-screen-lg mx-auto px-4">
-      <CarReviewCarousel />
-      <FeedbackCar />
+        <CarReviewCarousel />
+        <FeedbackCar />
       </div>
     </div>
   );
