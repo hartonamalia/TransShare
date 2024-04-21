@@ -4,7 +4,7 @@ const cors = require("cors");
 const multer = require("multer");
 const {
   getCarDetails,
-  updateCarDetails,
+  postCarDetails,
 } = require("../controllers/carController");
 
 //middleware
@@ -16,6 +16,6 @@ router.use(
 );
 
 router.get("/car-details/:id", getCarDetails);
-router.post("/update-car-details", updateCarDetails);
+router.post("/post-car-details", postCarDetails);
 
 module.exports = router;

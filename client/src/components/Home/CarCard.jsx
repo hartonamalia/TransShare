@@ -3,7 +3,7 @@ import CarPng from "../../assets/car.png";
 import Auto from "../../assets/icons/car-parts-01.svg";
 import Km from "../../assets/icons/car-parts-02.svg";
 import Fuel from "../../assets/icons/car-parts-03.svg";
-import Power from "../../assets/icons/car-parts-04.svg";
+import Door from "../../assets/icons/car-parts-04.svg";
 import Year from "../../assets/icons/car-parts-05.svg";
 import Seats from "../../assets/icons/car-parts-06.svg";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,8 @@ const CarCard = () => {
           className="w-full transform-gpu transition duration-2000 ease-in-out"
           alt="Toyota"
         />
-         <div className="absolute bottom-0 right-0 mb-[-1rem]  mr-[1rem] w-20 h-10 bg-violet-500 rounded-md flex items-center justify-center">
-          <span className="text-white">$400/day</span>
+         <div className="absolute bottom-0 right-0 mb-[-1rem]  mr-[1rem] w-28 h-10 bg-violet-500 rounded-md flex items-center justify-center">
+          <span className="text-white">RON100/day</span>
         </div>
       </div>
       <div className="flex flex-col gap-3 p-4">
@@ -61,9 +61,9 @@ const CarCard = () => {
           <ul className="flex items-center justify-between">
             <li className="flex items-center gap-1">
               <span>
-                <img src={Power} alt="Power" />
+                <img src={Door} alt="Door" />
               </span>
-              <p>Power</p>
+              <p>5 Doors</p>
             </li>
             <li className="flex items-center gap-1">
               <span>

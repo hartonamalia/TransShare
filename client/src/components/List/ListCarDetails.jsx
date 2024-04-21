@@ -63,6 +63,8 @@ const ListCarDetails = () => {
       odometer: formData.odometer,
       transmission: formData.transmission,
       fuelType: formData.fuelType,
+      seats: formData.seats,
+      doors: formData.doors,
       licensePlate: licensePlate,
       county: selectedCounty.nume,
       city: selectedCity.nume,
@@ -77,7 +79,7 @@ const ListCarDetails = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/car/update-car-details",
+        "http://localhost:8000/api/car/post-car-details",
         {
           method: "POST",
           headers: {

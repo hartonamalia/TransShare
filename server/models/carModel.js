@@ -12,6 +12,8 @@ const carSchema = new Schema({
   odometer: String,
   transmission: String,
   fuelType: String,
+  seats: String,
+  doors: String,
   licensePlate: String,
   county: String,
   city: String,
@@ -29,6 +31,8 @@ carSchema.statics.createCar = async function (
   odometer,
   transmission,
   fuelType,
+  seats,
+  doors,
   licensePlate,
   county,
   city,
@@ -45,6 +49,8 @@ carSchema.statics.createCar = async function (
     !odometer ||
     !transmission ||
     !fuelType ||
+    !seats ||
+    !doors ||
     !licensePlate ||
     !county ||
     !city ||
@@ -63,6 +69,8 @@ carSchema.statics.createCar = async function (
     odometer,
     transmission,
     fuelType,
+    seats,
+    doors,
     licensePlate,
     county,
     city,
@@ -84,7 +92,7 @@ carSchema.statics.getCarDetails = async function (carId) {
   return car;
 };
 
-carSchema.statics.updateCarDetails = async function (carId, newData) {
+carSchema.statics.postCarDetails = async function (carId, newData) {
   if (!carId) {
     throw Error("Invalid car id");
   }

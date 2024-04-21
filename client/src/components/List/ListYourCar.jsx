@@ -15,6 +15,8 @@ const ListYourCar = () => {
     odometer: "",
     transmission: "",
     fuelType: "",
+    seats: "",
+    doors: "",
   });
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -38,7 +40,10 @@ const ListYourCar = () => {
       !formData.make ||
       !formData.model ||
       !formData.odometer ||
-      !formData.fuelType
+      !formData.fuelType ||
+      !formData.transmission ||
+      !formData.seats ||
+      !formData.doors
     ) {
       toast("Please fill all the fields");
       return;
@@ -113,14 +118,57 @@ const ListYourCar = () => {
             >
               Make
             </label>
-            <input
+            <select
               id="make"
-              type="text"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
-              placeholder="Make"
               onChange={(e) => handleChange(e, "make")}
-            />
+            >
+              <option value="">Select a make</option>
+              <option value="Acura">Acura</option>
+              <option value="Alfa Romeo">Alfa Romeo</option>
+              <option value="Audi">Audi</option>
+              <option value="BMW">BMW</option>
+              <option value="Cadillac">Cadillac</option>
+              <option value="Chevrolet">Chevrolet</option>
+              <option value="Chrysler">Chrysler</option>
+              <option value="Dodge">Dodge</option>
+              <option value="Ferrari">Ferrari</option>
+              <option value="Fiat">Fiat</option>
+              <option value="Ford">Ford</option>
+              <option value="Genesis">Genesis</option>
+              <option value="GMC">GMC</option>
+              <option value="Honda">Honda</option>
+              <option value="Hyundai">Hyundai</option>
+              <option value="Infiniti">Infiniti</option>
+              <option value="Jaguar">Jaguar</option>
+              <option value="Jeep">Jeep</option>
+              <option value="Kia">Kia</option>
+              <option value="Lamborghini">Lamborghini</option>
+              <option value="Land Rover">Land Rover</option>
+              <option value="Lexus">Lexus</option>
+              <option value="Lincoln">Lincoln</option>
+              <option value="Maserati">Maserati</option>
+              <option value="Mazda">Mazda</option>
+              <option value="Mercedes-Benz">Mercedes-Benz</option>
+              <option value="Mini">Mini</option>
+              <option value="Mitsubishi">Mitsubishi</option>
+              <option value="Nissan">Nissan</option>
+              <option value="Opel">Opel</option>
+              <option value="Peugeot">Peugeot</option>
+              <option value="Porsche">Porsche</option>
+              <option value="Ram">Ram</option>
+              <option value="Renault">Renault</option>
+              <option value="Rolls-Royce">Rolls-Royce</option>
+              <option value="Saab">Saab</option>
+              <option value="Subaru">Subaru</option>
+              <option value="Suzuki">Suzuki</option>
+              <option value="Tesla">Tesla</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Volkswagen">Volkswagen</option>
+              <option value="Volvo">Volvo</option>
+            </select>
           </div>
+
           <div>
             <label
               htmlFor="model"
@@ -210,6 +258,53 @@ const ListYourCar = () => {
             <option value="gas">Gas</option>
             <option value="gpl">GPL</option>
             <option value="hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div className="relative mb-4">
+          <label
+            htmlFor="seats"
+            className="block mb-2  text-gray-700 font-semibold "
+          >
+            Seats
+          </label>
+          <select
+            id="seats"
+            name="seats"
+            className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+            onChange={(e) => handleChange(e, "seats")}
+          >
+            <option value="">Select seats</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
+        </div>
+        <div className="relative mb-4">
+          <label
+            htmlFor="doors"
+            className="block mb-2  text-gray-700 font-semibold "
+          >
+            Doors
+          </label>
+          <select
+            id="doors"
+            name="doors"
+            className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+            onChange={(e) => handleChange(e, "doors")}
+          >
+            <option value="">Select doors</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
           </select>
         </div>
         <div className="border-t pt-4">

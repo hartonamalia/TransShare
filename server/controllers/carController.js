@@ -40,7 +40,7 @@ const getCarDetails = async (req, res) => {
   }
 };
 
-const updateCarDetails = async (req, res) => {
+const postCarDetails = async (req, res) => {
   console.log(req.body);
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -66,6 +66,8 @@ const updateCarDetails = async (req, res) => {
       odometer,
       transmission,
       fuelType,
+      seats,
+      doors,
       licensePlate,
       county,
       city,
@@ -81,6 +83,8 @@ const updateCarDetails = async (req, res) => {
       !odometer ||
       !transmission ||
       !fuelType ||
+      !seats ||
+      !doors ||
       !licensePlate ||
       !county ||
       !city ||
@@ -100,6 +104,8 @@ const updateCarDetails = async (req, res) => {
       odometer,
       transmission,
       fuelType,
+      seats,
+      doors,
       licensePlate,
       county,
       city,
@@ -181,6 +187,6 @@ const uploadCarImages = async (req, res) => {
 
 module.exports = {
   getCarDetails,
-  updateCarDetails,
+  postCarDetails,
   uploadCarImages,
 };

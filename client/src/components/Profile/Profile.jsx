@@ -273,11 +273,11 @@ const Profile = () => {
                     </span>
                     {(userDetails.driverFrontPictureURL ||
                       userDetails.driverBackPictureURL) && (
-                        <FileOpenIcon
-                          className="text-violet-500 text-xs cursor-pointer"
-                          onClick={openDriverLicenseLinks}
-                        />
-                      )}
+                      <FileOpenIcon
+                        className="text-violet-500 text-xs cursor-pointer"
+                        onClick={openDriverLicenseLinks}
+                      />
+                    )}
                   </div>
                   <div className="flex items-center">
                     <button
@@ -308,6 +308,12 @@ const Profile = () => {
                   onClick={() => navigate("/list")}
                 >
                   List your car
+                </button>
+                <button
+                  className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
+                  onClick={() => navigate("/list-your-car")}
+                >
+                  Edit car details
                 </button>
               </div>
             )}
