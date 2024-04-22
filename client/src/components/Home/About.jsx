@@ -1,9 +1,9 @@
 import React from "react";
 import CarPng from "../../assets/car.png";
-import { useNavigate } from "react-router-dom";  
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
   return (
     <div className="dark:bg-dark bg-slate-100 md:mt-50  lg:mt-0 mt-60 sm:min-h-[600px] sm:grid sm:place-items-center duration-300">
       <div className="container">
@@ -23,20 +23,24 @@ const About = () => {
               >
                 About us
               </h1>
-              <p data-aos="fade-up" className="leading-8 tracking-wide">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Aspernatur, magnam! Tenetur odio quo et maxime?
+              <p
+                data-aos="fade-up"
+                className="leading-8 tracking-wide font-semibold"
+              >
+                "TransShare" is a web application designed to streamline the
+                temporary sharing of private vehicles among users.
               </p>
-              <p data-aos="fade-up">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-                tempora.
+              <p data-aos="fade-up" className="font-semibold">
+                This platform enables car owners to list their vehicles for
+                rental, providing an opportunity for those in need of
+                transportation to easily access a car for a specified duration.
               </p>
               <button
-            className="px-6 py-2 border font-semibold border-gray-500 rounded hover:bg-violet-500 hover:text-white transition ease-in-out duration-300"
-            onClick={() => navigate("/about")}
-          >
-           Find more
-          </button>
+                className="px-6 py-2 border font-semibold border-gray-500 rounded hover:bg-violet-500 hover:text-white transition ease-in-out duration-300"
+                onClick={() => navigate("/about")}
+              >
+                Find more
+              </button>
             </div>
           </div>
         </div>

@@ -2,19 +2,19 @@ import React from "react";
 
 const feedbackData = [
   {
-    name: "Dilshad",
+    name: "Ion",
     image: "",
     description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
     aosDelay: "0",
   },
   {
-    name: "Satya",
+    name: "Maria",
     image: "",
     description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
     aosDelay: "300",
   },
   {
-    name: "Sabir",
+    name: "Mihnea",
     image: "",
     description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
     aosDelay: "1000",
@@ -32,12 +32,12 @@ const Feedback = () => {
               data-aos="fade-up"
               className="text-3xl font-semibold text-center sm:text-4xl "
             >
-              What Our Clients Say About Us
+              Feedback from hosts
             </p>
-            <p data-aos="fade-up" className="text-center sm:px-44">
+            {/* <p data-aos="fade-up" className="text-center sm:px-44">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Perferendis iure consectetur tempora amet.
-            </p>
+            </p> */}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-black dark:text-white">
