@@ -13,6 +13,7 @@ import bcgImage from "../../assets/bcg.jpg";
 import profileImage from "../../assets/profile_pic.png";
 import UpdateProfilePicture from "./UpdateProfilePicture";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
+import EditCarDetails from "./EditCarDetails";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
@@ -311,7 +312,7 @@ const Profile = () => {
                 </button>
                 <button
                   className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
-                  onClick={() => navigate("/list-your-car")}
+                  onClick={() => navigate("/edit-car-details")}
                 >
                   Edit car details
                 </button>

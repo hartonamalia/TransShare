@@ -17,6 +17,7 @@ import ListCarDetails from "./components/List/ListCarDetails";
 import ListCarSubmit from "./components/List/ListCarSubmit";
 import DashboardRent from "./components/Dashboard/DashboardRent";
 import RentCars from "./components/Rent/RentCars";
+import EditCarDetails from "./components/Profile/EditCarDetails";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -76,6 +77,10 @@ const App = () => {
              <Route
               path="/list-car-submit"
               element={user ? <ListCarSubmit /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/edit-car-details"
+              element={user ? <EditCarDetails /> : <Navigate to="/login" />}
             />
             <Route
               path="/sent-requests"
