@@ -19,7 +19,7 @@ const CarCard = () => {
           alt="Toyota"
         />
          <div className="absolute bottom-0 right-0 mb-[-1rem]  mr-[1rem] w-28 h-10 bg-violet-500 rounded-md flex items-center justify-center">
-          <span className="text-white">RON100/day</span>
+          <span className="text-white">EUR100/day</span>
         </div>
       </div>
       <div className="flex flex-col gap-3 p-4">

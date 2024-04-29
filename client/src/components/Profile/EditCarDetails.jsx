@@ -705,7 +705,7 @@ const EditCarDetails = () => {
               Daily price
             </label>
             <div className="flex items-center border border-gray-300 rounded overflow-hidden">
-              <span className="pl-1 text-gray-500">RON</span>
+              <span className="pl-1 text-gray-500">EUR</span>
               <input
                 type="text"
                 id="daily-price"

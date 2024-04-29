@@ -5,6 +5,7 @@ const multer = require("multer");
 const {
   getCarDetails,
   postCarDetails,
+  updateCarDetails,
 } = require("../controllers/carController");
 
 //middleware
@@ -17,5 +18,6 @@ router.use(
 
 router.get("/car-details/:id", getCarDetails);
 router.post("/post-car-details", postCarDetails);
+router.post("/update-car-details/:carId",updateCarDetails);
 
 module.exports = router;

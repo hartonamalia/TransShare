@@ -103,4 +103,15 @@ carSchema.statics.postCarDetails = async function (carId, newData) {
   return car;
 };
 
+carSchema.statics.updateCarDetails = async function (carId, newData) {
+  if (!carId) {
+    throw Error("Invalid car id");
+  }
+  const car = await this.findByIdAndUpdate(carId, newData, { new: true });
+  if (!car) {
+    throw Error("Car with this id doesn't exist!");
+  }
+  return car;
+};
+
 module.exports = mongoose.model("Car", carSchema);
