@@ -99,7 +99,12 @@ const getUserDetails = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    const photoTypes = ["profilePictureURL", "idPictureURL", "driverFrontPictureURL", "driverBackPictureURL"];
+    const photoTypes = [
+      "profilePictureURL",
+      "idPictureURL",
+      "driverFrontPictureURL",
+      "driverBackPictureURL",
+    ];
     for (const type of photoTypes) {
       console.log(type);
       let pictureURL = await getPicture(user, type);
@@ -114,6 +119,36 @@ const getUserDetails = async (req, res) => {
     }
 
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getUserIdDetails = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({
+        error: "No token provided or Bearer token not formatted properly",
+      });
+  }
+
+  const token = authHeader.substring(7);
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const userId = req.params.id;
+
+    const user = await User.getUserIdDetails(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ userDetails: user });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    }
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -304,4 +339,5 @@ module.exports = {
   changeUserPassword,
   updateUserDateOfBirth,
   updateProfilePicture,
+  getUserIdDetails,
 };

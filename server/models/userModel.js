@@ -96,6 +96,17 @@ userSchema.statics.getDetails = async function (_id) {
   return user;
 };
 
+userSchema.statics.getUserIdDetails = async function (_id) {
+  if (!_id) {
+    throw Error("Invalid user id");
+  }
+  const user = await this.findOne({ _id });
+  if (!user) {
+    throw Error("User with this id doesn't exist!");
+  }
+  return user;
+};
+
 userSchema.statics.updateDetails = async function (_id, newData) {
   if (!_id) {
     throw Error("Invalid user id");

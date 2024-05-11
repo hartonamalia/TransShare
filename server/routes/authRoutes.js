@@ -9,6 +9,7 @@ const {
   changeUserPassword,
   updateUserDateOfBirth,
   updateProfilePicture,
+  getUserIdDetails,
 } = require("../controllers/userController");
 const { getUserDetails } = require("../controllers/userController");
 
@@ -26,6 +27,7 @@ router.use(
 router.post("/login", loginUser);
 router.post("/signup", signupUser);
 router.get("/user-details", getUserDetails);
+router.get("/user-id-details/:id", getUserIdDetails);
 router.post(
   "/user-pictures",
   upload.single("image"),

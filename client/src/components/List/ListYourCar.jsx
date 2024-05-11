@@ -253,11 +253,11 @@ const ListYourCar = () => {
             onChange={(e) => handleChange(e, "fuelType")}
           >
             <option value="">Select fuel type</option>
-            <option value="disel">Diesel</option>
-            <option value="electric">Electric</option>
-            <option value="gas">Gas</option>
-            <option value="gpl">GPL</option>
-            <option value="hybrid">Hybrid</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Electric">Electric</option>
+            <option value="Gas">Gas</option>
+            <option value="GPL">GPL</option>
+            <option value="Hybrid">Hybrid</option>
           </select>
         </div>
         <div className="relative mb-4">

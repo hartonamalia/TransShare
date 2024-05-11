@@ -43,7 +43,7 @@ const ReviewsList = () => {
       <div className="mt-10">
         <h3 className="text-xl font-semibold mb-4">Leave a Reply</h3>
         <form className="space-y-4">
-          <div>
+          {/* <div>
             <label
               htmlFor="fullName"
               className="block text-sm font-medium text-gray-700"
@@ -70,13 +70,13 @@ const ReviewsList = () => {
               required
               className="mt-1 p-2 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
             />
-          </div>
+          </div> */}
           <div>
             <label
               htmlFor="comment"
               className="block text-sm font-medium text-gray-700"
             >
-              Comments
+              Comment
             </label>
             <textarea
               id="comment"
