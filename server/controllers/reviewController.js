@@ -39,7 +39,18 @@ const postComment = async (req, res) => {
   }
 };
 
+const getReviewsByCarId = async (req, res) => {
+  try {
+    const { carId } = req.params;
+    const reviews = await Review.getReviewsByCarId(carId);
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addReview,
   postComment,
+  getReviewsByCarId,
 };

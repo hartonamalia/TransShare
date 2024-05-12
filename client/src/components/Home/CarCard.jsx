@@ -13,6 +13,7 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [car, setCar] = useState({});
+  const [carImages, setCarImages] = useState([]);
   const fetchCarDetails = async () => {
     try {
       const response = await fetch(
@@ -43,6 +44,7 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
   };
   useEffect(() => {
     fetchCarDetails();
+    fetchCarImages();
   }, []);
 
   const getValue = (key) => {
@@ -64,14 +66,37 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
     }
   };
 
+  const fetchCarImages = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-image/${carId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      setCarImages(data);
+      console.log("aici", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex flex-col w-80 h-[30rem] bg-white rounded-lg mb-6 shadow-md overflow-hidden">
       <div className="relative w-full">
         <img
-          src={CarPng}
-          className="w-full transform-gpu transition duration-2000 ease-in-out"
-          alt=""
+          src={carImages.length > 0 ? carImages[0].imageURL : CarPng}
+          className="w-full h-52 transform-gpu transition duration-2000 ease-in-out"
+          alt="Car"
         />
+        
+
         <div className="absolute bottom-0 right-0 mb-[-1rem]  mr-[1rem] w-28 h-10 bg-violet-500 rounded-md flex items-center justify-center">
           <span className="text-white">{car.dailyPrice} EUR/day</span>
         </div>

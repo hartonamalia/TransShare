@@ -15,7 +15,7 @@ const StarRating = ({
         />
       ))}
       <p>
-        {selectedStars} din {totalStars}
+        {selectedStars} from {totalStars}
       </p>
     </div>
   );

@@ -202,8 +202,8 @@ const updateCarDetails = async (req, res) => {
     const decoded = jwt.verify(token, process.env.SECRET);
     const userId = decoded._id;
 
-    const carId = req.params.carId; 
-    const currentCarData = await Car.getCarDetails(carId); 
+    const carId = req.params.carId;
+    const currentCarData = await Car.getCarDetails(carId);
 
     const {
       address,
@@ -264,9 +264,43 @@ const updateCarDetails = async (req, res) => {
   }
 };
 
+const getCarPicture = async (photoUrl) => {
+  const getObjectParams = {
+    Bucket: "trans-share",
+    Key: photoUrl,
+  };
+  const command = new GetObjectCommand(getObjectParams);
+  const url = await getSignedUrl(s3, command);
+  return url;
+};
+
+const getCarImages = async (req, res) => {
+  const carId = req.params.id;
+
+  try {
+    const images = await CarImage.getCarImages(carId);
+    if (!images) {
+      return res.status(404).json({ error: "Images not found" });
+    }
+
+    for (const image of images) {
+      const url = await getCarPicture(image.imageURL);
+      image.imageURL = url;
+    }
+
+    res.status(200).json(images);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
+  }
+};
+
 module.exports = {
   getCarDetails,
   postCarDetails,
   uploadCarImages,
   updateCarDetails,
+  getCarImages,
 };

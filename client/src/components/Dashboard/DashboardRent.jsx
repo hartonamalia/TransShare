@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CarDetails from "./CarDetails";
-import ReviewsList from "../Review/ReviewList";
 import ReviewForm from "../Review/ReviewForm";
 
 const DashboardRent = () => {
+  const [carOwner, setCarOwner] = useState({}); 
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [pickupDate, setPickupDate] = useState(new Date());
@@ -20,7 +20,8 @@ const DashboardRent = () => {
         <div className="flex flex-wrap -mx-4">
           {/* CarCard Component */}
           <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
-            <CarDetails />
+            <CarDetails
+            setCarOwner={setCarOwner} />
           </div>
           {/* DashboardRent form and information */}
           <div className=" lg:w-1/3 px-4">
@@ -121,7 +122,7 @@ const DashboardRent = () => {
                   <Link to="#">
                     <img
                       className="h-12 w-12 rounded-full"
-                      src="path-to-avatar"
+                      src={carOwner.profilePictureURL || "https://via.placeholder.com/150"}
                       alt=""
                     />
                   </Link>
@@ -129,14 +130,14 @@ const DashboardRent = () => {
                 <div className="flex-1 min-w-0">
                   <h5 className="text-lg font-semibold">
                     <Link to="#" className="hover:underline">
-                      Owner name
+                      {carOwner.firstName} {carOwner.lastName}
                     </Link>
                   </h5>
                   <div className="text-sm font-medium text-violet-500">
                     {[...Array(5)].map((_, i) => (
                       <i key={i} className="fas fa-star filled"></i>
                     ))}
-                    <span className="ml-1">(5.0)</span>
+                    {/* <span className="ml-1">(5.0)</span> */}
                   </div>
                 </div>
               </div>
@@ -152,9 +153,6 @@ const DashboardRent = () => {
             </div>
           </div>
 
-          <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
-            <ReviewsList />
-          </div>
           <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
             <ReviewForm />
           </div>

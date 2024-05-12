@@ -15,7 +15,7 @@ carImageSchema.statics.createCarImage = async function (_id, imageURL) {
   }
   const carExists = await Car.findById(_id);
   if (!carExists) {
-      throw Error("Car does not exist");
+    throw Error("Car does not exist");
   }
   const carImage = await this.create({
     carId: _id,

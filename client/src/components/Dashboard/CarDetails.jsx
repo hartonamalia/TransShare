@@ -4,11 +4,14 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CarPng from "../../assets/car.png";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useParams } from "react-router-dom";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
 
-const CarDetails = () => {
+const CarDetails = ({ setCarOwner }) => {
   const { id } = useParams();
   const { user } = useAuthContext();
   const [car, setCar] = useState({});
+  const [carImages, setCarImages] = useState([]);
   const [carSpecs, setCarSpecs] = useState({});
   const fetchCarDetails = async () => {
     try {
@@ -34,22 +37,61 @@ const CarDetails = () => {
       ];
       handleSpecifications(specs);
       setCar(data);
-      console.log(data);
+      fetchCarOwner(data.userId);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchCarDetails();
+    fetchCarImages();
   }, []);
 
-  
+  const fetchCarOwner = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/user-id-details/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      setCarOwner(data.userDetails);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSpecifications = (specifications) => {
     for (let key in specifications) {
       setCarSpecs((prev) => {
         return { ...prev, [key]: specifications[key] };
       });
+    }
+  };
+
+  const fetchCarImages = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-image/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      setCarImages(data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -94,11 +136,25 @@ const CarDetails = () => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto my-4">
-      <img
-        src={CarPng}
-        alt="Car"
-        className="w-full h-64 object-cover rounded-t-lg"
-      />
+      <Splide
+        options={{
+          perPage: 1,
+          arrow: false,
+          pagination: false,
+          drag: "free",
+          width: "100%",
+        }}
+      >
+        {carImages.map((image, index) => (
+          <SplideSlide key={index}>
+            <img
+              src={image.imageURL || CarPng}
+              alt="Car"
+              className="w-full h-64 object-cover rounded-t-lg"
+            />
+          </SplideSlide>
+        ))}
+      </Splide>
 
       <div className="mt-4">
         <h3 className="text-xl font-semibold">

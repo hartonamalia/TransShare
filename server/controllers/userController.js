@@ -11,6 +11,7 @@ const crypto = require("crypto");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { url } = require("inspector");
 
 const s3 = new S3Client({
   region: "eu-central-1",
@@ -36,7 +37,7 @@ const loginUser = async (req, res) => {
     // create a token
     const token = createToken(user._id);
 
-    res.status(200).json({ email, token });
+    res.status(200).json({ email, userId: user["_id"], token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -125,11 +126,9 @@ const getUserDetails = async (req, res) => {
 const getUserIdDetails = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({
-        error: "No token provided or Bearer token not formatted properly",
-      });
+    return res.status(401).json({
+      error: "No token provided or Bearer token not formatted properly",
+    });
   }
 
   const token = authHeader.substring(7);
@@ -142,7 +141,19 @@ const getUserIdDetails = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
+    const photoTypes = [
+      "profilePictureURL",
+      "idPictureURL",
+      "driverFrontPictureURL",
+      "driverBackPictureURL",
+    ];
+    for (const type of photoTypes) {
+      console.log(type);
+      let pictureURL = await getPicture(user, type);
+      if (pictureURL) {
+        user[type] = pictureURL;
+      }
+    }
     return res.status(200).json({ userDetails: user });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {

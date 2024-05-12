@@ -8,4 +8,6 @@ router.post("/add", reviewController.addReview);
 
 router.post("/comment", reviewController.postComment);
 
+router.get("/:carId", reviewController.getReviewsByCarId);
+
 module.exports = router;

@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 const multer = require("multer");
-const { uploadCarImages } = require("../controllers/carController");
+const {
+  uploadCarImages,
+  getCarImages,
+} = require("../controllers/carController");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -15,5 +18,6 @@ router.use(
   })
 );
 router.post("/post-car-image/:id", upload.array("images", 5), uploadCarImages);
+router.get("/:id", getCarImages);
 
 module.exports = router;
