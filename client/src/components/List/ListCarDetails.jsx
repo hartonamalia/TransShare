@@ -138,11 +138,22 @@ const ListCarDetails = () => {
   };
 
   function deleteHandler(image) {
-    setSelectedImages(selectedImages.filter((e) => e !== image));
-    URL.revokeObjectURL(image);
+    // Find the index of the image to be removed
+    const index = selectedImages.indexOf(image);
+    if (index > -1) {
+      // Update the selectedImages state to remove the image
+      const newImages = selectedImages.filter((_, idx) => idx !== index);
+      setSelectedImages(newImages);
+      URL.revokeObjectURL(image);
+
+      // Update the selectedFiles state to remove the file corresponding to the image
+      const newFiles = selectedFiles.filter((_, idx) => idx !== index);
+      setSelectedFiles(newFiles);
+    }
   }
 
   const uploadImages = async (carId) => {
+    console.log(selectedImages);
     const formBody = new FormData();
     console.log("carId:", carId);
     selectedFiles.forEach((file) => {

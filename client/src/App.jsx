@@ -27,6 +27,7 @@ const App = () => {
   useEffect(() => {
     Aos.init({ duration: 2000 });
   }, []);
+  if (user === undefined) return <div>Loading...</div>;
 
   return (
     <div>
@@ -54,15 +55,15 @@ const App = () => {
               path="/about"
               element={user ? <About /> : <Navigate to="/login" />}
             /> */}
-             <Route
+            <Route
               path="/list"
               element={user ? <ListCar /> : <Navigate to="/login" />}
             />
-             <Route
+            <Route
               path="/list-car-details"
               element={user ? <ListCarDetails /> : <Navigate to="/login" />}
             />
-             <Route
+            <Route
               path="/list-your-car"
               element={user ? <ListYourCar /> : <Navigate to="/login" />}
             />
@@ -78,7 +79,7 @@ const App = () => {
               path="/see-car/:id"
               element={user ? <DashboardRent /> : <Navigate to="/login" />}
             />
-             <Route
+            <Route
               path="/list-car-submit"
               element={user ? <ListCarSubmit /> : <Navigate to="/login" />}
             />

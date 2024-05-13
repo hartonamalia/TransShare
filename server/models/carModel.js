@@ -20,6 +20,7 @@ const carSchema = new Schema({
   carFeatures: [String],
   description: String,
   dailyPrice: Number,
+  publishDate: { type: Date, default: Date.now },
 });
 
 carSchema.statics.createCar = async function (
@@ -38,7 +39,8 @@ carSchema.statics.createCar = async function (
   city,
   carFeatures,
   description,
-  dailyPrice
+  dailyPrice,
+  publishDate
 ) {
   if (
     !userId ||
@@ -77,6 +79,7 @@ carSchema.statics.createCar = async function (
     carFeatures,
     description,
     dailyPrice,
+    publishDate,
   });
   return car;
 };
@@ -112,6 +115,15 @@ carSchema.statics.updateCarDetails = async function (carId, newData) {
     throw Error("Car with this id doesn't exist!");
   }
   return car;
+};
+
+carSchema.statics.findTopNewCars = async function () {
+  try {
+    return await this.find().sort({ publishDate: -1 }).limit(9);
+  } catch (error) {
+    console.error("Error fetching top new cars:", error);
+    throw error;
+  }
 };
 
 module.exports = mongoose.model("Car", carSchema);

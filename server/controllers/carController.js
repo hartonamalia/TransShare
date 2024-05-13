@@ -74,6 +74,7 @@ const postCarDetails = async (req, res) => {
       carFeatures,
       description,
       dailyPrice,
+      publishDate,
     } = req.body;
     if (
       !address ||
@@ -111,7 +112,8 @@ const postCarDetails = async (req, res) => {
       city,
       carFeatures,
       description,
-      dailyPrice
+      dailyPrice,
+      publishDate,
     );
     res.status(201).json({ message: "Car created successfully", car: newCar });
   } catch (error) {
@@ -297,10 +299,27 @@ const getCarImages = async (req, res) => {
   }
 };
 
+const getTopNewCars = async (req, res) => {
+  try {
+    const cars = await Car.findTopNewCars();
+    if (!cars) {
+      return res.status(404).json({ error: "Cars not found" });
+    }
+
+    res.status(200).json(cars);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
+  }
+};
+
 module.exports = {
   getCarDetails,
   postCarDetails,
   uploadCarImages,
   updateCarDetails,
   getCarImages,
+  getTopNewCars,
 };

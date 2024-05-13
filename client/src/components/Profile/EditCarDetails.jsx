@@ -423,7 +423,7 @@ const EditCarDetails = () => {
               onChange={(e) => handleChange(e, "fuelType")}
             >
               <option value="">Select fuel type</option>
-              <option value="disel">Diesel</option>
+              <option value="diesel">Diesel</option>
               <option value="electric">Electric</option>
               <option value="gas">Gas</option>
               <option value="gpl">GPL</option>

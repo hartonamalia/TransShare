@@ -6,7 +6,7 @@ import CarDetails from "./CarDetails";
 import ReviewForm from "../Review/ReviewForm";
 
 const DashboardRent = () => {
-  const [carOwner, setCarOwner] = useState({}); 
+  const [carOwner, setCarOwner] = useState({});
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [pickupDate, setPickupDate] = useState(new Date());
@@ -20,8 +20,7 @@ const DashboardRent = () => {
         <div className="flex flex-wrap -mx-4">
           {/* CarCard Component */}
           <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
-            <CarDetails
-            setCarOwner={setCarOwner} />
+            <CarDetails setCarOwner={setCarOwner} />
           </div>
           {/* DashboardRent form and information */}
           <div className=" lg:w-1/3 px-4">
@@ -122,7 +121,10 @@ const DashboardRent = () => {
                   <Link to="#">
                     <img
                       className="h-12 w-12 rounded-full"
-                      src={carOwner.profilePictureURL || "https://via.placeholder.com/150"}
+                      src={
+                        carOwner.profilePictureURL ||
+                        "https://via.placeholder.com/150"
+                      }
                       alt=""
                     />
                   </Link>
@@ -137,7 +139,6 @@ const DashboardRent = () => {
                     {[...Array(5)].map((_, i) => (
                       <i key={i} className="fas fa-star filled"></i>
                     ))}
-                    {/* <span className="ml-1">(5.0)</span> */}
                   </div>
                 </div>
               </div>

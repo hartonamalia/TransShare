@@ -4,11 +4,39 @@ import SidebarRent from "./SidebarRent";
 import SearchForm from "./SearchRent";
 import RentImage from "../../assets/carRent.png";
 import CarCard from "../Home/CarCard";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const RentCars = () => {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+  const [cars, setCars] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
+
+  const fetchCars = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/car/top-new-cars",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setCars(data);
+      } else {
+        throw new Error(
+          data.message || "An error occurred while fetching the cars"
+        );
+      }
+    } catch (error) {
+      console.error("Failed to fetch cars:", error);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,6 +46,7 @@ const RentCars = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   useEffect(() => {
     if (isLargeScreen) {
       setIsFilterOpen(true);
@@ -26,15 +55,12 @@ const RentCars = () => {
     }
   }, [isLargeScreen]);
 
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
   return (
     <div>
-      {/* <button
-        className="mt-8 px-6 py-2 bg-violet-500 text-white rounded-full font-medium hover:bg-purple-400 hover:text-white ease-in-out duration-300"
-        onClick={() => navigate("/see-car")}
-      >
-        Get started
-      </button> */}
-
       <img src={RentImage} alt="Banner" className="w-full object-fill" />
 
       <SearchForm />
@@ -50,15 +76,9 @@ const RentCars = () => {
         )}
         {isFilterOpen && <SidebarRent isFilterOpen={isFilterOpen} />}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
-          <CarCard />
-          <CarCard />
-          <CarCard />
-          <CarCard />
-          <CarCard />
-          <CarCard />
-          <CarCard />
-          <CarCard />
-          <CarCard />
+          {cars.map((car) => (
+            <CarCard carId={car._id} key={car._id} car={car} />
+          ))}
         </div>
       </div>
     </div>

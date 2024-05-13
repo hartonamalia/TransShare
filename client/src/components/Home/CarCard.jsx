@@ -13,7 +13,29 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [car, setCar] = useState({});
+  const [carOwner, setCarOwner] = useState({});
   const [carImages, setCarImages] = useState([]);
+
+  const fetchCarOwner = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/user-id-details/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      setCarOwner(data.userDetails);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchCarDetails = async () => {
     try {
       const response = await fetch(
@@ -37,6 +59,7 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
         data.seats,
       ];
       setCar(data);
+      fetchCarOwner(data.userId);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -95,7 +118,6 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
           className="w-full h-52 transform-gpu transition duration-2000 ease-in-out"
           alt="Car"
         />
-        
 
         <div className="absolute bottom-0 right-0 mb-[-1rem]  mr-[1rem] w-28 h-10 bg-violet-500 rounded-md flex items-center justify-center">
           <span className="text-white">{car.dailyPrice} EUR/day</span>
@@ -109,13 +131,13 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
             <p>⭐</p>
             <p>⭐</p>
             <p>⭐</p>
-            <span>(5.0)</span>
+            {/* <span>(5.0)</span> */}
           </div>
           <h3 className="font-semibold">
             {car.make} {car.model}
           </h3>
           <h6>
-            Listed By : <span>Venis Darren</span>
+            Listed By : {carOwner.firstName} {carOwner.lastName}
           </h6>
         </div>
         <div className="flex flex-col gap-2 border-t border-t-gray-500">
@@ -162,7 +184,7 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
         </div>
         <button
           className="px-6 py-2 border font-semibold border-gray-500 rounded hover:bg-violet-500 hover:text-white transition ease-in-out duration-300"
-          onClick={() => navigate(`/see-car/6626a6e9c745c3a1e5bac9f2`)}
+          onClick={() => navigate(`/see-car/${carId}`)}
         >
           Rent now
         </button>
