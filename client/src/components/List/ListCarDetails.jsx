@@ -77,6 +77,11 @@ const ListCarDetails = () => {
   const submitCarDetails = async () => {
     const carData = prepareData();
 
+    if (!carData.licensePlate || !carData.county || !carData.city || !carData.carFeatures.length || !carData.description || !carData.dailyPrice || selectedImages.length === 0) {
+      toast.error("Please complete all required fields and upload at least one image.");
+      return;
+    }
+
     try {
       const response = await fetch(
         "http://localhost:8000/api/car/post-car-details",
@@ -138,15 +143,12 @@ const ListCarDetails = () => {
   };
 
   function deleteHandler(image) {
-    // Find the index of the image to be removed
     const index = selectedImages.indexOf(image);
     if (index > -1) {
-      // Update the selectedImages state to remove the image
       const newImages = selectedImages.filter((_, idx) => idx !== index);
       setSelectedImages(newImages);
       URL.revokeObjectURL(image);
 
-      // Update the selectedFiles state to remove the file corresponding to the image
       const newFiles = selectedFiles.filter((_, idx) => idx !== index);
       setSelectedFiles(newFiles);
     }
@@ -366,7 +368,7 @@ const ListCarDetails = () => {
         className="flex justify-between items-center mb-4 cursor-pointer border-t-2 border-t-violet-500 py-2"
         onClick={toggleSecondDetails}
       >
-        <h1 className="text-3xl font-semibold text-gray-800">Car photos</h1>
+        <h1 className="text-3xl font-semibold text-gray-800">Car photos (max 5 images)</h1>
         {isSecondDetailsOpen ? (
           <ChevronUpIcon className="w-5 h-5" />
         ) : (
