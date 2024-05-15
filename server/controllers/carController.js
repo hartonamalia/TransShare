@@ -113,7 +113,7 @@ const postCarDetails = async (req, res) => {
       carFeatures,
       description,
       dailyPrice,
-      publishDate,
+      publishDate
     );
     res.status(201).json({ message: "Car created successfully", car: newCar });
   } catch (error) {
@@ -315,6 +315,22 @@ const getTopNewCars = async (req, res) => {
   }
 };
 
+const getAllCars = async (req, res) => {
+  try {
+    const cars = await Car.findAllCars();
+    if (!cars) {
+      return res.status(404).json({ error: "Cars not found" });
+    }
+
+    res.status(200).json(cars);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
+  }
+};
+
 module.exports = {
   getCarDetails,
   postCarDetails,
@@ -322,4 +338,5 @@ module.exports = {
   updateCarDetails,
   getCarImages,
   getTopNewCars,
+  getAllCars,
 };

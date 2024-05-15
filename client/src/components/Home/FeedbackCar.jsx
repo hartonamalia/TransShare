@@ -1,22 +1,26 @@
 import React from "react";
+import naomiImage from "../../assets/naomi.jpg";
+import mariaImage from "../../assets/maria.jpg";
+import edwardImage from "../../assets/edward.jpg";
 
 const feedbackData = [
   {
-    name: "Ion",
-    image: "",
-    description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    name: "Naomi Russo",
+    image: naomiImage,
+    description:
+      "I had a fantastic experience renting this car. Ami was very communicative and flexible with the pickup and drop-off times.",
     aosDelay: "0",
   },
   {
-    name: "Maria",
-    image: "",
-    description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    name: "Maria Popescu",
+    image: mariaImage,
+    description: "Great service, I will definitely come back!",
     aosDelay: "300",
   },
   {
-    name: "Mihnea",
-    image: "",
-    description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    name: "Edward Newgate",
+    image: edwardImage,
+    description: "The car was clean and exactly as advertised. I felt comfortable renting from Andrew and would do so again. Highly recommended!",
     aosDelay: "1000",
   },
 ];
@@ -45,7 +49,7 @@ const Feedback = () => {
                 className="card text-center group space-y-3 sm:space-y-6 p-4 sm:py-12 dark:bg-white/20 bg-gray-100 duration-300  rounded-lg "
               >
                 <div className="grid place-items-center cursor-pointer">
-                  <img src="" alt="" className="rounded-full w-20 h-20" />
+                  <img src={skill.image} alt={skill.name} className="rounded-full w-20 h-20" />
                 </div>
                 <div className="text-2xl">⭐⭐⭐⭐⭐</div>
                 <p>{skill.description}</p>

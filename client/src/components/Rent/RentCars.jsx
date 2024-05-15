@@ -16,7 +16,7 @@ const RentCars = () => {
   const fetchCars = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/car/top-new-cars",
+        "http://localhost:8000/api/car/all-cars",
         {
           method: "GET",
           headers: {

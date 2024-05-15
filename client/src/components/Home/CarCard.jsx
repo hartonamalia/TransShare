@@ -137,7 +137,7 @@ const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
             {car.make} {car.model}
           </h3>
           <h6>
-            Listed By : {carOwner.firstName} {carOwner.lastName}
+            Listed By : {carOwner?.firstName} {carOwner?.lastName}
           </h6>
         </div>
         <div className="flex flex-col gap-2 border-t border-t-gray-500">

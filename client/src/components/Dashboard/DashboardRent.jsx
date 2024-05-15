@@ -122,7 +122,7 @@ const DashboardRent = () => {
                     <img
                       className="h-12 w-12 rounded-full"
                       src={
-                        carOwner.profilePictureURL ||
+                        carOwner?.profilePictureURL ||
                         "https://via.placeholder.com/150"
                       }
                       alt=""
@@ -132,7 +132,7 @@ const DashboardRent = () => {
                 <div className="flex-1 min-w-0">
                   <h5 className="text-lg font-semibold">
                     <Link to="#" className="hover:underline">
-                      {carOwner.firstName} {carOwner.lastName}
+                      {carOwner?.firstName} {carOwner?.lastName}
                     </Link>
                   </h5>
                   <div className="text-sm font-medium text-violet-500">

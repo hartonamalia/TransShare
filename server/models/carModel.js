@@ -126,4 +126,13 @@ carSchema.statics.findTopNewCars = async function () {
   }
 };
 
+carSchema.statics.findAllCars = async function () {
+  try {
+    return await this.find();
+  } catch (error) {
+    console.error("Error fetching all cars:", error);
+    throw error;
+  }
+};
+
 module.exports = mongoose.model("Car", carSchema);
