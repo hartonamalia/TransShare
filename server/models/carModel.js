@@ -126,11 +126,19 @@ carSchema.statics.findTopNewCars = async function () {
   }
 };
 
-carSchema.statics.findAllCars = async function () {
+carSchema.statics.findAllCars = async function (page, limit) {
   try {
-    return await this.find();
+    const skip = (page - 1) * limit;
+    const cars = await this.find().skip(skip).limit(limit);
+    const totalCars = await this.countDocuments();
+    const totalPages = Math.ceil(totalCars / limit);
+    return {
+      cars,
+      totalPages,
+      currentPage: page,
+    };
   } catch (error) {
-    console.error("Error fetching all cars:", error);
+    console.error("Error fetching paginated cars:", error);
     throw error;
   }
 };

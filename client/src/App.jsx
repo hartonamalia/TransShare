@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     Aos.init({ duration: 2000 });
   }, []);
-  if (user === undefined) return <div>Loading...</div>;
+  // if (user === undefined) return <div>Loading...</div>;
 
   return (
     <div>

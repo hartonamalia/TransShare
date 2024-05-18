@@ -316,18 +316,18 @@ const getTopNewCars = async (req, res) => {
 };
 
 const getAllCars = async (req, res) => {
+  const { page = 1, limit = 6 } = req.query; 
+
   try {
-    const cars = await Car.findAllCars();
+    const { cars, totalPages, currentPage } = await Car.findAllCars(Number(page), Number(limit));
     if (!cars) {
       return res.status(404).json({ error: "Cars not found" });
     }
 
-    res.status(200).json(cars);
+    res.status(200).json({ cars, totalPages, currentPage });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Internal server error", details: error.message });
+    res.status(500).json({ error: "Internal server error", details: error.message });
   }
 };
 

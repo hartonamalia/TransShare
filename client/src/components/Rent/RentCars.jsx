@@ -5,6 +5,7 @@ import SearchForm from "./SearchRent";
 import RentImage from "../../assets/carRent.png";
 import CarCard from "../Home/CarCard";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import Pagination from "./Pagination";
 
 const RentCars = () => {
   const navigate = useNavigate();
@@ -13,10 +14,13 @@ const RentCars = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
 
-  const fetchCars = async () => {
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalPages, setTotalPages] = useState(1);  
+
+  const fetchCars = async (page = 1) => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/car/all-cars",
+        `http://localhost:8000/api/car/all-cars?page=${page}&limit=6`, 
         {
           method: "GET",
           headers: {
@@ -27,7 +31,8 @@ const RentCars = () => {
       );
       const data = await response.json();
       if (response.ok) {
-        setCars(data);
+        setCars(data.cars);
+        setTotalPages(data.totalPages); 
       } else {
         throw new Error(
           data.message || "An error occurred while fetching the cars"
@@ -56,8 +61,12 @@ const RentCars = () => {
   }, [isLargeScreen]);
 
   useEffect(() => {
-    fetchCars();
-  }, []);
+    fetchCars(currentPage); 
+  }, [currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div>
@@ -81,6 +90,12 @@ const RentCars = () => {
           ))}
         </div>
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
