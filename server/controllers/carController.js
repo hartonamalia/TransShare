@@ -316,18 +316,45 @@ const getTopNewCars = async (req, res) => {
 };
 
 const getAllCars = async (req, res) => {
-  const { page = 1, limit = 6 } = req.query; 
+  const {
+    page = 1,
+    limit = 6,
+    sort = "price-asc",
+    year,
+    transmission,
+    fuelType,
+    make,
+    seats,
+  } = req.query;
+
+  const filters = {
+    year,
+    transmission,
+    fuelType,
+    make,
+    seats,
+  };
+
+  console.log(filters);
+  console.log(sort);
 
   try {
-    const { cars, totalPages, currentPage } = await Car.findAllCars(Number(page), Number(limit));
-    if (!cars) {
+    const { cars, totalPages, currentPage } = await Car.findAllCars(
+      Number(page),
+      Number(limit),
+      sort,
+      filters
+    );
+    if (!cars || cars.length === 0) {
       return res.status(404).json({ error: "Cars not found" });
     }
 
     res.status(200).json({ cars, totalPages, currentPage });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error", details: error.message });
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
   }
 };
 

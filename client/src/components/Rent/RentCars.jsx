@@ -14,25 +14,37 @@ const RentCars = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
 
-  const [currentPage, setCurrentPage] = useState(1); 
-  const [totalPages, setTotalPages] = useState(1);  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [sort, setSort] = useState("price-asc");
+  const [filters, setFilters] = useState({});
 
-  const fetchCars = async (page = 1) => {
+  const fetchCars = async (
+    page = 1,
+    sortOption = "price-asc",
+    filterOptions = {}
+  ) => {
+    const query = new URLSearchParams({
+      page,
+      limit: 6,
+      sort: sortOption,
+      ...filterOptions,
+    }).toString();
     try {
       const response = await fetch(
-        `http://localhost:8000/api/car/all-cars?page=${page}&limit=6`, 
+        `http://localhost:8000/api/car/all-cars?${query}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`
+            Authorization: `Bearer ${user.token}`,
           },
         }
       );
       const data = await response.json();
       if (response.ok) {
         setCars(data.cars);
-        setTotalPages(data.totalPages); 
+        setTotalPages(data.totalPages);
       } else {
         throw new Error(
           data.message || "An error occurred while fetching the cars"
@@ -61,11 +73,21 @@ const RentCars = () => {
   }, [isLargeScreen]);
 
   useEffect(() => {
-    fetchCars(currentPage); 
-  }, [currentPage]);
+    fetchCars(currentPage, sort, filters); 
+  }, [currentPage, sort, filters]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleSortChange = (event) => {
+    setSort(event.target.value);
+  };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1); 
+    fetchCars(1, sort, newFilters); 
   };
 
   return (
@@ -83,7 +105,7 @@ const RentCars = () => {
             Filter
           </button>
         )}
-        {isFilterOpen && <SidebarRent isFilterOpen={isFilterOpen} />}
+        {isFilterOpen && <SidebarRent isFilterOpen={isFilterOpen} onFilterChange={handleFilterChange} />}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
           {cars.map((car) => (
             <CarCard carId={car._id} key={car._id} car={car} />

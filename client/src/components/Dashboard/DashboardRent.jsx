@@ -13,6 +13,11 @@ const DashboardRent = () => {
   const [pickupTime, setPickupTime] = useState("");
   const [returnDate, setReturnDate] = useState(new Date());
   const [returnTime, setReturnTime] = useState("");
+  const [requestSent, setRequestSent] = useState(false);
+
+  const handleRequest = () => {
+    setRequestSent(true);
+  };
 
   return (
     <div className="bg-gray-100">
@@ -146,13 +151,23 @@ const DashboardRent = () => {
               <div className="mt-4">
                 <Link
                   to="#"
-                  className="block text-center bg-violet-500 hover:bg-violet-400 text-white font-semibold py-2 px-4 rounded transition-colors  p-6  shadow-md"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleRequest();
+                  }}
+                  className={`block text-center ${
+                    requestSent
+                      ? "bg-green-500 hover:bg-green-400"
+                      : "bg-violet-500 hover:bg-violet-400"
+                  } text-white font-semibold py-2 px-4 rounded transition-colors p-6 shadow-md`}
                 >
-                  Send a request to owner
+                  {requestSent ? "Request Sent" : "Send a request to owner"}
                 </Link>
               </div>
             </div>
           </div>
+
+          
 
           <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
             <ReviewForm />

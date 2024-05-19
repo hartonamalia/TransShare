@@ -318,12 +318,12 @@ export default function SignUpForm({ setAuthState }) {
                   onChange={handleTermsCheckboxChange}
                 />
                 <label className="ml-2 font-medium text-base" htmlFor="terms">
-                  I accept the terms and conditions
+                I accept the terms of data processing
                 </label>
               </div>
-              <button className="font-medium text-base text-violet-500">
+              {/* <button className="font-medium text-base text-violet-500">
                 View terms and conditions
-              </button>
+              </button> */}
             </div>
             {errorMessage && (
               <p className="text-red-500 mt-2">{errorMessage}</p>

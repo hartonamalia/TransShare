@@ -126,11 +126,46 @@ carSchema.statics.findTopNewCars = async function () {
   }
 };
 
-carSchema.statics.findAllCars = async function (page, limit) {
+carSchema.statics.findAllCars = async function (page, limit, sort, filters) {
   try {
     const skip = (page - 1) * limit;
-    const cars = await this.find().skip(skip).limit(limit);
-    const totalCars = await this.countDocuments();
+    let sortOption = {};
+    let filterOption = {};
+
+    // Sortare
+    switch (sort) {
+      case "price-asc":
+        sortOption = { price: 1 };
+        break;
+      case "price-desc":
+        sortOption = { price: -1 };
+        break;
+      default:
+        sortOption = {};
+    }
+
+    // Filtrare
+    if (filters.year) {
+      filterOption.year = filters.year;
+    }
+    if (filters.transmission) {
+      filterOption.transmission = filters.transmission;
+    }
+    if (filters.fuelType) {
+      filterOption.fuelType = filters.fuelType;
+    }
+    if (filters.make) {
+      filterOption.make = filters.make;
+    }
+    if (filters.seats) {
+      filterOption.seats = filters.seats;
+    }
+
+    const cars = await this.find(filterOption)
+      .skip(skip)
+      .limit(limit)
+      .sort(sortOption);
+    const totalCars = await this.countDocuments(filterOption);
     const totalPages = Math.ceil(totalCars / limit);
     return {
       cars,
@@ -138,7 +173,7 @@ carSchema.statics.findAllCars = async function (page, limit) {
       currentPage: page,
     };
   } catch (error) {
-    console.error("Error fetching paginated cars:", error);
+    console.error("Error fetching paginated and filtered cars:", error);
     throw error;
   }
 };

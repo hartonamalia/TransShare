@@ -1,14 +1,29 @@
 import React, { useState } from "react";
 
-const SidebarRent = ({ isFilterOpen }) => {
-  const [year, setYear] = useState(2007);
+const SidebarRent = ({ isFilterOpen, onFilterChange }) => {
+  const [filters, setFilters] = useState({
+    sort: '',
+    make: '',
+    year: 2007,
+    transmission: '',
+    fuelType: '',  // Schimbat pentru a se potrivi cu numele din backend
+    seats: ''
+  });
 
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters({
+      ...filters,
+      [name]: value,
+    });
   };
+
+  const handleFilterSubmit = () => {
+    onFilterChange(filters);
+  };
+
   return (
     <>
-      {" "}
       {isFilterOpen && (
         <div className="bg-white p-4 space-y-4 w-full sm:w-64">
           <div>
@@ -20,11 +35,14 @@ const SidebarRent = ({ isFilterOpen }) => {
             </label>
             <select
               id="sort"
+              name="sort"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 shadow focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm rounded-md"
+              value={filters.sort}
+              onChange={handleFilterChange}
             >
               <option value="">Select</option>
-              <option value="increasing price">Increasing price</option>
-              <option value="decreasing price">Decreasing price</option>
+              <option value="price-asc">Increasing price</option>
+              <option value="price-desc">Decreasing price</option>
             </select>
           </div>
 
@@ -37,7 +55,10 @@ const SidebarRent = ({ isFilterOpen }) => {
             </label>
             <select
               id="make"
+              name="make"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 shadow focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm rounded-md"
+              value={filters.make}
+              onChange={handleFilterChange}
             >
               <option value="">Select a make</option>
               <option value="Acura">Acura</option>
@@ -90,7 +111,7 @@ const SidebarRent = ({ isFilterOpen }) => {
               htmlFor="year"
               className="block text-sm font-medium text-gray-700"
             >
-              Year: {year}
+              Year: {filters.year}
             </label>
             <input
               type="range"
@@ -98,8 +119,8 @@ const SidebarRent = ({ isFilterOpen }) => {
               name="year"
               min="2007"
               max="2024"
-              value={year}
-              onChange={handleYearChange}
+              value={filters.year}
+              onChange={handleFilterChange}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
@@ -113,7 +134,10 @@ const SidebarRent = ({ isFilterOpen }) => {
             </label>
             <select
               id="transmission"
+              name="transmission"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 shadow focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm rounded-md"
+              value={filters.transmission}
+              onChange={handleFilterChange}
             >
               <option value="">Select transmission</option>
               <option value="automatic">Automatic</option>
@@ -123,14 +147,17 @@ const SidebarRent = ({ isFilterOpen }) => {
 
           <div>
             <label
-              htmlFor="fueltype"
+              htmlFor="fuelType"  // Schimbat pentru a se potrivi cu numele din backend
               className="block text-sm font-medium text-gray-700"
             >
               Fuel Type
             </label>
             <select
-              id="fueltype"
+              id="fuelType"
+              name="fuelType"  // Schimbat pentru a se potrivi cu numele din backend
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 shadow focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm rounded-md"
+              value={filters.fuelType}
+              onChange={handleFilterChange}
             >
               <option value="">Select fuel type</option>
               <option value="diesel">Diesel</option>
@@ -150,7 +177,10 @@ const SidebarRent = ({ isFilterOpen }) => {
             </label>
             <select
               id="seats"
+              name="seats"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 shadow focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm rounded-md"
+              value={filters.seats}
+              onChange={handleFilterChange}
             >
               <option value="">Select seats</option>
               <option value="1">1</option>
@@ -169,6 +199,7 @@ const SidebarRent = ({ isFilterOpen }) => {
             <button
               className="mt-4 block w-full bg-violet-500 hover:bg-purple-400 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-violet-300 shadow-lg"
               type="button"
+              onClick={handleFilterSubmit}
             >
               Filter Results
             </button>
