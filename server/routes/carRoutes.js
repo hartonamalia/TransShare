@@ -24,4 +24,5 @@ router.post("/update-car-details/:carId", updateCarDetails);
 router.get("/top-new-cars", getTopNewCars);
 router.get("/all-cars", getAllCars);
 
+
 module.exports = router;

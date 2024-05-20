@@ -319,7 +319,7 @@ const getAllCars = async (req, res) => {
   const {
     page = 1,
     limit = 6,
-    sort = "price-asc",
+    sort = "",
     year,
     transmission,
     fuelType,

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 const SidebarRent = ({ isFilterOpen, onFilterChange }) => {
   const [filters, setFilters] = useState({
-    sort: '',
-    make: '',
-    year: 2007,
-    transmission: '',
-    fuelType: '',  // Schimbat pentru a se potrivi cu numele din backend
-    seats: ''
+    sort: "",
+    make: "",
+    year: "",
+    transmission: "",
+    fuelType: "",
+    seats: "",
   });
 
   const handleFilterChange = (event) => {
@@ -20,6 +20,25 @@ const SidebarRent = ({ isFilterOpen, onFilterChange }) => {
 
   const handleFilterSubmit = () => {
     onFilterChange(filters);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      sort: "",
+      make: "",
+      year: "",
+      transmission: "",
+      fuelType: "",
+      seats: "",
+    });
+    onFilterChange({
+      sort: "",
+      make: "",
+      year: "",
+      transmission: "",
+      fuelType: "",
+      seats: "",
+    });
   };
 
   return (
@@ -140,31 +159,31 @@ const SidebarRent = ({ isFilterOpen, onFilterChange }) => {
               onChange={handleFilterChange}
             >
               <option value="">Select transmission</option>
-              <option value="automatic">Automatic</option>
-              <option value="manual">Manual</option>
+              <option value="Automatic">Automatic</option>
+              <option value="Manual">Manual</option>
             </select>
           </div>
 
           <div>
             <label
-              htmlFor="fuelType"  // Schimbat pentru a se potrivi cu numele din backend
+              htmlFor="fuelType" 
               className="block text-sm font-medium text-gray-700"
             >
               Fuel Type
             </label>
             <select
               id="fuelType"
-              name="fuelType"  // Schimbat pentru a se potrivi cu numele din backend
+              name="fuelType"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 shadow focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm rounded-md"
               value={filters.fuelType}
               onChange={handleFilterChange}
             >
               <option value="">Select fuel type</option>
-              <option value="diesel">Diesel</option>
-              <option value="electric">Electric</option>
-              <option value="gas">Gas</option>
-              <option value="gpl">GPL</option>
-              <option value="hybrid">Hybrid</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+              <option value="Gas">Gas</option>
+              <option value="GPL">GPL</option>
+              <option value="Hybrid">Hybrid</option>
             </select>
           </div>
 
@@ -202,6 +221,13 @@ const SidebarRent = ({ isFilterOpen, onFilterChange }) => {
               onClick={handleFilterSubmit}
             >
               Filter Results
+            </button>
+            <button
+              className="mt-4 block w-full bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-violet-300 shadow-lg"
+              type="button"
+              onClick={handleResetFilters}
+            >
+              Reset Filters
             </button>
           </div>
         </div>

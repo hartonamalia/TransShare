@@ -6,6 +6,7 @@ import RentImage from "../../assets/carRent.png";
 import CarCard from "../Home/CarCard";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import Pagination from "./Pagination";
+import { toast } from "react-toastify";
 
 const RentCars = () => {
   const navigate = useNavigate();
@@ -16,12 +17,12 @@ const RentCars = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sort, setSort] = useState("price-asc");
+  const [sort, setSort] = useState("");
   const [filters, setFilters] = useState({});
 
   const fetchCars = async (
     page = 1,
-    sortOption = "price-asc",
+    sortOption = "",
     filterOptions = {}
   ) => {
     const query = new URLSearchParams({
@@ -30,6 +31,7 @@ const RentCars = () => {
       sort: sortOption,
       ...filterOptions,
     }).toString();
+    console.log("sort", sort);
     try {
       const response = await fetch(
         `http://localhost:8000/api/car/all-cars?${query}`,
@@ -46,9 +48,8 @@ const RentCars = () => {
         setCars(data.cars);
         setTotalPages(data.totalPages);
       } else {
-        throw new Error(
-          data.message || "An error occurred while fetching the cars"
-        );
+        setCars([]);
+        setTotalPages(1);
       }
     } catch (error) {
       console.error("Failed to fetch cars:", error);
@@ -73,7 +74,7 @@ const RentCars = () => {
   }, [isLargeScreen]);
 
   useEffect(() => {
-    fetchCars(currentPage, sort, filters); 
+    fetchCars(currentPage, sort, filters);
   }, [currentPage, sort, filters]);
 
   const handlePageChange = (page) => {
@@ -86,8 +87,8 @@ const RentCars = () => {
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
-    setCurrentPage(1); 
-    fetchCars(1, sort, newFilters); 
+    setCurrentPage(1);
+    fetchCars(1, sort, newFilters);
   };
 
   return (
@@ -105,11 +106,24 @@ const RentCars = () => {
             Filter
           </button>
         )}
-        {isFilterOpen && <SidebarRent isFilterOpen={isFilterOpen} onFilterChange={handleFilterChange} />}
+        {isFilterOpen && (
+          <SidebarRent
+            isFilterOpen={isFilterOpen}
+            onFilterChange={handleFilterChange}
+          />
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
-          {cars.map((car) => (
-            <CarCard carId={car._id} key={car._id} car={car} />
-          ))}
+          {cars &&
+            cars.map((car) => (
+              <CarCard carId={car._id} key={car._id} car={car} />
+            ))}
+          {cars.length === 0 && (
+            <div className="flex flex-col w-80 h-[30rem] bg-white rounded-lg mb-6 shadow-md overflow-hidden justify-center ml-8">
+              <h3 className="text-center text-xl font-semibold mt-4 text-red-500">
+                No cars found
+              </h3>
+            </div>
+          )}
         </div>
       </div>
 

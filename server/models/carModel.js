@@ -132,13 +132,15 @@ carSchema.statics.findAllCars = async function (page, limit, sort, filters) {
     let sortOption = {};
     let filterOption = {};
 
+
+    console.log("aici",sort);
     // Sortare
     switch (sort) {
       case "price-asc":
-        sortOption = { price: 1 };
+        sortOption = { dailyPrice: 1 };
         break;
       case "price-desc":
-        sortOption = { price: -1 };
+        sortOption = { dailyPrice: -1 };
         break;
       default:
         sortOption = {};
