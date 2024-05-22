@@ -312,7 +312,7 @@ const Profile = () => {
                 </button>
                 <button
                   className="mt-12 w-36 rounded-md p-2 text-white bg-violet-500 hover:bg-purple-400"
-                  onClick={() => navigate("/my-car-details")}
+                  onClick={() => navigate("/my-cars")}
                 >
                   My Cars
                 </button>

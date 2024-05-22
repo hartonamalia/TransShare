@@ -180,4 +180,15 @@ carSchema.statics.findAllCars = async function (page, limit, sort, filters) {
   }
 };
 
+carSchema.statics.getAllCarsByUserId = async function (userId) {
+  if (!userId) {
+    throw Error("Invalid user id");
+  }
+  const cars = await this.find({ userId });
+  if (!cars) {
+    throw Error("Cars not found");
+  }
+  return cars;
+};
+
 module.exports = mongoose.model("Car", carSchema);

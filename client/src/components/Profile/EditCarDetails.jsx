@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Modal } from "@mui/material";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { toast } from "react-toastify";
@@ -14,6 +13,10 @@ const EditCarDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthContext();
+  const { id } = useParams();
+
+  const [car, setCar] = useState({});
+  const [carImages, setCarImages] = useState([]);
 
   const [isFirstDetailsOpen, setIsFirstDetailsOpen] = useState(false);
   const [isSecondDetailsOpen, setIsSecondDetailsOpen] = useState(false);
@@ -94,34 +97,74 @@ const EditCarDetails = () => {
     };
   };
 
-  //   const submitCarDetails = async () => {
-  //     const carData = prepareData();
+  const handleChange = (event, field) => {
+    setFormData({ ...formData, [field]: event.target.value });
+  };
 
-  //     try {
-  //         const response = await fetch(
-  //           "http://localhost:8000/api/car/post-car-details",
-  //           {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //               Authorization: `Bearer ${user.token}`,
-  //             },
-  //             body: JSON.stringify(carData),
-  //           }
-  //         );
-  //         const responseData = await response.json();
-  //         if (!response.ok) {
-  //           toast.error(responseData.message);
-  //           return;
-  //         }
+  const handleSubmit = async () => {
+    const carData = prepareData();
 
-  //         console.log("Car details submitted successfully", responseData);
-  //         const carId = responseData.car._id;
-  //         uploadImages(carId);
-  //       } catch (error) {
-  //         toast.error(error);
-  //       }
-  //     };
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car/update-car-details/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(carData),
+        }
+      );
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        toast.error(responseData.error || "Failed to update car details");
+        return;
+      }
+
+      if (selectedFiles.length > 0) {
+        uploadImages(id);
+      }
+      toast.success("Car details updated successfully");
+      navigate("/my-cars"); 
+    } catch (error) {
+      toast.error("Failed to update car details");
+    }
+  };
+
+  const uploadImages = async (carId) => {
+    console.log(selectedImages);
+    const formBody = new FormData();
+    console.log("carId:", carId);
+    selectedFiles.forEach((file) => {
+      formBody.append("images", file);
+    });
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-image/post-car-image/${carId}`,
+        {
+          method: "POST",
+          body: formBody,
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Server response:", result);
+      setSelectedFiles([]);
+      setSelectedImages([]);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
 
   const featuresList = [
     "All-wheel drive",
@@ -162,38 +205,6 @@ const EditCarDetails = () => {
     URL.revokeObjectURL(image);
   }
 
-  //   const uploadImages = async (carId) => {
-  //     const formBody = new FormData();
-  //     console.log("carId:", carId);
-  //     selectedFiles.forEach((file) => {
-  //       formBody.append("images", file);
-  //     });
-
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:8000/api/car-image/post-car-image/${carId}`,
-  //         {
-  //           method: "POST",
-  //           body: formBody,
-  //           headers: {
-  //             Authorization: `Bearer ${user.token}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-
-  //       const result = await response.json();
-  //       console.log("Server response:", result);
-  //       setSelectedFiles([]);
-  //       setSelectedImages([]);
-  //       navigate("/list-car-submit");
-  //     } catch (error) {
-  //       console.error("Error uploading files:", error);
-  //     }
-  //   };
   const fetchCounties = async () => {
     try {
       const response = await fetch("https://roloca.coldfuse.io/judete");
@@ -205,11 +216,11 @@ const EditCarDetails = () => {
     }
   };
 
-  const fetchCities = async () => {
-    if (!selectedCounty.auto) return;
+  const fetchCities = async (countyAuto) => {
+    if (!countyAuto) return;
     try {
       const response = await fetch(
-        `https://roloca.coldfuse.io/orase/${selectedCounty.auto}`
+        `https://roloca.coldfuse.io/orase/${countyAuto}`
       );
       const data = await response.json();
       setCities(data);
@@ -218,13 +229,86 @@ const EditCarDetails = () => {
     }
   };
 
+  const fetchCarDetails = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car/car-details/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      const features = {};
+      data.carFeatures.forEach((feature) => {
+        features[feature] = true;
+      });
+
+      setCar(data);
+      setFormData({
+        address: data.address || "",
+        year: data.year || "",
+        make: data.make || "",
+        model: data.model || "",
+        odometer: data.odometer || "",
+        transmission: data.transmission || "",
+        fuelType: data.fuelType || "",
+        seats: data.seats || "",
+        doors: data.doors || "",
+      });
+      setLicensePlate(data.licensePlate || "");
+      setDailyPrice(data.dailyPrice || "");
+      setDescription(data.description || "");
+      setSelectedFeatures(features);
+      setSelectedCounty({ nume: data.county });
+      setSelectedCity({ nume: data.city });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+  const fetchCarImages = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-image/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      console.log("poza",data);
+      setCarImages(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCarDetails();
+    fetchCarImages();
+  }, []);
+
   useEffect(() => {
     fetchCounties();
   }, []);
 
   useEffect(() => {
-    fetchCities();
+    if (selectedCounty.nume) {
+      fetchCities(selectedCounty.auto);
+    }
   }, [selectedCounty]);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div
@@ -252,6 +336,7 @@ const EditCarDetails = () => {
               type="text"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
               placeholder="Enter address"
+              value={formData.address}
               onChange={(e) => handleChange(e, "address")}
             />
           </div>
@@ -278,6 +363,7 @@ const EditCarDetails = () => {
                 max={new Date().getFullYear()}
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
                 placeholder="Year"
+                value={formData.year}
                 onChange={(e) => handleChange(e, "year")}
               />
             </div>
@@ -291,6 +377,7 @@ const EditCarDetails = () => {
               <select
                 id="make"
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+                value={formData.make}
                 onChange={(e) => handleChange(e, "make")}
               >
                 <option value="">Select a make</option>
@@ -351,6 +438,7 @@ const EditCarDetails = () => {
                 type="text"
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
                 placeholder="Model"
+                value={formData.model}
                 onChange={(e) => handleChange(e, "model")}
               />
             </div>
@@ -420,6 +508,7 @@ const EditCarDetails = () => {
               id="fuel type"
               name="fuel type"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+              value={formData.fuelType}
               onChange={(e) => handleChange(e, "fuelType")}
             >
               <option value="">Select fuel type</option>
@@ -441,6 +530,7 @@ const EditCarDetails = () => {
               id="seats"
               name="seats"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+              value={formData.seats}
               onChange={(e) => handleChange(e, "seats")}
             >
               <option value="">Select seats</option>
@@ -466,6 +556,7 @@ const EditCarDetails = () => {
               id="doors"
               name="doors"
               className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
+              value={formData.doors}
               onChange={(e) => handleChange(e, "doors")}
             >
               <option value="">Select doors</option>
@@ -542,7 +633,8 @@ const EditCarDetails = () => {
                     (county) => county.nume === e.target.value
                   );
                   setSelectedCounty(selected);
-                  fetchCities();
+                  setSelectedCity({});
+                  fetchCities(selected.auto);
                 }}
               >
                 <option value="">Select County</option>
@@ -565,7 +657,7 @@ const EditCarDetails = () => {
                 name="city"
                 className="border-2 w-full md:w-2/3 lg:w-1/2 xl:w-1/3 p-2 rounded-lg"
                 placeholder="Select City"
-                defaultValue=""
+                value={selectedCity.nume || ""}
                 onChange={(e) => {
                   const selected = cities.find(
                     (city) => city.nume === e.target.value
@@ -573,6 +665,7 @@ const EditCarDetails = () => {
                   setSelectedCity(selected);
                 }}
               >
+                <option value="">Select City</option>
                 {cities &&
                   cities.map((city, index) => (
                     <option key={index} value={city.nume}>
@@ -622,6 +715,7 @@ const EditCarDetails = () => {
               rows="3"
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Add some details about your car."
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
@@ -633,7 +727,7 @@ const EditCarDetails = () => {
         className="flex justify-between items-center mb-4 cursor-pointer border-t-2 border-t-violet-500 py-2"
         onClick={toggleThirdDetails}
       >
-        <h1 className="text-3xl font-semibold text-gray-800">Car photos</h1>
+        <h1 className="text-3xl font-semibold text-gray-800">Car photos (maximum 5 images)</h1>
         {isThirdDetailsOpen ? (
           <ChevronUpIcon className="w-5 h-5" />
         ) : (
@@ -662,7 +756,23 @@ const EditCarDetails = () => {
             )}
 
             <div className="flex flex-wrap gap-10 items-center">
-              {selectedImages &&
+              {carImages &&
+                carImages.map((image, index) => {
+                  return (
+                    <div className="relative" key={index}>
+                      <img
+                        className="w-[200px] h-[200px]"
+                        src={image.imageURL}
+                        alt="upload"
+                      />
+                      <TrashIcon
+                        className="absolute top-0 right-0 flex items-center justify-center h-7 w-7 font-semibold text-red-500 cursor-pointer "
+                       // onClick={() => deleteHandler(image)}
+                      />
+                    </div>
+                  );
+                })}
+                {selectedImages &&
                 selectedImages.map((image, index) => {
                   return (
                     <div className="relative" key={image}>
@@ -721,7 +831,10 @@ const EditCarDetails = () => {
 
       {/* edit car details button */}
       <div className="text-center mt-6">
-        <button className="px-16 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium">
+        <button
+          className="px-16 py-2 bg-purple-600 hover:bg-violet-500 text-white rounded-full font-medium"
+          onClick={handleSubmit}
+        >
           Edit car details
         </button>
       </div>

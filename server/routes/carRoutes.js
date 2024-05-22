@@ -8,6 +8,7 @@ const {
   updateCarDetails,
   getTopNewCars,
   getAllCars,
+  getAllCarsByUserId,
 } = require("../controllers/carController");
 
 //middleware
@@ -20,9 +21,10 @@ router.use(
 
 router.get("/car-details/:id", getCarDetails);
 router.post("/post-car-details", postCarDetails);
-router.post("/update-car-details/:carId", updateCarDetails);
+router.put("/update-car-details/:carId", updateCarDetails);
 router.get("/top-new-cars", getTopNewCars);
 router.get("/all-cars", getAllCars);
+router.get("/all-cars/:userId", getAllCarsByUserId);
 
 
 module.exports = router;

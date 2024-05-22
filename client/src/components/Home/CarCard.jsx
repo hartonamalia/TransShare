@@ -9,7 +9,7 @@ import Seats from "../../assets/icons/car-parts-06.svg";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-const CarCard = ({ carId = "6626a6e9c745c3a1e5bac9f2" }) => {
+const CarCard = ({ carId }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [car, setCar] = useState({});

@@ -199,7 +199,6 @@ const updateCarDetails = async (req, res) => {
       .status(401)
       .json({ error: "Bearer token not formatted properly" });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.SECRET);
     const userId = decoded._id;
@@ -358,6 +357,24 @@ const getAllCars = async (req, res) => {
   }
 };
 
+const getAllCarsByUserId = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const cars = await Car.getAllCarsByUserId(userId);
+    if (!cars) {
+      return res.status(404).json({ error: "Cars not found" });
+    }
+
+    res.status(200).json({ cars: cars });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
+  }
+};
+
 module.exports = {
   getCarDetails,
   postCarDetails,
@@ -366,4 +383,5 @@ module.exports = {
   getCarImages,
   getTopNewCars,
   getAllCars,
+  getAllCarsByUserId,
 };
