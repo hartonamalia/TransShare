@@ -9,6 +9,7 @@ const carImageRoutes = require("./routes/carImageRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const carRequestRoutes = require("./routes/carRequestRoutes");
 const app = express();
 
 app.use(cors());
@@ -34,6 +35,7 @@ app.use("/api/car-image", carImageRoutes);
 app.use("/api/review", reviewRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
+app.use("/api/car-request", require("./routes/carRequestRoutes"));
 
 const port = 8000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));
