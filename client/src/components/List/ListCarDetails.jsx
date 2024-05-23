@@ -77,8 +77,18 @@ const ListCarDetails = () => {
   const submitCarDetails = async () => {
     const carData = prepareData();
 
-    if (!carData.licensePlate || !carData.county || !carData.city || !carData.carFeatures.length || !carData.description || !carData.dailyPrice || selectedImages.length === 0) {
-      toast.error("Please complete all required fields and upload at least one image.");
+    if (
+      !carData.licensePlate ||
+      !carData.county ||
+      !carData.city ||
+      !carData.carFeatures.length ||
+      !carData.description ||
+      !carData.dailyPrice ||
+      selectedImages.length === 0
+    ) {
+      toast.error(
+        "Please complete all required fields and upload at least one image."
+      );
       return;
     }
 
@@ -187,6 +197,7 @@ const ListCarDetails = () => {
       console.error("Error uploading files:", error);
     }
   };
+
   const fetchCounties = async () => {
     try {
       const response = await fetch("https://roloca.coldfuse.io/judete");
@@ -368,7 +379,9 @@ const ListCarDetails = () => {
         className="flex justify-between items-center mb-4 cursor-pointer border-t-2 border-t-violet-500 py-2"
         onClick={toggleSecondDetails}
       >
-        <h1 className="text-3xl font-semibold text-gray-800">Car photos (max 5 images)</h1>
+        <h1 className="text-3xl font-semibold text-gray-800">
+          Car photos (max 5 images)
+        </h1>
         {isSecondDetailsOpen ? (
           <ChevronUpIcon className="w-5 h-5" />
         ) : (

@@ -127,7 +127,7 @@ const EditCarDetails = () => {
         uploadImages(id);
       }
       toast.success("Car details updated successfully");
-      navigate("/my-cars"); 
+      navigate("/my-cars");
     } catch (error) {
       toast.error("Failed to update car details");
     }
@@ -271,8 +271,6 @@ const EditCarDetails = () => {
     }
   };
 
-
-
   const fetchCarImages = async () => {
     try {
       const response = await fetch(
@@ -287,7 +285,7 @@ const EditCarDetails = () => {
       );
 
       const data = await response.json();
-      console.log("poza",data);
+      console.log("poza", data);
       setCarImages(data);
     } catch (error) {
       console.log(error);
@@ -727,7 +725,9 @@ const EditCarDetails = () => {
         className="flex justify-between items-center mb-4 cursor-pointer border-t-2 border-t-violet-500 py-2"
         onClick={toggleThirdDetails}
       >
-        <h1 className="text-3xl font-semibold text-gray-800">Car photos (maximum 5 images)</h1>
+        <h1 className="text-3xl font-semibold text-gray-800">
+          Car photos (maximum 5 images)
+        </h1>
         {isThirdDetailsOpen ? (
           <ChevronUpIcon className="w-5 h-5" />
         ) : (
@@ -767,12 +767,12 @@ const EditCarDetails = () => {
                       />
                       <TrashIcon
                         className="absolute top-0 right-0 flex items-center justify-center h-7 w-7 font-semibold text-red-500 cursor-pointer "
-                       // onClick={() => deleteHandler(image)}
+                        // onClick={() => deleteHandler(image)}
                       />
                     </div>
                   );
                 })}
-                {selectedImages &&
+              {selectedImages &&
                 selectedImages.map((image, index) => {
                   return (
                     <div className="relative" key={image}>

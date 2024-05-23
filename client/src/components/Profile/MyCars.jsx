@@ -34,41 +34,49 @@ const MyCars = () => {
   }, []);
 
   return (
-    <div className="max-w-screen-lg mx-auto px-4">
-      <h1>My Cars</h1>
-      <p>Here you can see all the cars you have listed.</p>
-      <div className="mx-auto w-full">
-        <Splide
-          options={{
-            perPage: 1,
-            arrow: false,
-            pagination: false,
-            drag: "free",
-            gap: "2rem",
-            width: "100%",
-            autoWidth: true,
-            mediaQuery: "min",
-            breakpoints: {
-              1024: {
-                perPage: 3,
-                gap: "1rem",
+    <div className="max-w-screen-lg mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-4 text-center">My Cars</h1>
+      <p className="text-center text-gray-700 mb-6 font-semibold">
+        Here you can see all the cars you have listed.
+      </p>
+      {userCars.length > 0 ? (
+        <div className="mx-auto w-full">
+          <Splide
+            options={{
+              perPage: 1,
+              arrow: false,
+              pagination: false,
+              drag: "free",
+              gap: "2rem",
+              width: "100%",
+              autoWidth: true,
+              mediaQuery: "min",
+              breakpoints: {
+                1024: {
+                  perPage: 3,
+                  gap: "1rem",
+                },
+                768: {
+                  perPage: 2,
+                },
+                640: {
+                  perPage: 1,
+                },
               },
-              768: {
-                perPage: 2,
-              },
-              640: {
-                perPage: 1,
-              },
-            },
-          }}
-        >
-          {userCars.map((car) => (
-            <SplideSlide key={car._id}>
-              <OwnedCarCard car={car} />
-            </SplideSlide>
-          ))}
-        </Splide>
-      </div>
+            }}
+          >
+            {userCars.map((car) => (
+              <SplideSlide key={car._id}>
+                <OwnedCarCard car={car} />
+              </SplideSlide>
+            ))}
+          </Splide>
+        </div>
+      ) : (
+        <div className="text-center font-semibold text-red-500">
+          <p>You don’t have any cars listed at the moment.</p>
+        </div>
+      )}
     </div>
   );
 };
