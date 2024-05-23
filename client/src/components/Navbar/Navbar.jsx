@@ -25,6 +25,11 @@ export const Navlinks = [
     name: "PROFILE",
     link: "/profile",
   },
+  {
+    id: 5,
+    name: "CHAT",
+    link: "/chat",
+  },
 ];
 const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();

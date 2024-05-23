@@ -20,6 +20,7 @@ import RentCars from "./components/Rent/RentCars";
 import EditCarDetails from "./components/Profile/EditCarDetails";
 import AboutPage from "./components/Home/AboutPage";
 import MyCars from "./components/Profile/MyCars";
+import Chat from "./components/Chat/Chat";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -96,6 +97,10 @@ const App = () => {
             <Route
               path="/sent-requests"
               element={user ? <SentRequests /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/chat"
+              element={user ? <Chat /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>

@@ -342,6 +342,31 @@ const updateProfilePicture = async (req, res) => {
   }
 };
 
+const getUserData = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const user = await User.getDetails(_id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const photoTypes = [
+      "profilePictureURL",
+      "idPictureURL",
+      "driverFrontPictureURL",
+      "driverBackPictureURL",
+    ];
+    for (const type of photoTypes) {
+      let pictureURL = await getPicture(user, type);
+      if (pictureURL) {
+        user[type] = pictureURL;
+      }
+    }
+    res.status(200).json({ userDetails: user });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   signupUser,
   loginUser,
@@ -351,4 +376,5 @@ module.exports = {
   updateUserDateOfBirth,
   updateProfilePicture,
   getUserIdDetails,
+  getUserData,
 };

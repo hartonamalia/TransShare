@@ -10,6 +10,7 @@ const {
   updateUserDateOfBirth,
   updateProfilePicture,
   getUserIdDetails,
+  getUserData,
 } = require("../controllers/userController");
 const { getUserDetails } = require("../controllers/userController");
 
@@ -36,5 +37,6 @@ router.post(
 router.put("/update-details", updateUserDetails);
 router.post("/change-password", changeUserPassword);
 router.post("/dateOfBirth", updateUserDateOfBirth);
+router.get("/user-data/:_id", getUserData);
 
 module.exports = router;
