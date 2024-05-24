@@ -35,7 +35,7 @@ app.use("/api/car-image", carImageRoutes);
 app.use("/api/review", reviewRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
-app.use("/api/car-request", require("./routes/carRequestRoutes"));
+app.use("/api/car-request", carRequestRoutes);
 
 const port = 8000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 const multer = require("multer");
-const { createCarRequest } = require("../controllers/carRequestController");
+const {
+  createCarRequest,
+  updateCarRequest,
+  getCarRequests,
+} = require("../controllers/carRequestController");
 
 router.use(
   cors({
@@ -11,7 +15,8 @@ router.use(
   })
 );
 
-router.post("/create-car-request", createCarRequest);
-
+router.post("/:carId", createCarRequest);
+router.put("/:requestId", updateCarRequest);
+router.get("/:carId", getCarRequests);
 
 module.exports = router;
