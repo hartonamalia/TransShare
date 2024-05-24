@@ -99,4 +99,36 @@ carRequestSchema.statics.getCarRequests = async function (carId, userId) {
   return carRequests;
 };
 
+carRequestSchema.statics.getCheckAvailable = async function (
+  carId,
+  start,
+  end
+) {
+  if (!carId) {
+    throw new Error("Car id is required.");
+  }
+  const car = await carSchema.findById({ _id: carId });
+  if (!car) {
+    throw new Error("Car does not exist");
+  }
+  const carRequests = await this.find({ carId });
+  const unavailableDates = carRequests.filter((request) => {
+    return (
+      request.requestStatus === 1 &&
+      ((start >= request.pickupDate && start <= request.returnDate) ||
+        (end >= request.pickupDate && end <= request.returnDate) ||
+        (start <= request.pickupDate && end >= request.returnDate))
+    );
+  });
+  return unavailableDates;
+};
+
+carRequestSchema.statics.getCarRequestsByRenter = async function (userId) {
+  if (!userId) {
+    throw new Error("User id is required.");
+  }
+  const carRequests = await this.find({ requesterId: userId });
+  return carRequests;
+};
+
 module.exports = mongoose.model("CarRequest", carRequestSchema);

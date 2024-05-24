@@ -34,7 +34,7 @@ const DashboardRent = () => {
                 Check Availability
               </h4>
               <form className="space-y-4">
-                <div>
+                {/* <div>
                   <label className="block text-gray-700 text-sm font-semibold mb-2">
                     Pickup Location
                   </label>
@@ -57,7 +57,7 @@ const DashboardRent = () => {
                     className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
                     placeholder="Enter DropOff Location"
                   />
-                </div>
+                </div> */}
                 <div className="flex gap-4">
                   <div className="w-1/2">
                     <label className="block text-gray-700 text-sm font-semibold mb-2">
@@ -147,7 +147,32 @@ const DashboardRent = () => {
                   </div>
                 </div>
               </div>
-
+              <div className="flex flex-col gap-4 mt-4">
+                <div>
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">
+                    Pickup Location
+                  </label>
+                  <input
+                    type="text"
+                    value={pickupLocation}
+                    onChange={(e) => setPickupLocation(e.target.value)}
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    placeholder="Enter City, Airport, or Address"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">
+                    DropOff Location
+                  </label>
+                  <input
+                    type="text"
+                    value={dropoffLocation}
+                    onChange={(e) => setDropoffLocation(e.target.value)}
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    placeholder="Enter DropOff Location"
+                  />
+                </div>
+              </div>
               <div className="mt-4">
                 <Link
                   to="#"
@@ -166,8 +191,6 @@ const DashboardRent = () => {
               </div>
             </div>
           </div>
-
-          
 
           <div className="w-full lg:w-2/3 px-4 flex flex-wrap justify-center">
             <ReviewForm />

@@ -6,6 +6,8 @@ const {
   createCarRequest,
   updateCarRequest,
   getCarRequests,
+  getCheckAvailable,
+  getCarRequestsByRenter,
 } = require("../controllers/carRequestController");
 
 router.use(
@@ -17,6 +19,8 @@ router.use(
 
 router.post("/:carId", createCarRequest);
 router.put("/:requestId", updateCarRequest);
-router.get("/:carId", getCarRequests);
+router.get("/all-requests/byOwner/:carId", getCarRequests);
+router.get("/check-available", getCheckAvailable);
+router.get("/all-requests/byRenter", getCarRequestsByRenter);
 
 module.exports = router;
