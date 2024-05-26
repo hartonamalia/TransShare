@@ -167,7 +167,7 @@ const SentRequests = () => {
             </div>
           ))
         ) : (
-          <p>No bookings found</p>
+          <p className="text-red-500 font-semibold">No bookings found.</p>
         )}
       </div>
     </div>

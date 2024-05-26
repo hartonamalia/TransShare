@@ -112,6 +112,30 @@ const getCarRequests = async (req, res) => {
   }
 };
 
+const getCarRequestsByOwner = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Bearer token not formatted properly" });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const userId = decoded._id;
+    const carRequests = await CarRequest.getCarRequestsByOwner(userId);
+    res.status(200).json({ carRequests });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    }
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // const getCheckAvailable = async (req, res) => {
 //   const authHeader = req.headers.authorization;
 //   if (!authHeader) {
@@ -205,4 +229,5 @@ module.exports = {
   getCarRequests,
   getCheckAvailable,
   getCarRequestsByRenter,
+  getCarRequestsByOwner,
 };
