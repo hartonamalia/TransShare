@@ -21,9 +21,8 @@ import EditCarDetails from "./components/Profile/EditCarDetails";
 import AboutPage from "./components/Home/AboutPage";
 import MyCars from "./components/Profile/MyCars";
 import Chat from "./components/Chat/Chat";
+import ReceivedRequests from "./components/Profile/ReceivedRequests";
 
-axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.withCredentials = true;
 
 const App = () => {
   const { user } = useAuthContext();
@@ -97,6 +96,10 @@ const App = () => {
             <Route
               path="/sent-requests"
               element={user ? <SentRequests /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/received-requests"
+              element={user ? <ReceivedRequests /> : <Navigate to="/login" />}
             />
             <Route
               path="/chat"

@@ -223,6 +223,7 @@ const EditCarDetails = () => {
         `https://roloca.coldfuse.io/orase/${countyAuto}`
       );
       const data = await response.json();
+      console.log("Cities data", data);
       setCities(data);
     } catch (error) {
       console.error(error);

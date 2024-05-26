@@ -1,6 +1,7 @@
 import React from "react";
 import { useLogout } from "../../hooks/useLogout";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+
 const Sidebar = () => {
   const { logout } = useLogout();
   const handleLogout = () => {
@@ -24,15 +25,19 @@ const Sidebar = () => {
           <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-blue-200 border-l-2 border-l-surface-blue text-surface-blue font-semibold p-2">
             My profile
           </li>
-          <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-blue-200 border-l-2 border-l-surface-blue text-surface-blue p-2">
-            Sent requests
-          </li>
+          <Link to="/sent-requests">
+            <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-blue-200 border-l-2 border-l-surface-blue text-surface-blue p-2">
+              Sent requests
+            </li>
+          </Link>
           {/* <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-blue-200 border-l-2 border-l-surface-blue text-surface-blue p-2">
             Confirmed reservations
           </li> */}
-          <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-purple-300 border-l-2 border-l-violet-500 text-violet-500 p-2">
-            Received requests
-          </li>
+          <Link to="/received-requests">
+            <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-purple-300 border-l-2 border-l-violet-500 text-violet-500 p-2">
+              Received requests
+            </li>
+          </Link>
           {/* <li className="cursor-pointer hover:border-l-0 hover:rounded-md hover:bg-purple-300 border-l-2 border-l-violet-500 text-violet-500  p-2">
             Reserved cars
           </li> */}
