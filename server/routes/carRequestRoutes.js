@@ -10,6 +10,7 @@ const {
   getCarRequestsByRenter,
   getCarRequestsByOwner,
   acceptCarRequest,
+  getAlreadyRequested,  
 } = require("../controllers/carRequestController");
 
 router.use(
@@ -26,5 +27,6 @@ router.get("/all-requests/byOwner", getCarRequestsByOwner);
 router.get("/check-available", getCheckAvailable);
 router.get("/all-requests/byRenter", getCarRequestsByRenter);
 router.put("/accept/:requestId", acceptCarRequest);
+router.get("/already-requested/:carId", getAlreadyRequested);
 
 module.exports = router;

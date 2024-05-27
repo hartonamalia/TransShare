@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CarDetails from "./CarDetails";
 import ReviewForm from "../Review/ReviewForm";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const DashboardRent = () => {
   const [carOwner, setCarOwner] = useState({});
+  const { id } = useParams();
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [pickupDate, setPickupDate] = useState(new Date());
@@ -14,10 +18,63 @@ const DashboardRent = () => {
   const [returnDate, setReturnDate] = useState(new Date());
   const [returnTime, setReturnTime] = useState("");
   const [requestSent, setRequestSent] = useState(false);
+  const [requested, setRequested] = useState(false);
 
   const handleRequest = () => {
     setRequestSent(true);
   };
+
+  const handleCheckRequest = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-request/already-requested/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setRequested(data.alreadyRequested);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleContactOwner = async () => {
+    console.log("sender id", user);
+    console.log("receiver id", carOwner);
+    try {
+      const response = await fetch(`http://localhost:8000/api/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          senderId: user.userId,
+          receiverId: carOwner._id,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        navigate("/chat");
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleCheckRequest();
+  }, []);
 
   return (
     <div className="bg-gray-100">
@@ -34,30 +91,6 @@ const DashboardRent = () => {
                 Check Availability
               </h4>
               <form className="space-y-4">
-                {/* <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    Pickup Location
-                  </label>
-                  <input
-                    type="text"
-                    value={pickupLocation}
-                    onChange={(e) => setPickupLocation(e.target.value)}
-                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
-                    placeholder="Enter City, Airport, or Address"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    DropOff Location
-                  </label>
-                  <input
-                    type="text"
-                    value={dropoffLocation}
-                    onChange={(e) => setDropoffLocation(e.target.value)}
-                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
-                    placeholder="Enter DropOff Location"
-                  />
-                </div> */}
                 <div className="flex gap-4">
                   <div className="w-1/2">
                     <label className="block text-gray-700 text-sm font-semibold mb-2">
@@ -177,18 +210,33 @@ const DashboardRent = () => {
                 <Link
                   to="#"
                   onClick={(e) => {
-                    e.preventDefault();
                     handleRequest();
                   }}
                   className={`block text-center ${
-                    requestSent
+                    requested
                       ? "bg-green-500 hover:bg-green-400"
                       : "bg-violet-500 hover:bg-violet-400"
                   } text-white font-semibold py-2 px-4 rounded transition-colors p-6 shadow-md`}
                 >
-                  {requestSent ? "Request Sent" : "Send a request to owner"}
+                  {requested ? "Request Sent" : "Send a request to owner"}
                 </Link>
               </div>
+              {requested && (
+                <div
+                  className="mt-4"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleContactOwner();
+                  }}
+                >
+                  <p
+                    className="block text-center bg-violet-500 hover:bg-purple-400
+                    text-white font-semibold py-2 px-4 rounded transition-colors p-6 shadow-md"
+                  >
+                    Contact Owner
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

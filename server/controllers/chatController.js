@@ -4,6 +4,13 @@ const createChat = async (req, res) => {
   const newChat = new ChatModel({
     members: [req.body.senderId, req.body.receiverId],
   });
+  // verify if chat already exists
+  const chatExists = await ChatModel.findOne({
+    members: { $all: [req.body.senderId, req.body.receiverId] },
+  });
+  if (chatExists) {
+    return res.status(200).json(chatExists);
+  } 
   try {
     const result = await newChat.save();
     res.status(200).json(result);
@@ -28,9 +35,9 @@ const findChat = async (req, res) => {
     const chat = await ChatModel.findOne({
       members: { $all: [req.params.firstId, req.params.secondId] },
     });
-    res.status(200).json(chat)
+    res.status(200).json(chat);
   } catch (error) {
-    res.status(500).json(error)
+    res.status(500).json(error);
   }
 };
 

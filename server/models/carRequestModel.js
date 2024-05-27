@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 const validator = require("validator");
 const carSchema = require("./carModel");
 
@@ -43,8 +44,11 @@ carRequestSchema.statics.createCarRequest = async function (
 
   const existingRequests = await this.find({ carId });
   const existingRequestForRenter = existingRequests.filter(
-    (request) => request.requesterId === requesterId
+    (request) =>
+      request.requesterId === requesterId &&
+      (request.requestStatus === 0 || request.requestStatus === 1)
   );
+  console.log("nu megr", existingRequestForRenter);
   if (existingRequestForRenter.length > 0) {
     throw new Error("You have already made a request for this car");
   }
@@ -98,29 +102,49 @@ carRequestSchema.statics.updateCarRequest = async function (
   if (!requestId) {
     throw new Error("Request id is required.");
   }
+
   const existingRequest = await this.findOne({ _id: requestId });
   if (!existingRequest) {
     throw new Error("Request does not exist");
   }
+
   const car = await carSchema.findById(existingRequest.carId);
   if (!car) {
     throw new Error("Car does not exist");
   }
-  if (car.userId !== requesterId) {
+
+  if (car.userId.toString() !== requesterId.toString()) {
     throw new Error("You are not authorized to update this request");
   }
+
+  const parsedPickupDate = pickupDate
+    ? moment(pickupDate).toDate()
+    : existingRequest.pickupDate;
+  const parsedReturnDate = returnDate
+    ? moment(returnDate).toDate()
+    : existingRequest.returnDate;
+
   const updatedCarRequest = await this.findOneAndUpdate(
     { _id: requestId },
     {
       pickupLocation: pickupLocation || existingRequest.pickupLocation,
       dropOffLocation: dropOffLocation || existingRequest.dropOffLocation,
-      pickupDate: new Date(pickupDate) || existingRequest.pickupDate,
-      returnDate: new Date(returnDate) || existingRequest.returnDate,
+      pickupDate: parsedPickupDate,
+      returnDate: parsedReturnDate,
       requestStatus: requestStatus || existingRequest.requestStatus,
     },
     { new: true }
   );
-  console.log(pickupDate, returnDate, updatedCarRequest.pickupDate, updatedCarRequest.returnDate);
+
+  console.log(
+    pickupDate,
+    returnDate,
+    updatedCarRequest.pickupDate,
+    updatedCarRequest.returnDate
+  );
+  console.log(parsedPickupDate, parsedReturnDate);
+  console.log(updatedCarRequest);
+
   return updatedCarRequest;
 };
 
@@ -144,8 +168,8 @@ carRequestSchema.statics.getCarRequests = async function (carId, userId) {
   const currentDate = new Date();
 
   const updatedRequests = carRequests.map((request) => {
-    const startDate = new Date(request.startDate);
-    const endDate = new Date(request.endDate);
+    const startDate = new Date(request.pickupDate);
+    const endDate = new Date(request.returnDate);
 
     if (request.requestStatus !== 3 && request.requestStatus !== 2) {
       if (startDate <= currentDate && endDate >= currentDate) {
@@ -204,8 +228,8 @@ carRequestSchema.statics.getCarRequestsByOwner = async function (userId) {
   const currentDate = new Date();
 
   const updatedRequests = carRequests.map((request) => {
-    const startDate = new Date(request.startDate);
-    const endDate = new Date(request.endDate);
+    const startDate = new Date(request.pickupDate);
+    const endDate = new Date(request.returnDate);
 
     if (request.requestStatus !== 3 && request.requestStatus !== 2) {
       if (startDate <= currentDate && endDate >= currentDate) {
@@ -238,8 +262,8 @@ carRequestSchema.statics.getCarRequestsByRenter = async function (userId) {
   const currentDate = new Date();
 
   const updatedRequests = carRequests.map((request) => {
-    const startDate = new Date(request.startDate);
-    const endDate = new Date(request.endDate);
+    const startDate = new Date(request.pickupDate);
+    const endDate = new Date(request.returnDate);
 
     if (request.requestStatus !== 3 && request.requestStatus !== 2) {
       if (startDate <= currentDate && endDate >= currentDate) {
@@ -303,6 +327,27 @@ carRequestSchema.statics.acceptCarRequest = async function (requestId, userId) {
   }
 
   return updatedRequest;
+};
+
+carRequestSchema.statics.getAlreadyRequested = async function (carId, userId) {
+  if (!carId) {
+    throw new Error("Car id is required.");
+  }
+  if (!userId) {
+    throw new Error("User id is required.");
+  }
+
+  const request = await this.find({ carId, requesterId: userId });
+  console.log("request aici", request);
+  if (request.length > 0) {
+    const requestedAlready = request.filter(
+      (req) => req.requestStatus === 0 || req.requestStatus === 1
+    );
+    if (requestedAlready.length > 0) {
+      return true;
+    }
+  }
+  return false;
 };
 
 module.exports = mongoose.model("CarRequest", carRequestSchema);

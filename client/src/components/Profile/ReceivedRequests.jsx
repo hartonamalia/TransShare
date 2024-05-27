@@ -136,6 +136,30 @@ const ReceivedRequests = () => {
     }
   };
 
+  const handleAccept = async (requestId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-request/accept/${requestId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to accept request");
+      }
+
+      fetchReceivedRequests();
+      toast.success("Request accepted successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleEdit = (car) => {
     setSelectedCar(car);
     setFormData({
@@ -244,13 +268,13 @@ const ReceivedRequests = () => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">Start Date:</p>
-                <p>{car.pickupDate.split("T")[0]}</p>
-                <p>{car.pickupDate.split("T")[1].split(".")[0]}</p>
+                <p>{car.pickupDate?.split("T")[0]}</p>
+                <p>{car.pickupDate?.split("T")[1].split(".")[0]}</p>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">End Date:</p>
-                <p>{car.returnDate.split("T")[0]}</p>
-                <p>{car.returnDate.split("T")[1].split(".")[0]}</p>
+                <p>{car.returnDate?.split("T")[0]}</p>
+                <p>{car.returnDate?.split("T")[1].split(".")[0]}</p>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">Status:</p>
@@ -282,7 +306,7 @@ const ReceivedRequests = () => {
                 <div className="flex flex-col items-center justify-center space-y-2">
                   <button
                     className="bg-green-500 text-white py-1 px-3 rounded-full hover:bg-green-400 font-semibold"
-                    onClick={() => handleAction(car, "accept")}
+                    onClick={() => handleAccept(car._id)}
                   >
                     Accept
                   </button>

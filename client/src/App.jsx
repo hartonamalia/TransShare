@@ -74,10 +74,6 @@ const App = () => {
               element={user ? <RentCars /> : <Navigate to="/login" />}
             />
             <Route
-              path="/see-car"
-              element={user ? <DashboardRent /> : <Navigate to="/login" />}
-            />
-            <Route
               path="/see-car/:id"
               element={user ? <DashboardRent /> : <Navigate to="/login" />}
             />
