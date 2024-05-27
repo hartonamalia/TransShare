@@ -9,6 +9,7 @@ const {
   getCheckAvailable,
   getCarRequestsByRenter,
   getCarRequestsByOwner,
+  acceptCarRequest,
 } = require("../controllers/carRequestController");
 
 router.use(
@@ -24,5 +25,6 @@ router.get("/all-requests/byCar/:carId", getCarRequests);
 router.get("/all-requests/byOwner", getCarRequestsByOwner);
 router.get("/check-available", getCheckAvailable);
 router.get("/all-requests/byRenter", getCarRequestsByRenter);
+router.put("/accept/:requestId", acceptCarRequest);
 
 module.exports = router;
