@@ -3,10 +3,9 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import Conversation from "./Conversation/Conversation";
 import ChatBox from "./ChatBox/ChatBox";
 import { io } from "socket.io-client";
-import { useLocation } from "react-router-dom";
+
 const Chat = () => {
   const { user } = useAuthContext();
-  const location = useLocation();
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -15,27 +14,30 @@ const Chat = () => {
   const socket = useRef();
 
   useEffect(() => {
-    if (sendMessage !== null) {
-      console.log("sending message", sendMessage);
-      socket.current.emit("send-message", sendMessage);
-    }
-  }, [sendMessage]);
-
-  useEffect(() => {
     socket.current = io("http://localhost:8800");
     socket.current.emit("new-user-add", user.userId);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
       console.log("online users", users);
     });
-  }, [user]);
 
-  useEffect(() => {
     socket.current.on("receive-message", (data) => {
       console.log("mesaj", data);
       handleReceivedMessage(data);
     });
-  }, []);
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [user]);
+
+  useEffect(() => {
+    if (sendMessage !== null) {
+      console.log("sending message", sendMessage);
+      socket.current.emit("send-message", sendMessage);
+    }
+  }, [sendMessage]);
+
   const handleReceivedMessage = (data) => {
     console.log("mesaj12234");
     setReceivedMessage(data);

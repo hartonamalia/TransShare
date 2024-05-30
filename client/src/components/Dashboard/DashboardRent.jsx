@@ -5,6 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import CarDetails from "./CarDetails";
 import ReviewForm from "../Review/ReviewForm";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { toast } from "react-toastify";
+import { format } from 'date-fns'; 
 
 const DashboardRent = () => {
   const [carOwner, setCarOwner] = useState({});
@@ -13,9 +15,9 @@ const DashboardRent = () => {
   const navigate = useNavigate();
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
-  const [pickupDate, setPickupDate] = useState(new Date());
+  const [pickupDate, setPickupDate] = useState(null);
   const [pickupTime, setPickupTime] = useState("");
-  const [returnDate, setReturnDate] = useState(new Date());
+  const [returnDate, setReturnDate] = useState(null);
   const [returnTime, setReturnTime] = useState("");
   const [requestSent, setRequestSent] = useState(false);
   const [requested, setRequested] = useState(false);
@@ -69,6 +71,48 @@ const DashboardRent = () => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const formatDate = (date) => {
+    return format(date, 'yyyy-MM-dd');
+  };
+
+  const formatTime = (time) => {
+    return time;
+  };
+
+  const checkAvailability = async () => {
+    const startDate = `${formatDate(pickupDate)}T${formatTime(pickupTime)}`;
+    const endDate = `${formatDate(returnDate)}T${formatTime(returnTime)}`;
+
+    //console.log('Sending parameters:', { carId: id, startDate, endDate });
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-request/check-available?carId=${id}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.available) {
+          toast.success("Car is available for the selected dates!");
+        } else {
+          toast.error("Car is not available for the selected dates.");
+        }
+      } else {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
     }
   };
 
@@ -143,6 +187,7 @@ const DashboardRent = () => {
                 </div>
                 <button
                   type="button"
+                  onClick={checkAvailability}
                   className="w-full bg-violet-500 text-white font-semibold py-2 rounded-md hover:bg-violet-400 transition-colors"
                 >
                   Check Availability
