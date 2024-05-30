@@ -22,6 +22,7 @@ import AboutPage from "./components/Home/AboutPage";
 import MyCars from "./components/Profile/MyCars";
 import Chat from "./components/Chat/Chat";
 import ReceivedRequests from "./components/Profile/ReceivedRequests";
+import RenterDetails from "./components/Profile/RenterDetails/RenterDetails";
 
 
 const App = () => {
@@ -100,6 +101,10 @@ const App = () => {
             <Route
               path="/chat"
               element={user ? <Chat /> : <Navigate to="/login" />}
+            />
+           <Route
+              path="/renter-details/:id"
+              element={user ? <RenterDetails /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>

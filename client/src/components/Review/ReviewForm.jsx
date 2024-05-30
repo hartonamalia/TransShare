@@ -5,35 +5,6 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useParams } from "react-router-dom";
 import ReviewCard from "./ReviewCard";
 
-// const reviews = [
-//   {
-//     id: 1,
-//     name: "Amalia",
-//     date: "19 April 2023",
-//     comment:
-//       "It was popularised in the 1960s with the release of Letraset sheets...",
-//     ratings: {
-//       quality: 5,
-//       price: 5,
-//       comfort: 5,
-//       driving: 5,
-//     },
-//   },
-//   {
-//     id: 2,
-//     name: "Maya",
-//     date: "02 Feb 2024",
-//     comment:
-//       "It was popularised in the 1960s with the release of Letraset sheets...",
-//     ratings: {
-//       quality: 5,
-//       price: 4,
-//       comfort: 5,
-//       driving: 5,
-//     },
-//   },
-// ];
-
 const ReviewForm = () => {
   const { id } = useParams();
   const { user } = useAuthContext();
@@ -55,6 +26,11 @@ const ReviewForm = () => {
       comment,
       dateOfComment: new Date(),
     };
+
+    if (!reviewData.rating || !reviewData.comment) {
+      toast("Please provide a rating and comment");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8000/api/review/comment", {
@@ -111,8 +87,8 @@ const ReviewForm = () => {
           className=" flex flex-col space-y-4  overflow-auto max-h-[30rem]"
           style={{ scrollbarWidth: "none" }}
         >
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+          {reviews.map((review, index) => (
+            <ReviewCard key={index} review={review} />
           ))}
         </div>
       </div>

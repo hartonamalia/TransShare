@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ReceivedRequests = () => {
   const [receivedRequests, setReceivedRequests] = useState([]);
@@ -33,7 +34,9 @@ const ReceivedRequests = () => {
         carRequests.map(async (carRequest) => {
           const carDetails = await fetchCarDetails(carRequest.carId);
           const carImages = await fetchCarImages(carRequest.carId);
-          return { ...carRequest, carDetails, carImages };
+          const renterDetails = await fetchRenterDetails(carRequest.requesterId);
+          console.log("renter details", renterDetails);
+          return { ...carRequest, carDetails, carImages, renterDetails };
         })
       );
 
@@ -91,6 +94,31 @@ const ReceivedRequests = () => {
     } catch (error) {
       console.log(error);
       return [];
+    }
+  };
+
+  const fetchRenterDetails = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/user-data/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch renter details");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+      return null;
     }
   };
 
@@ -225,13 +253,13 @@ const ReceivedRequests = () => {
 
   return (
     <div className="overflow-x-auto">
-      <div className="min-w-[800px] max-w-[1100px] mx-auto mt-5">
+      <div className="min-w-[900px] max-w-[1100px] mx-auto mt-5">
         <h2 className="font-bold text-lg mb-5">Received requests:</h2>
         {receivedRequests.length > 0 ? (
           receivedRequests.map((car, index) => (
             <div
               key={index}
-              className="grid grid-cols-9 items-center p-4 border border-gray-300 rounded-md overflow-hidden"
+              className="grid grid-cols-10 items-center p-4 border border-gray-300 rounded-md overflow-hidden"
             >
               <div className="flex flex-col items-center">
                 <img
@@ -241,7 +269,7 @@ const ReceivedRequests = () => {
                 />
                 {car.requestStatus !== 2 && car.requestStatus !== 3 && (
                   <button
-                    className="bg-violet-500 text-white py-1 px-3 rounded-full hover:bg-purple-400 font-semibold"
+                    className="bg-violet-500 text-white py-1 px-3  hover:bg-purple-400 font-semibold"
                     onClick={() => handleEdit(car)}
                   >
                     Edit
@@ -251,7 +279,14 @@ const ReceivedRequests = () => {
               <h1 className="font-bold text-center">
                 {car.carDetails.make} {car.carDetails.model}
               </h1>
-
+              <Link to={`/renter-details/${car.renterDetails?.userDetails._id}`}>
+              <div className="flex flex-col items-center justify-center font-semibold cursor-pointer">
+                <p className="font-semibold">From:</p>
+                <p>
+                  {car.renterDetails?.userDetails?.firstName} {car.renterDetails?.userDetails?.lastName}
+                </p>
+              </div>
+              </Link>
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">Price(per day):</p>
                 <p className="text-red-600 font-bold">
@@ -305,13 +340,13 @@ const ReceivedRequests = () => {
               {car.requestStatus === 0 && (
                 <div className="flex flex-col items-center justify-center space-y-2">
                   <button
-                    className="bg-green-500 text-white py-1 px-3 rounded-full hover:bg-green-400 font-semibold"
+                    className="bg-green-500 text-white py-1 px-3 hover:bg-green-400 font-semibold"
                     onClick={() => handleAccept(car._id)}
                   >
                     Accept
                   </button>
                   <button
-                    className="bg-red-500 text-white py-1 px-3 rounded-full hover:bg-red-400 font-semibold"
+                    className="bg-red-500 text-white py-1 px-3 hover:bg-red-400 font-semibold"
                     onClick={() => handleAction(car, "cancel")}
                   >
                     Cancel
