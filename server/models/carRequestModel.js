@@ -22,7 +22,16 @@ carRequestSchema.statics.createCarRequest = async function (
   dropOffLocation,
   pickupDate,
   returnDate
-) {
+)
+{
+  console.log("pickupDate", pickupDate);
+  console.log("returnDate", returnDate);
+  console.log("carId", carId);  
+  console.log("requesterId", requesterId);
+  console.log("pickupLocation", pickupLocation);
+console.log("dropOffLocation", dropOffLocation);
+
+
   if (
     !carId ||
     !requesterId ||

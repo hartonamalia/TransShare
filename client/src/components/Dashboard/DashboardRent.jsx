@@ -6,7 +6,7 @@ import CarDetails from "./CarDetails";
 import ReviewForm from "../Review/ReviewForm";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { toast } from "react-toastify";
-import { format } from 'date-fns'; 
+import { format } from "date-fns";
 
 const DashboardRent = () => {
   const [carOwner, setCarOwner] = useState({});
@@ -14,7 +14,7 @@ const DashboardRent = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
+  const [dropOffLocation, setDropOffLocation] = useState("");
   const [pickupDate, setPickupDate] = useState(null);
   const [pickupTime, setPickupTime] = useState("");
   const [returnDate, setReturnDate] = useState(null);
@@ -75,7 +75,7 @@ const DashboardRent = () => {
   };
 
   const formatDate = (date) => {
-    return format(date, 'yyyy-MM-dd');
+    return format(date, "yyyy-MM-dd");
   };
 
   const formatTime = (time) => {
@@ -90,7 +90,9 @@ const DashboardRent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/car-request/check-available?carId=${id}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`,
+        `http://localhost:8000/api/car-request/check-available?carId=${id}&startDate=${encodeURIComponent(
+          startDate
+        )}&endDate=${encodeURIComponent(endDate)}`,
         {
           method: "GET",
           headers: {
@@ -109,10 +111,53 @@ const DashboardRent = () => {
         }
       } else {
         const errorData = await response.json();
-        console.error('Error response:', errorData);
+        console.error("Error response:", errorData);
       }
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Fetch error:", error);
+    }
+  };
+
+  const RequestToOwner = async () => {
+    if (!pickupDate || !returnDate || !pickupTime || !returnTime) {
+      toast.error("Please fill in all fields before sending the request.");
+      return;
+    }
+
+    const startDate = `${formatDate(pickupDate)}T${formatTime(pickupTime)}`;
+    const endDate = `${formatDate(returnDate)}T${formatTime(returnTime)}`;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/car-request/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            carId: id,
+            renterId: user.userId,
+            pickupDate: startDate,
+            returnDate: endDate,
+            pickupLocation,
+            dropOffLocation,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setRequested(true);
+        toast.success("Request sent successfully!");
+      } else {
+        const errorData = await response.json();
+        toast.error(`Request failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -244,8 +289,8 @@ const DashboardRent = () => {
                   </label>
                   <input
                     type="text"
-                    value={dropoffLocation}
-                    onChange={(e) => setDropoffLocation(e.target.value)}
+                    value={dropOffLocation}
+                    onChange={(e) => setDropOffLocation(e.target.value)}
                     className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
                     placeholder="Enter DropOff Location"
                   />
@@ -255,7 +300,9 @@ const DashboardRent = () => {
                 <Link
                   to="#"
                   onClick={(e) => {
-                    handleRequest();
+                   // handleRequest();
+                   e.preventDefault();
+                    RequestToOwner();
                   }}
                   className={`block text-center ${
                     requested
