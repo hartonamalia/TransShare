@@ -22,15 +22,13 @@ carRequestSchema.statics.createCarRequest = async function (
   dropOffLocation,
   pickupDate,
   returnDate
-)
-{
+) {
   console.log("pickupDate", pickupDate);
   console.log("returnDate", returnDate);
-  console.log("carId", carId);  
+  console.log("carId", carId);
   console.log("requesterId", requesterId);
   console.log("pickupLocation", pickupLocation);
-console.log("dropOffLocation", dropOffLocation);
-
+  console.log("dropOffLocation", dropOffLocation);
 
   if (
     !carId ||
@@ -347,16 +345,18 @@ carRequestSchema.statics.getAlreadyRequested = async function (carId, userId) {
   }
 
   const request = await this.find({ carId, requesterId: userId });
-  console.log("request aici", request);
   if (request.length > 0) {
     const requestedAlready = request.filter(
       (req) => req.requestStatus === 0 || req.requestStatus === 1
     );
     if (requestedAlready.length > 0) {
-      return true;
+      if (requestedAlready[0].requestStatus === 0) {
+        return { requested: true, status: 0 };
+      }
+      return { requested: true, status: 1 };
     }
   }
-  return false;
+  return { requested: false };
 };
 
 module.exports = mongoose.model("CarRequest", carRequestSchema);

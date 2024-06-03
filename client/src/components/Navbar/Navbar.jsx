@@ -30,6 +30,11 @@ export const Navlinks = [
     name: "CHAT",
     link: "/chat",
   },
+  {
+    id: 6,
+    name: "ASSISTANT",
+    link: "/assistant",
+  },
 ];
 const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();

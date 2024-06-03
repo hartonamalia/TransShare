@@ -28,20 +28,38 @@ const ReceivedRequests = () => {
       }
 
       const data = await response.json();
+      console.log("dateeeeeee", data);
       const carRequests = data.carRequests;
+
+      const addThreeHours = (dateString) => {
+        const date = new Date(dateString);
+        date.setHours(date.getHours() + 3);
+        return date.toISOString();
+      };
 
       const detailedCarRequests = await Promise.all(
         carRequests.map(async (carRequest) => {
           const carDetails = await fetchCarDetails(carRequest.carId);
           const carImages = await fetchCarImages(carRequest.carId);
-          const renterDetails = await fetchRenterDetails(carRequest.requesterId);
-          console.log("renter details", renterDetails);
-          return { ...carRequest, carDetails, carImages, renterDetails };
+          const renterDetails = await fetchRenterDetails(
+            carRequest.requesterId
+          );
+
+          const adjustedPickupDate = addThreeHours(carRequest.pickupDate);
+          const adjustedReturnDate = addThreeHours(carRequest.returnDate);
+
+          return {
+            ...carRequest,
+            carDetails,
+            carImages,
+            renterDetails,
+            pickupDate: adjustedPickupDate,
+            returnDate: adjustedReturnDate,
+          };
         })
       );
 
       setReceivedRequests(detailedCarRequests);
-      console.log(detailedCarRequests);
     } catch (error) {
       console.error(error);
     }
@@ -279,13 +297,16 @@ const ReceivedRequests = () => {
               <h1 className="font-bold text-center">
                 {car.carDetails.make} {car.carDetails.model}
               </h1>
-              <Link to={`/renter-details/${car.renterDetails?.userDetails._id}`}>
-              <div className="flex flex-col items-center justify-center font-semibold cursor-pointer">
-                <p className="font-semibold">From:</p>
-                <p>
-                  {car.renterDetails?.userDetails?.firstName} {car.renterDetails?.userDetails?.lastName}
-                </p>
-              </div>
+              <Link
+                to={`/renter-details/${car.renterDetails?.userDetails._id}`}
+              >
+                <div className="flex flex-col items-center justify-center font-semibold cursor-pointer">
+                  <p className="font-semibold">From:</p>
+                  <p>
+                    {car.renterDetails?.userDetails?.firstName}{" "}
+                    {car.renterDetails?.userDetails?.lastName}
+                  </p>
+                </div>
               </Link>
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">Price(per day):</p>
@@ -318,7 +339,7 @@ const ReceivedRequests = () => {
                     car.requestStatus === 0
                       ? "text-blue-200 bg-blue-500 py-1 px-2 rounded-full"
                       : car.requestStatus === 1
-                      ? "text-yellow-200 bg-yellow-500 py-1 px-2 rounded-full"
+                      ? "text-yellow-200 bg-yellow-500 py-1 px-1 rounded-full"
                       : car.requestStatus === 2
                       ? "text-green-200 bg-green-500 py-1 px-2 rounded-full"
                       : car.requestStatus === 3

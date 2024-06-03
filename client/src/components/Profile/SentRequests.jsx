@@ -25,14 +25,29 @@ const SentRequests = () => {
       const data = await response.json();
       const carRequests = data.carRequests;
 
+      const addThreeHours = (dateString) => {
+        const date = new Date(dateString);
+        date.setHours(date.getHours() + 3);
+        return date.toISOString();
+      };
+
       const detailedCarRequests = await Promise.all(
         carRequests.map(async (carRequest) => {
           const carDetails = await fetchCarDetails(carRequest.carId);
           const carImages = await fetchCarImages(carRequest.carId);
-          return { ...carRequest, carDetails, carImages };
+
+          const adjustedPickupDate = addThreeHours(carRequest.pickupDate);
+          const adjustedReturnDate = addThreeHours(carRequest.returnDate);
+
+          return {
+            ...carRequest,
+            carDetails,
+            carImages,
+            pickupDate: adjustedPickupDate,
+            returnDate: adjustedReturnDate,
+          };
         })
       );
-      
 
       setCarList(detailedCarRequests);
       console.log(detailedCarRequests);
@@ -118,7 +133,9 @@ const SentRequests = () => {
 
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">Price:</p>
-                <p className="text-red-600 font-bold">{car.carDetails.dailyPrice}€</p>
+                <p className="text-red-600 font-bold">
+                  {car.carDetails.dailyPrice}€
+                </p>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <p className="font-semibold">Pickup:</p>
@@ -137,7 +154,6 @@ const SentRequests = () => {
                 <p className="font-semibold">End Date:</p>
                 <p>{car.returnDate.split("T")[0]}</p>
                 <p>{car.returnDate.split("T")[1].split(".")[0]}</p>
-                
               </div>
               <div className="flex flex-col items-center justify-center">
                 <p

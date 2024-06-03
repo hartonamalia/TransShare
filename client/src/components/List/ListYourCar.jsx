@@ -131,6 +131,7 @@ const ListYourCar = () => {
               <option value="Cadillac">Cadillac</option>
               <option value="Chevrolet">Chevrolet</option>
               <option value="Chrysler">Chrysler</option>
+              <option value="Dacia">Dacia</option>
               <option value="Dodge">Dodge</option>
               <option value="Ferrari">Ferrari</option>
               <option value="Fiat">Fiat</option>

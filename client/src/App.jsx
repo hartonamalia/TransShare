@@ -23,6 +23,7 @@ import MyCars from "./components/Profile/MyCars";
 import Chat from "./components/Chat/Chat";
 import ReceivedRequests from "./components/Profile/ReceivedRequests";
 import RenterDetails from "./components/Profile/RenterDetails/RenterDetails";
+import Assistant from "./components/Assistant/Assistant";
 
 
 const App = () => {
@@ -105,6 +106,10 @@ const App = () => {
            <Route
               path="/renter-details/:id"
               element={user ? <RenterDetails /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/assistant"
+              element={user ? <Assistant /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>

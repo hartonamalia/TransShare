@@ -8,7 +8,7 @@ const feedbackData = [
     name: "Naomi Russo",
     image: naomiImage,
     description:
-      "I had a fantastic experience renting this car. Ami was very communicative and flexible with the pickup and drop-off times.",
+      "I had a fantastic experience renting this car. Amalia was very communicative and flexible with the pickup and drop-off times.",
     aosDelay: "0",
   },
   {
@@ -20,7 +20,7 @@ const feedbackData = [
   {
     name: "Edward Newgate",
     image: edwardImage,
-    description: "The car was clean and exactly as advertised. I felt comfortable renting from Andrew and would do so again. Highly recommended!",
+    description: "The car was clean and exactly as advertised. I felt comfortable renting from Andrei and would do so again. Highly recommended!",
     aosDelay: "1000",
   },
 ];

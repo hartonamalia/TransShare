@@ -21,9 +21,35 @@ const DashboardRent = () => {
   const [returnTime, setReturnTime] = useState("");
   const [requestSent, setRequestSent] = useState(false);
   const [requested, setRequested] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
 
   const handleRequest = () => {
     setRequestSent(true);
+  };
+
+  const fetchCurrentUserDetails = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/user/user-data/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch current user details");
+      }
+
+      const data = await response.json();
+      setCurrentUser(data.userDetails);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   };
 
   const handleCheckRequest = async () => {
@@ -119,6 +145,17 @@ const DashboardRent = () => {
   };
 
   const RequestToOwner = async () => {
+    console.log("Requesting to owner", currentUser);
+    if (currentUser.dateOfBirth === null) {
+      toast.error(
+        "Please complete your date of birth before sending a request."
+      );
+      return;
+    }
+    if (!currentUser.idPictureURL) {
+      toast.error("Please upload your ID picture before sending a request.");
+      return;
+    }
     if (!pickupDate || !returnDate || !pickupTime || !returnTime) {
       toast.error("Please fill in all fields before sending the request.");
       return;
@@ -163,6 +200,7 @@ const DashboardRent = () => {
 
   useEffect(() => {
     handleCheckRequest();
+    fetchCurrentUserDetails(user.userId);
   }, []);
 
   return (
@@ -300,20 +338,22 @@ const DashboardRent = () => {
                 <Link
                   to="#"
                   onClick={(e) => {
-                   // handleRequest();
-                   e.preventDefault();
+                    // handleRequest();
+                    e.preventDefault();
                     RequestToOwner();
                   }}
                   className={`block text-center ${
-                    requested
+                    requested.requested
                       ? "bg-green-500 hover:bg-green-400"
                       : "bg-violet-500 hover:bg-violet-400"
                   } text-white font-semibold py-2 px-4 rounded transition-colors p-6 shadow-md`}
                 >
-                  {requested ? "Request Sent" : "Send a request to owner"}
+                  {requested.requested
+                    ? "Request Sent"
+                    : "Send a request to owner"}
                 </Link>
               </div>
-              {requested && (
+              {requested.requested && requested.status === 1 && (
                 <div
                   className="mt-4"
                   onClick={(e) => {
