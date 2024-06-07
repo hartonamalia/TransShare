@@ -160,6 +160,7 @@ const CarDetails = ({ setCarOwner }) => {
         <h3 className="text-xl font-semibold">
           {car.make} {car.model}
         </h3>
+        <div className="text-gray-600 font-semibold">{car.county}, {car.city}</div>
         <div className="text-gray-600">{car.dailyPrice} EUR/day</div>
 
         {/* Specifications */}

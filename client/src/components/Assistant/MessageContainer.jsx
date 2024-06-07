@@ -17,7 +17,7 @@ const MessageContainer = ({ message }) => {
         <div
           className={`${
             message.sender === "ChatGPT" ? "bg-purple-700" : "bg-purple-500"
-          }  p-2 rounded-lg w-[25rem] text-white`}
+          }  p-2 rounded-lg max-w-[25rem] text-white`}
         >
           <p>{message.message}</p>
         </div>

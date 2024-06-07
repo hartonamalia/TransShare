@@ -163,6 +163,8 @@ const ListYourCar = () => {
               <option value="Saab">Saab</option>
               <option value="Subaru">Subaru</option>
               <option value="Suzuki">Suzuki</option>
+              <option value="Skoda">Skoda</option>
+              <option value="Skoda">Skoda</option>
               <option value="Tesla">Tesla</option>
               <option value="Toyota">Toyota</option>
               <option value="Volkswagen">Volkswagen</option>

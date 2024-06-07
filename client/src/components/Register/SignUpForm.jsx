@@ -33,8 +33,15 @@ export default function SignUpForm({ setAuthState }) {
       setErrorMessage("You must accept the terms and conditions to continue.");
       return;
     }
-    const { firstName, lastName, email, password, confirmPassword, prefix, restPhoneNumber } =
-      data;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      prefix,
+      restPhoneNumber,
+    } = data;
     if (
       firstName === "" ||
       lastName === "" ||
@@ -47,10 +54,9 @@ export default function SignUpForm({ setAuthState }) {
       toast.error("Please complete all the fields.");
       return;
     }
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
       toast.error("Passwords must be the same.");
       return;
-      
     }
     await signup(firstName, lastName, email, password, prefix, restPhoneNumber);
   };
@@ -304,7 +310,7 @@ export default function SignUpForm({ setAuthState }) {
                     setData({ ...data, restPhoneNumber: e.target.value })
                   }
                   //}
-                  className="border-2 border-gray-100 rounded-r-xl p-4 bg-transparent flex-1 ml-1" 
+                  className="border-2 border-gray-100 rounded-r-xl p-4 bg-transparent flex-1 ml-1"
                   placeholder="Rest of phone number"
                 />
               </div>
@@ -318,7 +324,7 @@ export default function SignUpForm({ setAuthState }) {
                   onChange={handleTermsCheckboxChange}
                 />
                 <label className="ml-2 font-medium text-base" htmlFor="terms">
-                I accept the terms of data processing
+                  I accept the terms of data processing
                 </label>
               </div>
               {/* <button className="font-medium text-base text-violet-500">
