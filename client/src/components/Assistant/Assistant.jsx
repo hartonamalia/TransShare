@@ -15,7 +15,7 @@ const Assistant = () => {
   const [conversations, setConversations] = useState([]);
   const [isConversationOpen, setIsConversationOpen] = useState(false);
   const { user } = useAuthContext();
-  const [currentConversation, setCurrentConversation] = useState({});
+  const [currentConversation, setCurrentConversation] = useState(null);
   const [conversationMessages, setConversationMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
@@ -189,7 +189,7 @@ const Assistant = () => {
   };
 
   useEffect(() => {
-    if (currentConversation._id) {
+    if (currentConversation?._id) {
       fetchCurrentConversationChats();
     }
   }, [currentConversation]);

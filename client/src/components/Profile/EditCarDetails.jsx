@@ -267,6 +267,7 @@ const EditCarDetails = () => {
       setSelectedFeatures(features);
       setSelectedCounty({ nume: data.county });
       setSelectedCity({ nume: data.city });
+      await fetchCounties();
     } catch (error) {
       console.log(error);
     }
@@ -299,14 +300,16 @@ const EditCarDetails = () => {
   }, []);
 
   useEffect(() => {
-    fetchCounties();
-  }, []);
-
-  useEffect(() => {
     if (selectedCounty.nume) {
-      fetchCities(selectedCounty.auto);
+      const countyAuto = searchCountyAuto(selectedCounty.nume);
+      fetchCities(countyAuto);
     }
-  }, [selectedCounty]);
+  }, [selectedCounty, counties]);
+
+  const searchCountyAuto = (countyName) => {
+    const county = counties.find((county) => county.nume === countyName);
+    return county ? county.auto : null;
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
