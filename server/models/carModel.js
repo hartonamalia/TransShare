@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const moment = require("moment");
 
 const Schema = mongoose.Schema;
 
@@ -126,15 +127,32 @@ carSchema.statics.findTopNewCars = async function () {
   }
 };
 
-carSchema.statics.findAllCars = async function (page, limit, sort, filters) {
+carSchema.statics.findAllCars = async function (
+  page,
+  limit,
+  sort,
+  filters,
+  city,
+  county,
+  pickupDate,
+  pickupTime,
+  returnDate,
+  returnTime
+) {
   try {
     const skip = (page - 1) * limit;
     let sortOption = {};
     let filterOption = {};
 
-
-    console.log("aici",sort);
-    // Sortare
+    console.log(
+      "aici2",
+      city,
+      county,
+      pickupDate,
+      pickupTime,
+      returnDate,
+      returnTime
+    );
     switch (sort) {
       case "price-asc":
         sortOption = { dailyPrice: 1 };
@@ -162,15 +180,39 @@ carSchema.statics.findAllCars = async function (page, limit, sort, filters) {
     if (filters.seats) {
       filterOption.seats = filters.seats;
     }
+    if (city) {
+      filterOption.city = city;
+    }
+    if (county) {
+      filterOption.county = county;
+    }
 
     const cars = await this.find(filterOption)
       .skip(skip)
       .limit(limit)
       .sort(sortOption);
+
+    const availableCars = [];
+
+    const start = moment(`${pickupDate} ${pickupTime}`, "MM/DD/YYYY HH:mm").toDate();
+    const end = moment(`${returnDate} ${returnTime}`, "MM/DD/YYYY HH:mm").toDate();
+
+
+    for (const car of cars) {
+      const isAvailable = await require("./carRequestModel").getCheckAvailable(
+        car._id,
+        start,
+        end
+      );
+      if (isAvailable) {
+        availableCars.push(car);
+      }
+    }
+
     const totalCars = await this.countDocuments(filterOption);
     const totalPages = Math.ceil(totalCars / limit);
     return {
-      cars,
+      cars: availableCars,
       totalPages,
       currentPage: page,
     };

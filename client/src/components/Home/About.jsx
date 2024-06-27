@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const About = () => {
   const navigate = useNavigate();
   return (
-    <div className="dark:bg-dark bg-slate-100 md:mt-50  lg:mt-0 mt-60 sm:min-h-[600px] sm:grid sm:place-items-center duration-300">
+    <div className="dark:bg-dark bg-slate-100 md:mt-80  lg:mt-0 mt-96 sm:min-h-[600px] sm:grid sm:place-items-center duration-300">
       <div className="container">
         <div className="grid grid-cols-1 sm:grid-cols-2 place-items-center">
           <div data-aos="slide-right" data-aos-duration="1500">

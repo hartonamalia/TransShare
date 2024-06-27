@@ -324,7 +324,14 @@ const getAllCars = async (req, res) => {
     fuelType,
     make,
     seats,
+    city,
+    countyName,
+    pickupDate,
+    pickupTime,
+    returnDate,
+    returnTime,
   } = req.query;
+  console.log(req.query);
 
   const filters = {
     year,
@@ -334,15 +341,18 @@ const getAllCars = async (req, res) => {
     seats,
   };
 
-  console.log(filters);
-  console.log(sort);
-
   try {
     const { cars, totalPages, currentPage } = await Car.findAllCars(
       Number(page),
       Number(limit),
       sort,
-      filters
+      filters,
+      city,
+      countyName,
+      pickupDate,
+      pickupTime,
+      returnDate,
+      returnTime
     );
     if (!cars || cars.length === 0) {
       return res.status(404).json({ error: "Cars not found" });
